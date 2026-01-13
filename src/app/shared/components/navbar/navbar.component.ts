@@ -67,9 +67,9 @@ interface NavLink {
             *ngIf="userRole !== 'ADMIN'"
             [routerLink]="getProjectsRoute()" 
             class="navbar-action-btn projects-btn"
-            [attr.aria-label]="'Proyectos'"
+            [attr.aria-label]="'Deal Room'"
           >
-            <span class="action-icon">📁</span>
+            <span class="action-icon">🤝</span>
             <span 
               *ngIf="projectCount > 0" 
               class="notification-badge"
@@ -193,16 +193,16 @@ export class NavbarComponent implements OnInit, OnChanges {
       case 'CLIENT':
         this.navLinks = [
           { label: 'Marketplace', route: '/client/marketplace', icon: '🏢' },
-          { label: 'Innovación', route: '/client/publish-rfid', icon: '💡' },
-          { label: 'Proyectos', route: '/client/projects', icon: '📁' }
+          { label: 'Deal Room', route: '/client/projects', icon: '🤝' },
+          { label: 'Innovación', route: '/client/publish-rfid', icon: '💡' }
         ];
         break;
 
       case 'PROVIDER':
         this.navLinks = [
           { label: 'Marketplace', route: '/provider/marketplace', icon: '🏢' },
-          { label: 'Leads', route: '/provider/leads', icon: '📊' },
-          { label: 'Deal Room', route: '/provider/project-management', icon: '🤝' }
+          { label: 'Deal Room', route: '/provider/project-management', icon: '🤝' },
+          { label: 'Leads', route: '/provider/leads', icon: '📊' }
         ];
         break;
 
@@ -265,7 +265,7 @@ export class NavbarComponent implements OnInit, OnChanges {
     switch (this.userRole) {
       case 'CLIENT':
       case 'PROVIDER':
-        return 'Proyectos';
+        return 'Deal Room';
       case 'ADMIN':
         return 'Notificaciones';
       default:
@@ -277,7 +277,7 @@ export class NavbarComponent implements OnInit, OnChanges {
     switch (this.userRole) {
       case 'CLIENT':
       case 'PROVIDER':
-        return '📁';
+        return '🤝';
       case 'ADMIN':
         return '🔔';
       default:

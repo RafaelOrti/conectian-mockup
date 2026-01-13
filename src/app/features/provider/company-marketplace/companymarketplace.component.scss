@@ -362,142 +362,103 @@
   align-items: center;
   padding-top: $spacing-4;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.rfp-count {
-  .rfp-badge {
-    padding: $spacing-2 $spacing-4;
-    background: rgba(255, 152, 0, 0.2);
-    border: 1px solid rgba(255, 152, 0, 0.4);
-    border-radius: $border-radius-base;
-    font-size: $font-size-sm;
-    font-weight: $font-weight-semibold;
-    color: $warning-orange;
-  }
-}
-
-// Proposal Sidebar
-.proposal-sidebar {
-  width: 320px;
-  flex-shrink: 0;
-  position: sticky;
-  top: 100px;
-  height: fit-content;
-}
-
-.proposal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: $spacing-4;
-  padding-bottom: $spacing-4;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-
-  h3 {
-    font-size: $font-size-lg;
-    font-weight: $font-weight-bold;
-    color: #ffffff;
-    margin: 0;
-  }
-
-  .close-btn {
-    background: transparent;
-    border: none;
-    color: $text-secondary;
-    font-size: $font-size-xl;
-    cursor: pointer;
-    padding: 0;
-    width: 24px;
-    height: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: $border-radius-base;
-    transition: all $transition-base;
-
-    &:hover {
-      background: rgba(255, 255, 255, 0.1);
-      color: #ffffff;
-    }
-  }
-}
-
-.proposal-content {
-  .proposal-label {
-    display: block;
-    font-size: $font-size-sm;
-    font-weight: $font-weight-semibold;
-    color: $text-secondary;
-    margin-bottom: $spacing-3;
-  }
-
-  .proposal-select {
-    width: 100%;
-    padding: $spacing-3 $spacing-4;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: $border-radius-base;
-    color: #ffffff;
-    font-size: $font-size-base;
-    margin-bottom: $spacing-4;
-    cursor: pointer;
-
-    &:focus {
-      outline: none;
-      border-color: $primary-blue;
-    }
-  }
-}
-
-.proposal-info {
-  display: flex;
-  flex-direction: column;
   gap: $spacing-3;
-  margin-bottom: $spacing-6;
+  position: relative; // For dropdown context if needed, though wrapper handles it
+}
+
+.proposal-action-wrapper {
+  position: relative;
+}
+
+.proposal-dropdown {
+  position: absolute;
+  bottom: 100%;
+  right: 0;
+  width: 320px;
+  background: #1a1f3a;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: $border-radius-lg;
+  box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.3);
   padding: $spacing-4;
-  background: rgba(255, 255, 255, 0.03);
-  border-radius: $border-radius-base;
-}
+  z-index: 100;
+  margin-bottom: $spacing-2;
+  animation: slideUp 0.2s ease-out;
 
-.info-item {
-  display: flex;
-  justify-content: space-between;
-  font-size: $font-size-sm;
-
-  .info-label {
-    color: $text-secondary;
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 
-  .info-value {
-    color: #ffffff;
-    font-weight: $font-weight-semibold;
-  }
-}
-
-.empty-state {
-  margin-top: $spacing-8;
-}
-
-.empty-content {
-  text-align: center;
-  padding: $spacing-12;
-
-  .empty-icon {
-    font-size: 4rem;
-    display: block;
+  .dropdown-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-bottom: $spacing-4;
-    opacity: 0.5;
+    padding-bottom: $spacing-2;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+    h4 {
+      margin: 0;
+      font-size: $font-size-base;
+      color: #ffffff;
+      font-weight: $font-weight-bold;
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      color: $text-secondary;
+      font-size: $font-size-lg;
+      cursor: pointer;
+      padding: 0;
+      
+      &:hover {
+        color: #ffffff;
+      }
+    }
   }
 
-  h2 {
-    font-size: $font-size-2xl;
-    color: #ffffff;
-    margin-bottom: $spacing-3;
-  }
+  .dropdown-content {
+    label {
+      display: block;
+      font-size: $font-size-sm;
+      color: $text-secondary;
+      margin-bottom: $spacing-2;
+    }
 
-  p {
-    font-size: $font-size-base;
-    color: $text-secondary;
+    .dropdown-select {
+      width: 100%;
+      padding: $spacing-2 $spacing-3;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: $border-radius-base;
+      color: #ffffff;
+      margin-bottom: $spacing-4;
+      
+      &:focus {
+        outline: none;
+        border-color: $primary-blue;
+      }
+    }
+
+    .proposal-stats {
+      background: rgba(255, 255, 255, 0.03);
+      padding: $spacing-3;
+      border-radius: $border-radius-base;
+      margin-bottom: $spacing-4;
+      display: flex;
+      flex-direction: column;
+      gap: $spacing-2;
+
+      .stat-item {
+        display: flex;
+        justify-content: space-between;
+        font-size: $font-size-sm;
+        
+        span { color: $text-secondary; }
+        strong { color: #ffffff; }
+      }
+    }
   }
 }
 
@@ -507,13 +468,16 @@
     flex-direction: column;
   }
 
-  .filters-sidebar,
-  .proposal-sidebar {
+  .filters-sidebar {
     width: 100%;
     position: static;
   }
 
   .companies-grid {
     grid-template-columns: 1fr;
+  }
+  
+  .proposal-dropdown {
+    width: 280px; // Slightly smaller on mobile
   }
 }

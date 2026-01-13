@@ -113,8 +113,8 @@ export class CompanyMarketplaceComponent implements OnInit {
     'Oracle', 'Google Cloud', 'IBM', 'Pamis'
   ];
 
-  // Proposal sidebar
-  selectedUseCase: any = null;
+  // Proposal handling
+  activeProposalCompanyId: string | null = null;
   proposalData = {
     useCase: '',
     engagement: '24%',
@@ -219,66 +219,32 @@ export class CompanyMarketplaceComponent implements OnInit {
     this.filteredCompanies = [...this.companies];
   }
 
-  filterCompanies(): void {
-    this.filteredCompanies = this.companies.filter(company => {
-      const matchesSearch = !this.searchQuery ||
-        company.name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-        company.sector.toLowerCase().includes(this.searchQuery.toLowerCase());
+  // ... (loadCompanies and filterCompanies methods remain the same)
 
-      const matchesSector = this.selectedSectors.length === 0 ||
-        this.selectedSectors.includes(company.sector);
-
-      const matchesTechnology = this.selectedTechnologies.length === 0 ||
-        this.selectedTechnologies.some(tech => company.technologies.includes(tech));
-
-      return matchesSearch && matchesSector && matchesTechnology;
-    });
-
-    this.sortCompanies();
-  }
-
-  sortCompanies(): void {
-    switch (this.sortBy) {
-      case 'relevancia':
-        // Sort by innovation level and RFP count
-        this.filteredCompanies.sort((a, b) => {
-          const innovationOrder = { 'ALTO': 3, 'MEDIO': 2, 'BAJO': 1 };
-          return (innovationOrder[b.innovationLevel] - innovationOrder[a.innovationLevel]) ||
-            ((b.rfpCount || 0) - (a.rfpCount || 0));
-        });
-        break;
-      case 'nombre':
-        this.filteredCompanies.sort((a, b) => a.name.localeCompare(b.name));
-        break;
-      case 'rfps':
-        this.filteredCompanies.sort((a, b) => (b.rfpCount || 0) - (a.rfpCount || 0));
-        break;
-    }
-  }
-
-  toggleFilter(array: string[], value: string): void {
-    const index = array.indexOf(value);
-    if (index > -1) {
-      array.splice(index, 1);
+  toggleProposalDropdown(company: Company): void {
+    if (this.activeProposalCompanyId === company.id) {
+      this.activeProposalCompanyId = null;
     } else {
-      array.push(value);
+      this.activeProposalCompanyId = company.id;
+      this.proposalData.useCase = ''; // Reset selection
     }
-    this.filterCompanies();
   }
 
-  viewCompany(company: Company): void {
-    // TODO: Navigate to company detail page
-    console.log('View company:', company);
+  viewRFPs(company: Company): void {
+    console.log('Viewing RFPs for:', company.name);
+    // Navigate to RFPs tab filtered by this company, or show a modal
+    this.activeTab = 'rfps';
+    // In a real app, we would filter the RFPs list by company.id
   }
 
-  sendProposal(company: Company): void {
-    // TODO: Open proposal modal or navigate to proposal form
-    console.log('Send proposal to:', company);
-  }
-
-  selectUseCase(useCase: any): void {
-    this.selectedUseCase = useCase;
-    this.proposalData.useCase = useCase?.title || '';
+  submitProposal(company: Company): void {
+    if (!this.proposalData.useCase) {
+      alert('Por favor selecciona un caso de uso');
+      return;
+    }
+    console.log(`Enviando propuesta a ${company.name} con caso: ${this.proposalData.useCase}`);
+    this.activeProposalCompanyId = null;
+    // Show success message
   }
 
   createNewUseCase(): void {

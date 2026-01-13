@@ -211,15 +211,64 @@
               </div>
 
               <div class="company-footer">
-                <div class="rfp-count" *ngIf="company.rfpCount && company.rfpCount > 0">
-                  <span class="rfp-badge">{{ company.rfpCount }} RFPs</span>
-                </div>
                 <app-button 
-                  variant="primary" 
-                  (clickEvent)="sendProposal(company); $event.stopPropagation()"
+                  variant="secondary" 
+                  (clickEvent)="viewRFPs(company); $event.stopPropagation()"
+                  class="action-btn"
                 >
-                  Enviar Propuesta
+                  Ver Necesidades ({{ company.rfpCount || 0 }})
                 </app-button>
+                
+                <div class="proposal-action-wrapper">
+                  <app-button 
+                    variant="primary" 
+                    (clickEvent)="toggleProposalDropdown(company); $event.stopPropagation()"
+                    class="action-btn"
+                  >
+                    Enviar Propuesta
+                  </app-button>
+                  
+                  <!-- Proposal Dropdown -->
+                  <div 
+                    *ngIf="activeProposalCompanyId === company.id" 
+                    class="proposal-dropdown"
+                    (click)="$event.stopPropagation()"
+                  >
+                    <div class="dropdown-header">
+                      <h4>Enviar Propuesta a {{ company.name }}</h4>
+                      <button class="close-btn" (click)="toggleProposalDropdown(company)">×</button>
+                    </div>
+                    
+                    <div class="dropdown-content">
+                      <label>Selecciona tu Caso de Uso</label>
+                      <select [(ngModel)]="proposalData.useCase" class="dropdown-select">
+                        <option value="">Selecciona un caso de uso...</option>
+                        <option value="chatbot-onboarding">Chatbot Asistente Onboarding RRHH</option>
+                        <option value="vision-artificial">Visión Artificial para Control Calidad</option>
+                        <option value="prediccion-fraude">Predicción de Fraude Transaccional</option>
+                      </select>
+                      
+                      <div class="proposal-stats" *ngIf="proposalData.useCase">
+                        <div class="stat-item">
+                          <span>Engagement:</span>
+                          <strong>{{ proposalData.engagement }}</strong>
+                        </div>
+                        <div class="stat-item">
+                          <span>Usuarios:</span>
+                          <strong>{{ proposalData.users }}</strong>
+                        </div>
+                      </div>
+                      
+                      <app-button 
+                        variant="primary" 
+                        style="width: 100%"
+                        (clickEvent)="submitProposal(company)"
+                      >
+                        ✉️ Enviar Ahora
+                      </app-button>
+                    </div>
+                  </div>
+                </div>
               </div>
             </app-card>
           </div>
@@ -318,47 +367,5 @@
         </app-card>
       </div>
     </main>
-
-    <!-- Right Sidebar - Proposal -->
-    <aside class="proposal-sidebar" *ngIf="selectedUseCase || true">
-      <app-card>
-        <div class="proposal-header">
-          <h3>TU PROPUESTA</h3>
-          <button class="close-btn" (click)="selectedUseCase = null">×</button>
-        </div>
-        
-        <div class="proposal-content">
-          <label class="proposal-label">Selecciona tu Caso de Uso</label>
-          <select 
-            [(ngModel)]="proposalData.useCase"
-            class="proposal-select"
-          >
-            <option value="">Selecciona un caso de uso...</option>
-            <option value="chatbot-onboarding">Chatbot Asistente Onboarding RRHH</option>
-            <option value="vision-artificial">Visión Artificial para Control Calidad</option>
-            <option value="prediccion-fraude">Predicción de Fraude Transaccional</option>
-          </select>
-
-          <div class="proposal-info">
-            <div class="info-item">
-              <span class="info-label">Engagement:</span>
-              <span class="info-value">{{ proposalData.engagement }}</span>
-            </div>
-            <div class="info-item">
-              <span class="info-label">Incluye:</span>
-              <span class="info-value">{{ proposalData.users }} usuarios</span>
-            </div>
-          </div>
-
-          <app-button 
-            variant="primary" 
-            (clickEvent)="sendProposal(selectedUseCase || {})"
-            style="width: 100%;"
-          >
-            ✉️ Enviar Propuesta
-          </app-button>
-        </div>
-      </app-card>
-    </aside>
   </div>
 </div>
