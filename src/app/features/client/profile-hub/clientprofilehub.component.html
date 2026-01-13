@@ -32,6 +32,13 @@
         >
           <span class="icon">🏆</span> Badges y Recompensas
         </button>
+        <button 
+          class="tab-btn" 
+          [class.active]="activeTab === 'payments'"
+          (click)="setActiveTab('payments')"
+        >
+          <span class="icon">💳</span> Pagos
+        </button>
       </div>
     </div>
 
@@ -39,6 +46,7 @@
       <app-clientprofile *ngIf="activeTab === 'profile'" [showNavbar]="false"></app-clientprofile>
       <app-clientcompany *ngIf="activeTab === 'company'" [showNavbar]="false"></app-clientcompany>
       <app-clientbadges *ngIf="activeTab === 'badges'" [showNavbar]="false"></app-clientbadges>
+      <app-clientpayments *ngIf="activeTab === 'payments'" [showNavbar]="false"></app-clientpayments>
     </div>
   </div>
 </div>

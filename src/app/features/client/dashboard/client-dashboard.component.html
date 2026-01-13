@@ -365,74 +365,194 @@
     
     <!-- Main Content -->
     <main class="main-content">
-      <!-- Combined Case Studies Grid -->
-      <section class="cases-section">
-        <div class="section-header">
-          <div>
-            <h2>Casos de uso</h2>
-            <p class="results-count">{{ caseStudies.length }} resultados encontrados</p>
+      <!-- Tabs Navigation (Inside Main Content) -->
+      <div class="tabs">
+        <button 
+          class="tab" 
+          [class.active]="activeTab === 'marketplace'"
+          (click)="activeTab = 'marketplace'"
+        >
+          Mercado Global
+        </button>
+        <button 
+          class="tab" 
+          [class.active]="activeTab === 'received'"
+          (click)="activeTab = 'received'"
+        >
+          Propuestas Recibidas
+          <span class="badge" *ngIf="receivedProposals.length > 0">{{receivedProposals.length}}</span>
+        </button>
+        <button 
+          class="tab" 
+          [class.active]="activeTab === 'my-requests'"
+          (click)="activeTab = 'my-requests'"
+        >
+          Mis Solicitudes (Innovación)
+          <span class="badge" *ngIf="myRequests.length > 0">{{myRequests.length}}</span>
+        </button>
+      </div>
+
+      <!-- MARKETPLACE VIEW -->
+      <div *ngIf="activeTab === 'marketplace'">
+        <section class="cases-section">
+          <div class="section-header">
+            <div>
+              <h2>Casos de uso</h2>
+              <p class="results-count">{{ caseStudies.length }} resultados encontrados</p>
+            </div>
+            <select class="sort-select">
+              <option>Más relevantes</option>
+              <option>Más recientes</option>
+              <option>Mejor valorados</option>
+            </select>
           </div>
-          <select class="sort-select">
-            <option>Más relevantes</option>
-            <option>Más recientes</option>
-            <option>Mejor valorados</option>
-          </select>
-        </div>
-        
-        <div class="cases-grid">
-          <article 
-            *ngFor="let case of caseStudies"
-            class="case-card"
-            [class.featured]="case.featured"
-            (click)="onCaseClick(case)"
-          >
-            <!-- Relevance Score -->
-            <div class="case-header">
-              <span class="relevance-badge" [class.featured-badge]="case.featured">
-                <span *ngIf="case.featured" class="premium-icon">⭐</span>
-                {{ case.relevanceScore }}% coincidencia
-              </span>
+          
+          <div class="cases-grid">
+            <article 
+              *ngFor="let case of caseStudies"
+              class="case-card"
+              [class.featured]="case.featured"
+              (click)="onCaseClick(case)"
+            >
+              <!-- Relevance Score -->
+              <div class="case-header">
+                <span class="relevance-badge" [class.featured-badge]="case.featured">
+                  <span *ngIf="case.featured" class="premium-icon">⭐</span>
+                  {{ case.relevanceScore }}% coincidencia
+                </span>
+              </div>
+              
+              <!-- Title -->
+              <h3 class="case-title">{{ case.title }}</h3>
+              
+              <!-- Provider Info -->
+              <div class="case-provider">
+                <span class="provider-avatar-sm">{{ case.provider.logo }}</span>
+                <span class="provider-name">{{ case.provider.name }}</span>
+                <span *ngIf="case.provider.verified" class="verified-icon">
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10.067.87a2.89 2.89 0 0 0-4.134 0l-.622.638-.89-.011a2.89 2.89 0 0 0-2.924 2.924l.01.89-.636.622a2.89 2.89 0 0 0 0 4.134l.637.622-.011.89a2.89 2.89 0 0 0 2.924 2.924l.89-.01.622.636a2.89 2.89 0 0 0 4.134 0l.622-.637.89.011a2.89 2.89 0 0 0 2.924-2.924l-.01-.89.636-.622a2.89 2.89 0 0 0 0-4.134l-.637-.622.011-.89a2.89 2.89 0 0 0-2.924-2.924l-.89.01-.622-.636zm.287 5.984l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7 8.793l2.646-2.647a.5.5 0 0 1 .708.708z"/>
+                  </svg>
+                </span>
+              </div>
+              
+              <!-- KPIs -->
+              <div class="case-metrics">
+                <div *ngFor="let kpi of case.kpis" class="metric-item">
+                  <span class="metric-label">{{ kpi.label }}</span>
+                  <span class="metric-value">{{ kpi.value }}</span>
+                </div>
+              </div>
+              
+              <!-- Tags -->
+              <div class="case-tags">
+                <span *ngFor="let tag of case.tags" class="tag">{{ tag }}</span>
+              </div>
+              
+              <!-- Footer -->
+              <div class="case-footer">
+                <button class="view-case-btn">
+                  Ver caso de estudio
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                    <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
+                  </svg>
+                </button>
+              </div>
+            </article>
+          </div>
+        </section>
+      </div>
+
+      <!-- RECEIVED PROPOSALS VIEW -->
+      <div *ngIf="activeTab === 'received'">
+        <section class="cases-section">
+          <div class="section-header">
+            <div>
+              <h2>Propuestas Recibidas</h2>
+              <p class="subtitle">Casos de uso y ofertas enviadas directamente a ti</p>
             </div>
-            
-            <!-- Title -->
-            <h3 class="case-title">{{ case.title }}</h3>
-            
-            <!-- Provider Info -->
-            <div class="case-provider">
-              <span class="provider-avatar-sm">{{ case.provider.logo }}</span>
-              <span class="provider-name">{{ case.provider.name }}</span>
-              <span *ngIf="case.provider.verified" class="verified-icon">
-                <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
-                  <path fill-rule="evenodd" d="M10.067.87a2.89 2.89 0 0 0-4.134 0l-.622.638-.89-.011a2.89 2.89 0 0 0-2.924 2.924l.01.89-.636.622a2.89 2.89 0 0 0 0 4.134l.637.622-.011.89a2.89 2.89 0 0 0 2.924 2.924l.89-.01.622.636a2.89 2.89 0 0 0 4.134 0l.622-.637.89.011a2.89 2.89 0 0 0 2.924-2.924l-.01-.89.636-.622a2.89 2.89 0 0 0 0-4.134l-.637-.622.011-.89a2.89 2.89 0 0 0-2.924-2.924l-.89.01-.622-.636zm.287 5.984l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7 8.793l2.646-2.647a.5.5 0 0 1 .708.708z"/>
-                </svg>
-              </span>
+          </div>
+          
+          <div class="cases-grid">
+            <article 
+              *ngFor="let case of receivedProposals"
+              class="case-card featured"
+              (click)="onCaseClick(case)"
+            >
+              <div class="case-header">
+                <span class="relevance-badge featured-badge">
+                  <span class="premium-icon">📥</span>
+                  Oferta Privada
+                </span>
+              </div>
+              
+              <h3 class="case-title">{{ case.title }}</h3>
+              
+              <div class="case-provider">
+                <span class="provider-avatar-sm">{{ case.provider.logo }}</span>
+                <span class="provider-name">{{ case.provider.name }}</span>
+              </div>
+              
+              <div class="case-metrics">
+                <div *ngFor="let kpi of case.kpis" class="metric-item">
+                  <span class="metric-label">{{ kpi.label }}</span>
+                  <span class="metric-value">{{ kpi.value }}</span>
+                </div>
+              </div>
+              
+              <div class="case-tags">
+                <span *ngFor="let tag of case.tags" class="tag">{{ tag }}</span>
+              </div>
+              
+              <div class="case-footer">
+                <button class="view-case-btn">
+                  Revisar Propuesta
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                    <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
+                  </svg>
+                </button>
+              </div>
+            </article>
+          </div>
+        </section>
+      </div>
+
+      <!-- MY REQUESTS VIEW -->
+      <div *ngIf="activeTab === 'my-requests'">
+        <section class="cases-section">
+          <div class="section-header">
+            <div>
+              <h2>Mis Solicitudes de Innovación</h2>
+              <p class="subtitle">Gestiona tus retos publicados y revisa las respuestas</p>
             </div>
-            
-            <!-- KPIs -->
-            <div class="case-metrics">
-              <div *ngFor="let kpi of case.kpis" class="metric-item">
-                <span class="metric-label">{{ kpi.label }}</span>
-                <span class="metric-value">{{ kpi.value }}</span>
+            <button class="primary-btn" (click)="publishRFP()">
+              + Publicar Nuevo Reto
+            </button>
+          </div>
+          
+          <div class="requests-list">
+            <div *ngFor="let req of myRequests" class="request-card">
+              <div class="request-info">
+                <h3>{{ req.title }}</h3>
+                <div class="request-meta">
+                  <span>📅 {{ req.date }}</span>
+                  <span class="status-badge" [class.active]="req.status === 'Active'">{{ req.status }}</span>
+                  <span>💰 {{ req.budget }}</span>
+                </div>
+              </div>
+              <div class="request-stats">
+                <div class="stat-box">
+                  <span class="stat-value">{{ req.responses }}</span>
+                  <span class="stat-label">Respuestas</span>
+                </div>
+                <button class="view-responses-btn">
+                  Ver Respuestas
+                </button>
               </div>
             </div>
-            
-            <!-- Tags -->
-            <div class="case-tags">
-              <span *ngFor="let tag of case.tags" class="tag">{{ tag }}</span>
-            </div>
-            
-            <!-- Footer -->
-            <div class="case-footer">
-              <button class="view-case-btn">
-                Ver caso de estudio
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-                  <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
-                </svg>
-              </button>
-            </div>
-          </article>
-        </div>
-      </section>
+          </div>
+        </section>
+      </div>
     </main>
   </div>
 </div>

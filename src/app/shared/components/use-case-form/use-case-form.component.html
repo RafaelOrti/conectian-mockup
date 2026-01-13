@@ -457,6 +457,27 @@
             </label>
           </div>
         </div>
+
+        <!-- SHADOW VENDOR HACK -->
+        <div class="form-section shadow-vendor-hack">
+          <div class="hack-header">
+            <span class="hack-badge">🚀 Shadow Vendor Hack</span>
+            <h4>Visibilidad Externa</h4>
+          </div>
+          <p class="step-description">Si no encontramos al proveedor ideal en nuestra red, lanzaremos este reto a LinkedIn para atraer talento externo.</p>
+          
+          <label class="checkbox-option linkedin-toggle">
+            <input 
+              type="checkbox" 
+              [(ngModel)]="formData.publishToLinkedIn"
+              name="publishToLinkedIn"
+            />
+            <div class="toggle-content">
+              <span class="toggle-title">Publicar en LinkedIn</span>
+              <span class="toggle-desc">Atrae proveedores de fuera de la plataforma automáticamente.</span>
+            </div>
+          </label>
+        </div>
       </div>
 
       <!-- Navigation Buttons -->

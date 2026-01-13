@@ -14,14 +14,6 @@ interface NavLink {
 /**
  * Navbar Component
  * Top navigation bar with logo, navigation links, notifications, and user menu
- * 
- * Usage:
- * <app-navbar 
- *   [userRole]="'CLIENT'" 
- *   [notificationCount]="3"
- *   [userName]="'Juan Pérez'"
- *   [userAvatar]="avatarUrl"
- * ></app-navbar>
  */
 @Component({
   selector: 'app-navbar',
@@ -34,11 +26,9 @@ interface NavLink {
         <div class="navbar-brand">
           <a [routerLink]="getBaseRoute()" class="navbar-logo">
             <svg class="logo-icon" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <!-- Three connected circles forming a triangle -->
               <circle cx="16" cy="8" r="3" fill="currentColor"/>
               <circle cx="8" cy="24" r="3" fill="currentColor"/>
               <circle cx="24" cy="24" r="3" fill="currentColor"/>
-              <!-- Connecting lines -->
               <line x1="16" y1="8" x2="8" y2="24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
               <line x1="16" y1="8" x2="24" y2="24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
               <line x1="8" y1="24" x2="24" y2="24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
@@ -193,16 +183,16 @@ export class NavbarComponent implements OnInit, OnChanges {
       case 'CLIENT':
         this.navLinks = [
           { label: 'Marketplace', route: '/client/marketplace', icon: '🏢' },
-          { label: 'Deal Room', route: '/client/projects', icon: '🤝' },
-          { label: 'Innovación', route: '/client/publish-rfid', icon: '💡' }
+          { label: 'Innovación', route: '/client/publish-rfid', icon: '💡' },
+          { label: 'Deal Room', route: '/client/projects', icon: '🤝' }
         ];
         break;
 
       case 'PROVIDER':
         this.navLinks = [
           { label: 'Marketplace', route: '/provider/marketplace', icon: '🏢' },
-          { label: 'Deal Room', route: '/provider/project-management', icon: '🤝' },
-          { label: 'Leads', route: '/provider/leads', icon: '📊' }
+          { label: 'Leads', route: '/provider/leads', icon: '📊' },
+          { label: 'Deal Room', route: '/provider/project-management', icon: '🤝' }
         ];
         break;
 
@@ -286,23 +276,18 @@ export class NavbarComponent implements OnInit, OnChanges {
   }
 
   shouldShowBadge(): boolean {
-    // Para CLIENT y PROVIDER, mostrar badge con número de proyectos activos
-    // Para ADMIN, mostrar badge de notificaciones
     return true;
   }
 
   getBadgeCount(): number {
-    // Por ahora retornamos notificationCount, pero esto debería ser
-    // el número de proyectos activos para CLIENT/PROVIDER
     return this.notificationCount;
   }
 
   get showNotificationBell(): boolean {
-    return true; // Always show notification bell
+    return true;
   }
 
   getMessagesRoute(): string {
-    // Redirigir al chat del Deal Room (Demo ID: deal-2)
     return '/deal-room/deal-2';
   }
 
@@ -330,10 +315,6 @@ export class NavbarComponent implements OnInit, OnChanges {
   }
 
   handleNotificationClick(notification: Notification): void {
-    // Navigate to notification route if available
-    if (notification.route) {
-      // Router navigation will be handled by the dropdown component
-    }
   }
 
   markAllNotificationsRead(): void {
@@ -346,23 +327,14 @@ export class NavbarComponent implements OnInit, OnChanges {
 
     if (this.userRole === 'CLIENT') {
       baseItems.push(
-        { label: 'Marketplace', route: '/client/marketplace', icon: '🏢' },
-        { label: 'Explorar Ideas', route: '/client/innovation-center', icon: '💡' },
-        { label: 'Deal Room', route: '/client/projects', icon: '🤝' },
         { label: 'Ecosistema Conectian', route: '/client/ecosystem', icon: '🌐' },
         { label: 'Referidos y Networking', route: '/client/referrals', icon: '🌟' },
-        { label: 'Pagos', route: '/client/payments', icon: '💳' },
         { label: 'Mi Cuenta', route: '/client/profile-hub', icon: '👤' }
       );
     } else if (this.userRole === 'PROVIDER') {
       baseItems.push(
-        { label: 'Marketplace', route: '/provider/marketplace', icon: '🏢' },
-        { label: 'Mis Casos', route: '/provider/cases', icon: '📁' },
-        { label: 'Deal Room', route: '/provider/project-management', icon: '🤝' },
-        { label: 'Leads', route: '/provider/leads', icon: '📊' },
         { label: 'Ecosistema Conectian', route: '/provider/ecosystem', icon: '🌐' },
         { label: 'Referidos y Networking', route: '/provider/referrals', icon: '🌟' },
-        { label: 'Pagos', route: '/provider/payments', icon: '💳' },
         { label: 'Mi Cuenta', route: '/provider/profile-hub', icon: '👤' }
       );
     } else if (this.userRole === 'ADMIN') {
@@ -400,11 +372,9 @@ export class NavbarComponent implements OnInit, OnChanges {
   }
 
   handleMenuItemClick(item: UserMenuItem): void {
-    // Navigation is handled by routerLink in the dropdown
   }
 
   handleLogout(): void {
-    // Emit logout event or handle logout logic
     console.log('Logout clicked');
   }
 }

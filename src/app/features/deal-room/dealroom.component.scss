@@ -1054,3 +1054,105 @@
     }
   }
 }
+// Achievement Modal (Social Proof Engineering)
+.achievement-modal {
+  max-width: 600px !important;
+  
+  .achievement-preview {
+    margin: $spacing-6 0;
+    padding: $spacing-8;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: $border-radius-lg;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .achievement-card {
+    width: 100%;
+    max-width: 400px;
+    background: white;
+    color: #333;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    
+    .achievement-icon {
+      height: 120px;
+      background: linear-gradient(135deg, #0077b5 0%, #00a0dc 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 60px;
+    }
+    
+    .achievement-body {
+      padding: $spacing-6;
+      
+      h3 {
+        margin: 0 0 $spacing-2 0;
+        color: #0077b5;
+        font-size: 1.2rem;
+        font-weight: 700;
+      }
+      
+      p {
+        margin: 0;
+        font-size: 14px;
+        line-height: 1.5;
+        color: #555;
+      }
+      
+      .achievement-footer {
+        margin-top: $spacing-4;
+        padding-top: $spacing-4;
+        border-top: 1px solid #eee;
+        display: flex;
+        justify-content: space-between;
+        font-size: 11px;
+        color: #999;
+        font-weight: 600;
+        text-transform: uppercase;
+      }
+    }
+  }
+  
+  .achievement-actions {
+    text-align: center;
+    
+    .hint {
+      margin-bottom: $spacing-6;
+      color: $text-secondary;
+      font-size: $font-size-sm;
+    }
+    
+    .button-group {
+      display: flex;
+      justify-content: center;
+      gap: $spacing-4;
+    }
+  }
+}
+
+.share-milestone-btn {
+  background: rgba(255, 215, 0, 0.1);
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  color: #FFD700;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+  margin-left: $spacing-2;
+  
+  &:hover {
+    background: rgba(255, 215, 0, 0.2);
+    transform: scale(1.1);
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+  }
+}

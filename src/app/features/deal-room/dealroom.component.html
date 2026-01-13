@@ -22,6 +22,9 @@
           <app-button variant="secondary" icon="📊" (clickEvent)="generatePDFReport()">
             Generar Informe PDF
           </app-button>
+          <app-button variant="secondary" icon="🏆" (clickEvent)="openAchievementModal()">
+            Compartir Logro
+          </app-button>
           <app-button variant="primary" icon="❓" (clickEvent)="toggleUnifiedQuestions()">
             Preguntas Unificadas
           </app-button>
@@ -265,6 +268,14 @@
                          milestone.status === 'in-progress' ? 'En Progreso' : 
                          milestone.status === 'awaiting-approval' ? 'Esperando Aprobación' : 'Pendiente' }}
                     </span>
+                    <button 
+                      *ngIf="milestone.status === 'completed'"
+                      class="share-milestone-btn" 
+                      (click)="openAchievementModal(milestone)"
+                      title="Compartir hito en LinkedIn"
+                    >
+                      🏆
+                    </button>
                   </div>
                   <p class="milestone-date">{{ milestone.date }}</p>
                   
@@ -665,6 +676,38 @@
               </div>
             </div>
           </div>
+        </div>
+      </div>
+    </app-card>
+  </div>
+
+  <!-- Achievement Modal (Social Proof Engineering) -->
+  <div *ngIf="showAchievementModal" class="modal-overlay" (click)="closeAchievementModal()">
+    <app-card class="modal-content achievement-modal" variant="elevated" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>🏆 Generar Logro para LinkedIn</h2>
+        <button class="close-btn" (click)="closeAchievementModal()">✕</button>
+      </div>
+      <div class="achievement-preview">
+        <div class="achievement-card">
+          <div class="achievement-icon">{{ achievementData.image }}</div>
+          <div class="achievement-body">
+            <h3>{{ achievementData.title }}</h3>
+            <p>{{ achievementData.description }}</p>
+            <div class="achievement-footer">
+              <span class="platform-tag">via Conectian</span>
+              <span class="date-tag">{{ today | date:'mediumDate' }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="achievement-actions">
+        <p class="hint">Este logro se publicará en tu perfil de LinkedIn para potenciar tu marca personal y la de tu empresa.</p>
+        <div class="button-group">
+          <app-button variant="secondary" (clickEvent)="closeAchievementModal()">Cancelar</app-button>
+          <app-button variant="primary" icon="🔗" (clickEvent)="shareOnLinkedIn()">
+            Compartir en LinkedIn
+          </app-button>
         </div>
       </div>
     </app-card>

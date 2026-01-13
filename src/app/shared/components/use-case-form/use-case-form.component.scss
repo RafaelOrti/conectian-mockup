@@ -416,6 +416,82 @@
     }
   }
 
+  // Shadow Vendor Hack Section
+  .shadow-vendor-hack {
+    margin-top: $spacing-8;
+    padding: $spacing-6;
+    background: rgba(13, 134, 255, 0.05);
+    border: 1px solid rgba(13, 134, 255, 0.2);
+    border-radius: $border-radius-lg;
+    
+    .hack-header {
+      display: flex;
+      align-items: center;
+      gap: $spacing-3;
+      margin-bottom: $spacing-4;
+      
+      h4 {
+        margin: 0;
+        font-size: 16px;
+        color: $text-primary;
+      }
+    }
+    
+    .hack-badge {
+      background: linear-gradient(135deg, $primary-blue 0%, #6b5cf0 100%);
+      color: white;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 12px rgba(13, 134, 255, 0.3);
+    }
+    
+    .linkedin-toggle {
+      display: flex;
+      align-items: flex-start;
+      gap: $spacing-4;
+      padding: $spacing-4;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: $border-radius-base;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      margin-top: $spacing-4;
+      flex: none;
+      width: 100%;
+      
+      &:hover {
+        background: rgba(255, 255, 255, 0.06);
+      }
+      
+      input[type="checkbox"] {
+        width: 20px;
+        height: 20px;
+        margin-top: 4px;
+        accent-color: #0077b5; // LinkedIn Blue
+      }
+      
+      .toggle-content {
+        display: flex;
+        flex-direction: column;
+        
+        .toggle-title {
+          font-weight: 600;
+          color: $text-primary;
+          font-size: 15px;
+        }
+        
+        .toggle-desc {
+          font-size: 13px;
+          color: $text-secondary;
+          margin-top: 2px;
+        }
+      }
+    }
+  }
+
   // Form Actions
   .form-actions {
     display: flex;

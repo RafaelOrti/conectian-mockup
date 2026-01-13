@@ -63,6 +63,9 @@ export class ClientDashboardComponent implements OnInit {
   ];
 
   // Case Studies (Mock data) - Los primeros son casos destacados/premium
+  activeTab: 'marketplace' | 'received' | 'my-requests' = 'marketplace';
+
+  // Case Studies (Mock data) - Los primeros son casos destacados/premium
   caseStudies: CaseStudy[] = [
     // Casos destacados (proveedores destacados convertidos a casos de uso)
     {
@@ -212,6 +215,46 @@ export class ClientDashboardComponent implements OnInit {
       ],
       sector: 'Salud',
       tags: ['Computer Vision', 'ResNet', 'HIPAA']
+    }
+  ];
+
+  receivedProposals: CaseStudy[] = [
+    {
+      id: 'prop-1',
+      title: 'Propuesta Personalizada: Automatización de Inventario',
+      provider: { name: 'LogiTech Solutions', logo: '📦', verified: true },
+      relevanceScore: 100,
+      kpis: [{ label: 'Ahorro Est.', value: '30%', icon: '💰' }],
+      sector: 'Logística',
+      tags: ['Private Offer', 'Automation']
+    },
+    {
+      id: 'prop-2',
+      title: 'Propuesta: Chatbot Interno HR',
+      provider: { name: 'HR Tech AI', logo: '👥', verified: false },
+      relevanceScore: 95,
+      kpis: [{ label: 'Eficiencia', value: '40%', icon: '⚡' }],
+      sector: 'HR',
+      tags: ['Private Offer', 'NLP']
+    }
+  ];
+
+  myRequests: any[] = [
+    {
+      id: 'req-1',
+      title: 'Sistema de Detección de Anomalías en Producción',
+      date: '2025-10-15',
+      status: 'Active',
+      responses: 5,
+      budget: '50k - 100k'
+    },
+    {
+      id: 'req-2',
+      title: 'Motor de Recomendación para E-commerce',
+      date: '2025-09-20',
+      status: 'Closed',
+      responses: 12,
+      budget: '20k - 50k'
     }
   ];
 

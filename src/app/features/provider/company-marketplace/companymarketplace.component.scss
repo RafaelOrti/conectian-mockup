@@ -18,70 +18,101 @@
 .filters-sidebar {
   width: 280px;
   flex-shrink: 0;
-  background: rgba(255, 255, 255, 0.03);
-  border-radius: $border-radius-lg;
-  padding: $spacing-6;
-  height: fit-content;
+  background: rgba(15, 23, 42, 0.4);
+  backdrop-filter: blur(20px);
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
+  padding: $spacing-8 $spacing-6;
+  height: calc(100vh - 80px);
   position: sticky;
-  top: 100px;
+  top: 80px;
+  overflow-y: auto;
+  @include scrollbar-custom;
 }
 
 .filters-header {
-  margin-bottom: $spacing-6;
-  padding-bottom: $spacing-4;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-
+  margin-bottom: $spacing-8;
+  
   h3 {
-    font-size: $font-size-lg;
-    font-weight: $font-weight-bold;
+    font-size: 16px;
+    font-weight: 700;
     color: #ffffff;
     margin: 0;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 1.5px;
   }
 }
 
 .filter-section {
-  margin-bottom: $spacing-6;
+  margin-bottom: $spacing-8;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  padding-bottom: $spacing-6;
+
+  &:last-child {
+    border-bottom: none;
+  }
 
   .filter-label {
     display: block;
-    font-size: $font-size-sm;
-    font-weight: $font-weight-semibold;
-    color: $text-secondary;
-    margin-bottom: $spacing-3;
+    font-size: 12px;
+    font-weight: 700;
+    color: #94a3b8;
+    margin-bottom: $spacing-4;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 1px;
   }
 }
 
 .checkbox-group {
   display: flex;
   flex-direction: column;
-  gap: $spacing-2;
+  gap: $spacing-3;
 }
 
 .checkbox-option {
   display: flex;
   align-items: center;
-  gap: $spacing-2;
-  padding: $spacing-2;
+  gap: $spacing-3;
   cursor: pointer;
-  border-radius: $border-radius-base;
-  transition: all $transition-base;
+  transition: all 0.2s ease;
 
   &:hover {
-    background: rgba(255, 255, 255, 0.05);
+    span {
+      color: #ffffff;
+    }
   }
 
   input[type="checkbox"] {
-    margin: 0;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
     cursor: pointer;
+    position: relative;
+    transition: all 0.2s ease;
+
+    &:checked {
+      background: $primary-blue;
+      border-color: $primary-blue;
+
+      &::after {
+        content: '✓';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: white;
+        font-size: 12px;
+      }
+    }
   }
 
   span {
-    color: #ffffff;
-    font-size: $font-size-sm;
+    color: #cbd5e1;
+    font-size: 14px;
+    font-weight: 500;
+    user-select: none;
   }
 }
 
@@ -95,18 +126,23 @@
     padding: $spacing-2 $spacing-3;
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: $border-radius-base;
+    border-radius: 6px;
     color: #ffffff;
-    font-size: $font-size-sm;
+    font-size: 14px;
 
     &:focus {
       outline: none;
       border-color: $primary-blue;
+      background: rgba(255, 255, 255, 0.08);
     }
 
     &::placeholder {
-      color: rgba(255, 255, 255, 0.4);
+      color: rgba(255, 255, 255, 0.3);
     }
+  }
+  
+  span {
+    color: #64748b;
   }
 }
 
@@ -163,10 +199,6 @@
     display: flex;
     align-items: center;
     gap: $spacing-4;
-
-    .create-case-btn {
-      // Estilos específicos si son necesarios, o hereda de app-button
-    }
   }
 
   .sort-controls {

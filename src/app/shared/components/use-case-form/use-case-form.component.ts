@@ -34,6 +34,7 @@ export interface UseCaseForm {
   dataSecurity: string[];
   compliance: string[];
   certifications: string[];
+  publishToLinkedIn: boolean;
 }
 
 @Component({
@@ -76,7 +77,8 @@ export class UseCaseFormComponent implements OnInit, OnDestroy {
     dataLocation: '',
     dataSecurity: [],
     compliance: [],
-    certifications: []
+    certifications: [],
+    publishToLinkedIn: false
   };
 
   // Opciones disponibles

@@ -69,9 +69,16 @@ interface UnifiedQuestion {
 export class DealRoomComponent implements OnInit {
   dealId: string = '';
   activeTab: number = 1;
+  today: Date = new Date();
   showROICalculator: boolean = false;
   showSupportModal: boolean = false;
   showUnifiedQuestions: boolean = false;
+  showAchievementModal: boolean = false;
+  achievementData = {
+    title: '',
+    description: '',
+    image: '🚀'
+  };
 
   dealInfo = {
     title: 'Proyecto: Chatbot para E-commerce',
@@ -514,5 +521,35 @@ export class DealRoomComponent implements OnInit {
       else if (m.status === 'awaiting-approval') total += 90;
     });
     return Math.round(total / this.milestones.length);
+  }
+
+  // Social Proof Engineering
+  openAchievementModal(milestone?: Milestone): void {
+    if (milestone) {
+      this.achievementData = {
+        title: `¡Hito Alcanzado: ${milestone.title}!`,
+        description: `Estamos avanzando con éxito en el proyecto "${this.dealInfo.title}" junto a ${this.dealInfo.provider === 'Nexus Solutions' ? this.dealInfo.client : this.dealInfo.provider}. #Innovación #IA #Conectian`,
+        image: '🎯'
+      };
+    } else {
+      const progress = this.calculateTotalProgress();
+      this.achievementData = {
+        title: `¡Proyecto al ${progress}%!`,
+        description: `Orgullosos del progreso en "${this.dealInfo.title}". La colaboración entre ${this.dealInfo.client} y ${this.dealInfo.provider} está dando frutos increíbles. #DigitalTransformation #Success`,
+        image: '🚀'
+      };
+    }
+    this.showAchievementModal = true;
+  }
+
+  closeAchievementModal(): void {
+    this.showAchievementModal = false;
+  }
+
+  shareOnLinkedIn(): void {
+    // In a real app, this would open the LinkedIn share dialog with a generated image or post
+    const url = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.href)}`;
+    window.open(url, '_blank');
+    this.showAchievementModal = false;
   }
 }
