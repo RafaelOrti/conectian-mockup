@@ -201,9 +201,8 @@ export class NavbarComponent implements OnInit, OnChanges {
       case 'PROVIDER':
         this.navLinks = [
           { label: 'Marketplace', route: '/provider/marketplace', icon: '🏢' },
-          { label: 'Caso de Uso', route: '/provider/publish-case', icon: '➕' },
           { label: 'Leads', route: '/provider/leads', icon: '📊' },
-          { label: 'Proyectos', route: '/provider/project-management', icon: '📁' }
+          { label: 'Deal Room', route: '/provider/project-management', icon: '🤝' }
         ];
         break;
 

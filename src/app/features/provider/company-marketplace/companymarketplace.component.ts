@@ -280,4 +280,8 @@ export class CompanyMarketplaceComponent implements OnInit {
     this.selectedUseCase = useCase;
     this.proposalData.useCase = useCase?.title || '';
   }
+
+  createNewUseCase(): void {
+    this.router.navigate(['/provider/publish-case']);
+  }
 }

@@ -159,6 +159,16 @@
     margin: 0 0 $spacing-2 0;
   }
 
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: $spacing-4;
+
+    .create-case-btn {
+      // Estilos específicos si son necesarios, o hereda de app-button
+    }
+  }
+
   .sort-controls {
     display: flex;
     align-items: center;

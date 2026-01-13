@@ -244,13 +244,22 @@
             <h1>CASOS DE USO</h1>
             <p class="results-count">{{ useCases.length }} resultados encontrados</p>
           </div>
-          <div class="sort-controls">
-            <span>Ordenar por:</span>
-            <select class="sort-select">
-              <option>Más relevantes</option>
-              <option>Más recientes</option>
-              <option>Mejor valorados</option>
-            </select>
+          <div class="header-actions">
+            <app-button 
+              variant="primary" 
+              (clickEvent)="createNewUseCase()"
+              class="create-case-btn"
+            >
+              ➕ Crear Nuevo Caso
+            </app-button>
+            <div class="sort-controls">
+              <span>Ordenar por:</span>
+              <select class="sort-select">
+                <option>Más relevantes</option>
+                <option>Más recientes</option>
+                <option>Mejor valorados</option>
+              </select>
+            </div>
           </div>
         </div>
         
