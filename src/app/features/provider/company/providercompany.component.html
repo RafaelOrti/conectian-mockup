@@ -1,0 +1,93 @@
+<div class="provider-company-page" [class.no-navbar]="!showNavbar">
+  <app-navbar 
+    *ngIf="showNavbar"
+    [userRole]="'PROVIDER'" 
+    [userName]="'TechSolutions AI'"
+    [notificationCount]="5"
+    [messageCount]="3"
+    [projectCount]="8"
+  ></app-navbar>
+  
+  <div class="container">
+    <div class="page-header">
+      <div>
+        <h1>🏢 Mi Empresa</h1>
+        <p class="subtitle">Gestiona el equipo y la estructura de tu organización proveedora</p>
+      </div>
+      <app-button variant="primary" icon="➕">Invitar Miembro</app-button>
+    </div>
+
+    <!-- Company Overview -->
+    <app-card class="company-info-card">
+      <div class="company-header">
+        <div class="logo-placeholder">TS</div>
+        <div class="company-details">
+          <h2>TechSolutions AI</h2>
+          <p class="industry">Desarrollo de IA & Consultoría</p>
+          <div class="meta-info">
+            <span>📍 Barcelona, España</span>
+            <span>👥 12 Expertos</span>
+            <span>🌐 techsolutions-ai.com</span>
+          </div>
+        </div>
+        <button class="edit-btn">Editar Perfil</button>
+      </div>
+    </app-card>
+
+    <!-- Departments Grid -->
+    <div class="departments-layout">
+      <!-- Equipo Técnico -->
+      <section class="department-section">
+        <div class="dept-header">
+          <h3>Equipo Técnico</h3>
+          <span class="count">8 miembros</span>
+        </div>
+        <div class="members-grid">
+          <app-card class="member-card">
+            <div class="member-avatar">DR</div>
+            <div class="member-info">
+              <h4>David Ruiz</h4>
+              <span class="role">Lead AI Engineer</span>
+              <span class="email">david&#64;techsolutions-ai.com</span>
+            </div>
+            <span class="status-badge active">Activo</span>
+          </app-card>
+          
+          <app-card class="member-card">
+            <div class="member-avatar">EL</div>
+            <div class="member-info">
+              <h4>Elena López</h4>
+              <span class="role">Data Scientist</span>
+              <span class="email">elena&#64;techsolutions-ai.com</span>
+            </div>
+            <span class="status-badge active">Activo</span>
+          </app-card>
+
+          <div class="add-member-card">
+            <span class="plus-icon">+</span>
+            <span>Añadir al equipo</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Gestión y Ventas -->
+      <section class="department-section">
+        <div class="dept-header">
+          <h3>Gestión y Ventas</h3>
+          <span class="count">4 miembros</span>
+        </div>
+        <div class="members-grid">
+          <app-card class="member-card">
+            <div class="member-avatar">MP</div>
+            <div class="member-info">
+              <h4>Marta Pérez</h4>
+              <span class="role">Business Development</span>
+              <span class="email">marta&#64;techsolutions-ai.com</span>
+            </div>
+            <span class="status-badge active">Activo</span>
+          </app-card>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,107 @@
+<div class="client-referrals-page">
+  <app-navbar 
+    [userRole]="'CLIENT'" 
+    [userName]="'Carlos Martínez'"
+    [notificationCount]="3"
+    [messageCount]="2"
+    [projectCount]="4"
+  ></app-navbar>
+  
+  <div class="container">
+    <div class="page-header">
+      <div>
+        <h1>🌟 Referidos y Networking</h1>
+        <p class="subtitle">Invita a otros y gana recompensas exclusivas</p>
+      </div>
+      <app-button variant="primary" icon="✉️">Invitar Contacto</app-button>
+    </div>
+
+    <div class="referrals-layout">
+      <!-- Stats Cards -->
+      <div class="stats-grid">
+        <app-card class="stat-card">
+          <div class="stat-icon invites">📨</div>
+          <div class="stat-info">
+            <span class="stat-value">12</span>
+            <span class="stat-label">Invitaciones Enviadas</span>
+          </div>
+        </app-card>
+        <app-card class="stat-card">
+          <div class="stat-icon accepted">✅</div>
+          <div class="stat-info">
+            <span class="stat-value">5</span>
+            <span class="stat-label">Aceptadas</span>
+          </div>
+        </app-card>
+        <app-card class="stat-card">
+          <div class="stat-icon rewards">🎁</div>
+          <div class="stat-info">
+            <span class="stat-value">€250</span>
+            <span class="stat-label">Crédito Ganado</span>
+          </div>
+        </app-card>
+      </div>
+
+      <!-- Referral Link Section -->
+      <app-card class="referral-link-card">
+        <div class="link-content">
+          <div class="link-info">
+            <h3>Tu enlace único de referido</h3>
+            <p>Comparte este enlace con tus contactos. Ganarás €50 por cada empresa que se registre y complete su perfil.</p>
+          </div>
+          <div class="link-box">
+            <input type="text" value="https://conectian.com/ref/carlos-m-8291" readonly>
+            <button class="copy-btn">Copiar</button>
+          </div>
+          <div class="social-share">
+            <span>Compartir en:</span>
+            <button class="social-btn linkedin">LinkedIn</button>
+            <button class="social-btn twitter">Twitter</button>
+            <button class="social-btn email">Email</button>
+          </div>
+        </div>
+        <div class="link-image">
+          <!-- Illustration placeholder -->
+          <div class="illustration">🤝</div>
+        </div>
+      </app-card>
+
+      <!-- Referrals List -->
+      <app-card class="referrals-list-card">
+        <h3>Historial de Invitaciones</h3>
+        <table class="referrals-table">
+          <thead>
+            <tr>
+              <th>Contacto</th>
+              <th>Empresa</th>
+              <th>Fecha</th>
+              <th>Estado</th>
+              <th>Recompensa</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let referral of referrals">
+              <td>
+                <div class="user-cell">
+                  <div class="avatar">{{referral.initials}}</div>
+                  <span>{{referral.name}}</span>
+                </div>
+              </td>
+              <td>{{referral.company}}</td>
+              <td>{{referral.date}}</td>
+              <td>
+                <span class="status-badge" [class]="referral.status">
+                  {{referral.status === 'completed' ? 'Completado' : referral.status === 'pending' ? 'Pendiente' : 'Registrado'}}
+                </span>
+              </td>
+              <td>
+                <span class="reward-text" *ngIf="referral.reward">{{referral.reward}}</span>
+                <span class="no-reward" *ngIf="!referral.reward">-</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </app-card>
+    </div>
+  </div>
+</div>

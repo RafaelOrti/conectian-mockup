@@ -1,0 +1,185 @@
+@import '../../../../styles/variables';
+
+.client-company-page {
+  min-height: 100vh;
+  background: $bg-dark;
+  color: $text-primary;
+  padding-top: 80px; // Padding for fixed navbar
+
+  &.no-navbar {
+    padding-top: 0;
+    min-height: auto;
+  }
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: $spacing-8;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: $spacing-8;
+
+  h1 {
+    font-size: $font-size-3xl;
+    font-weight: $font-weight-bold;
+    margin-bottom: $spacing-2;
+  }
+
+  .subtitle {
+    color: $text-secondary;
+    font-size: $font-size-lg;
+  }
+}
+
+.company-info-card {
+  margin-bottom: $spacing-10;
+  
+  .company-header {
+    display: flex;
+    align-items: center;
+    gap: $spacing-6;
+
+    .logo-placeholder {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, $primary-blue, $ai-purple);
+      border-radius: $border-radius-lg;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: $font-size-2xl;
+      font-weight: bold;
+      color: white;
+    }
+
+    .company-details {
+      flex: 1;
+
+      h2 { font-size: $font-size-2xl; margin-bottom: $spacing-1; }
+      .industry { color: $primary-blue; font-weight: $font-weight-medium; margin-bottom: $spacing-2; }
+      
+      .meta-info {
+        display: flex;
+        gap: $spacing-6;
+        color: $text-secondary;
+        font-size: $font-size-sm;
+      }
+    }
+
+    .edit-btn {
+      padding: $spacing-2 $spacing-4;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: $border-radius-base;
+      color: $text-primary;
+      cursor: pointer;
+      transition: all 0.2s;
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.1);
+      }
+    }
+  }
+}
+
+.departments-layout {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-10;
+
+  .department-section {
+    .dept-header {
+      display: flex;
+      align-items: baseline;
+      gap: $spacing-4;
+      margin-bottom: $spacing-6;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding-bottom: $spacing-2;
+
+      h3 { font-size: $font-size-xl; color: $text-primary; }
+      .count { color: $text-secondary; font-size: $font-size-sm; }
+    }
+
+    .members-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: $spacing-6;
+
+      .member-card {
+        display: flex;
+        align-items: center;
+        gap: $spacing-4;
+        padding: $spacing-4;
+        transition: transform 0.2s;
+
+        &:hover {
+          transform: translateY(-2px);
+        }
+
+        .member-avatar {
+          width: 48px;
+          height: 48px;
+          border-radius: 50%;
+          background: rgba(255, 255, 255, 0.1);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-weight: bold;
+          color: $text-primary;
+        }
+
+        .member-info {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          overflow: hidden;
+
+          h4 { font-size: $font-size-base; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+          .role { color: $primary-blue; font-size: $font-size-xs; margin-bottom: 2px; }
+          .email { color: $text-secondary; font-size: $font-size-xs; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        }
+
+        .status-badge {
+          font-size: 10px;
+          padding: 2px 6px;
+          border-radius: $border-radius-full;
+          text-transform: uppercase;
+          font-weight: bold;
+
+          &.active { background: rgba(24, 185, 129, 0.1); color: $success-green; }
+          &.away { background: rgba(249, 105, 8, 0.1); color: $warning-orange; }
+          &.pending { background: rgba(255, 255, 255, 0.1); color: $text-secondary; }
+        }
+      }
+
+      .add-member-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: $spacing-2;
+        padding: $spacing-4;
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px dashed rgba(255, 255, 255, 0.1);
+        border-radius: $border-radius-lg;
+        color: $text-secondary;
+        cursor: pointer;
+        min-height: 80px;
+        transition: all 0.2s;
+
+        &:hover {
+          background: rgba(255, 255, 255, 0.05);
+          border-color: $primary-blue;
+          color: $primary-blue;
+        }
+
+        .plus-icon { font-size: 24px; }
+      }
+    }
+  }
+}

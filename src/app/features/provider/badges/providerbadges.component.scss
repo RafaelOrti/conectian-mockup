@@ -1,0 +1,363 @@
+@import '../../../../styles/variables';
+
+.badges-page {
+  min-height: 100vh;
+  background: $bg-dark;
+  color: $text-primary;
+  padding-top: 80px;
+  &.no-navbar {
+    padding-top: 0;
+    min-height: auto;
+  }
+  padding-bottom: $spacing-8;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: $spacing-8;
+}
+
+.page-header {
+  margin-bottom: $spacing-8;
+  text-align: center;
+  
+  h1 {
+    font-size: $font-size-4xl;
+    font-weight: $font-weight-bold;
+    color: $text-primary;
+    margin-bottom: $spacing-4;
+    background: linear-gradient(135deg, #ffffff 0%, #a0aec0 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  .page-subtitle {
+    font-size: $font-size-lg;
+    color: $text-secondary;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+}
+
+// Reputation Card
+.reputation-card {
+  margin-bottom: $spacing-8;
+}
+
+.reputation-content {
+  display: flex;
+  align-items: center;
+  gap: $spacing-6;
+  padding: $spacing-4;
+  
+  .reputation-icon {
+    font-size: 64px;
+    flex-shrink: 0;
+  }
+  
+  .reputation-info {
+    flex: 1;
+    
+    .reputation-score {
+      font-size: $font-size-4xl;
+      font-weight: $font-weight-bold;
+      color: $text-primary;
+      margin-bottom: $spacing-2;
+    }
+    
+    .reputation-level {
+      font-size: $font-size-lg;
+      color: $text-secondary;
+      margin-bottom: $spacing-4;
+    }
+    
+    .reputation-progress {
+      .progress-bar {
+        width: 100%;
+        height: 12px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: $border-radius-full;
+        overflow: hidden;
+        margin-bottom: $spacing-2;
+        
+        .progress-fill {
+          height: 100%;
+          background: linear-gradient(90deg, #0d86ff 0%, #6b5cf0 100%);
+          border-radius: $border-radius-full;
+          transition: width 0.3s ease;
+        }
+      }
+      
+      .progress-text {
+        font-size: $font-size-sm;
+        color: $text-secondary;
+      }
+    }
+  }
+}
+
+// Badges Sections
+.badges-grid {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-8;
+  margin-bottom: $spacing-8;
+}
+
+.badges-section {
+  h2 {
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-bold;
+    color: $text-primary;
+    margin-bottom: $spacing-6;
+  }
+}
+
+.badges-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: $spacing-6;
+}
+
+.badge-card {
+  text-align: center;
+  padding: $spacing-6 !important;
+  transition: all 0.3s ease;
+  
+  &.earned {
+    border: 2px solid rgba(24, 185, 129, 0.3);
+    background: rgba(24, 185, 129, 0.05);
+    
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(24, 185, 129, 0.2);
+    }
+  }
+  
+  &.in-progress {
+    border: 2px solid rgba(13, 134, 255, 0.3);
+    
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(13, 134, 255, 0.2);
+    }
+  }
+  
+  &.locked {
+    opacity: 0.6;
+    filter: grayscale(50%);
+  }
+  
+  .badge-icon-large {
+    font-size: 64px;
+    margin-bottom: $spacing-4;
+    display: block;
+    
+    &.locked-icon {
+      filter: grayscale(100%);
+      opacity: 0.5;
+    }
+  }
+  
+  .badge-info {
+    h3 {
+      font-size: $font-size-xl;
+      font-weight: $font-weight-bold;
+      color: $text-primary;
+      margin-bottom: $spacing-2;
+    }
+    
+    .badge-level {
+      font-size: $font-size-base;
+      font-weight: $font-weight-semibold;
+      margin-bottom: $spacing-3;
+      text-transform: uppercase;
+    }
+    
+    .badge-description {
+      font-size: $font-size-sm;
+      color: $text-secondary;
+      margin-bottom: $spacing-4;
+      line-height: 1.6;
+    }
+    
+    .badge-date {
+      font-size: $font-size-xs;
+      color: $text-muted;
+      margin-bottom: $spacing-3;
+    }
+    
+    .badge-progress {
+      margin: $spacing-4 0;
+      
+      .progress-bar {
+        width: 100%;
+        height: 8px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: $border-radius-full;
+        overflow: hidden;
+        margin-bottom: $spacing-2;
+        
+        .progress-fill {
+          height: 100%;
+          border-radius: $border-radius-full;
+          transition: width 0.3s ease;
+        }
+      }
+      
+      .progress-text {
+        font-size: $font-size-sm;
+        color: $text-secondary;
+      }
+    }
+    
+    .badge-rewards {
+      margin-top: $spacing-4;
+      padding-top: $spacing-4;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      text-align: left;
+      
+      strong {
+        font-size: $font-size-sm;
+        color: $text-primary;
+        display: block;
+        margin-bottom: $spacing-2;
+      }
+      
+      ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        
+        li {
+          font-size: $font-size-xs;
+          color: $text-secondary;
+          padding: $spacing-1 0;
+          padding-left: $spacing-4;
+          position: relative;
+          
+          &::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #18b981;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Achievements
+.achievements-section {
+  h2 {
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-bold;
+    color: $text-primary;
+    margin-bottom: $spacing-6;
+  }
+}
+
+.achievements-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: $spacing-4;
+}
+
+.achievement-card {
+  padding: $spacing-5 !important;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-4;
+  
+  &.completed {
+    border-color: rgba(24, 185, 129, 0.3);
+    background: rgba(24, 185, 129, 0.05);
+  }
+  
+  &.in-progress {
+    border-color: rgba(13, 134, 255, 0.3);
+  }
+  
+  &.locked {
+    opacity: 0.6;
+    filter: grayscale(50%);
+  }
+  
+  .achievement-icon {
+    font-size: 48px;
+    text-align: center;
+  }
+  
+  .achievement-info {
+    flex: 1;
+    
+    h4 {
+      font-size: $font-size-base;
+      font-weight: $font-weight-semibold;
+      color: $text-primary;
+      margin-bottom: $spacing-2;
+    }
+    
+    p {
+      font-size: $font-size-sm;
+      color: $text-secondary;
+      margin-bottom: $spacing-3;
+      line-height: 1.5;
+    }
+    
+    .achievement-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: $font-size-xs;
+      
+      .achievement-category {
+        color: $text-secondary;
+      }
+      
+      .achievement-points {
+        color: $primary-blue;
+        font-weight: $font-weight-semibold;
+      }
+    }
+  }
+  
+  .achievement-status {
+    .status-badge {
+      padding: $spacing-1 $spacing-3;
+      border-radius: $border-radius-full;
+      font-size: $font-size-xs;
+      font-weight: $font-weight-medium;
+      
+      &.completed {
+        background: rgba(24, 185, 129, 0.2);
+        color: #18b981;
+      }
+      
+      &.in-progress {
+        background: rgba(13, 134, 255, 0.2);
+        color: $primary-blue;
+      }
+      
+      &.locked {
+        background: rgba(255, 255, 255, 0.1);
+        color: $text-secondary;
+      }
+    }
+  }
+}
+
+@media (max-width: $breakpoint-md) {
+  .badges-list,
+  .achievements-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .reputation-content {
+    flex-direction: column;
+    text-align: center;
+  }
+}

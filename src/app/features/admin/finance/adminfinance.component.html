@@ -1,0 +1,194 @@
+<div class="admin-finance-page">
+  <app-navbar 
+    [userRole]="'ADMIN'" 
+    [userName]="'Admin User'"
+    [notificationCount]="5"
+  ></app-navbar>
+  
+  <div class="container">
+    <!-- Page Header -->
+    <div class="page-header">
+      <div>
+        <h1>💰 Finanzas</h1>
+        <p class="subtitle">Control financiero y métricas de ingresos</p>
+      </div>
+      <div class="header-actions">
+        <select class="period-select" [(ngModel)]="selectedPeriod">
+          <option value="7d">Últimos 7 días</option>
+          <option value="30d">Últimos 30 días</option>
+          <option value="90d">Últimos 90 días</option>
+          <option value="year">Este año</option>
+        </select>
+        <app-button variant="primary" icon="📊">Exportar Reporte</app-button>
+      </div>
+    </div>
+
+    <!-- KPIs Row -->
+    <div class="kpis-row">
+      <app-card class="kpi-card">
+        <div class="kpi-icon revenue">💵</div>
+        <div class="kpi-content">
+          <span class="kpi-label">MRR Total</span>
+          <span class="kpi-value">€{{metrics.mrr.toLocaleString()}}</span>
+          <span class="kpi-trend positive">+{{metrics.mrrGrowth}}% vs mes anterior</span>
+        </div>
+      </app-card>
+
+      <app-card class="kpi-card">
+        <div class="kpi-icon arr">📈</div>
+        <div class="kpi-content">
+          <span class="kpi-label">ARR Proyectado</span>
+          <span class="kpi-value">€{{metrics.arr.toLocaleString()}}</span>
+          <span class="kpi-trend positive">+{{metrics.arrGrowth}}% crecimiento</span>
+        </div>
+      </app-card>
+
+      <app-card class="kpi-card">
+        <div class="kpi-icon customers">👥</div>
+        <div class="kpi-content">
+          <span class="kpi-label">Clientes de Pago</span>
+          <span class="kpi-value">{{metrics.payingCustomers}}</span>
+          <span class="kpi-trend positive">+{{metrics.newCustomersThisMonth}} este mes</span>
+        </div>
+      </app-card>
+
+      <app-card class="kpi-card">
+        <div class="kpi-icon ltv">💎</div>
+        <div class="kpi-content">
+          <span class="kpi-label">LTV Promedio</span>
+          <span class="kpi-value">€{{metrics.avgLtv.toLocaleString()}}</span>
+          <span class="kpi-trend">CAC: €{{metrics.cac}}</span>
+        </div>
+      </app-card>
+    </div>
+
+    <!-- Revenue Breakdown -->
+    <div class="grid-2">
+      <app-card class="revenue-breakdown">
+        <h3>Desglose de Ingresos</h3>
+        <div class="breakdown-list">
+          <div class="breakdown-item">
+            <div class="breakdown-info">
+              <span class="breakdown-label">Suscripciones CEOs (PRO IA)</span>
+              <span class="breakdown-value">€{{revenueBreakdown.ceoPro.toLocaleString()}}/mes</span>
+            </div>
+            <div class="breakdown-bar">
+              <div class="bar-fill" [style.width.%]="(revenueBreakdown.ceoPro / metrics.mrr) * 100"></div>
+            </div>
+            <span class="breakdown-percent">{{((revenueBreakdown.ceoPro / metrics.mrr) * 100).toFixed(1)}}%</span>
+          </div>
+
+          <div class="breakdown-item">
+            <div class="breakdown-info">
+              <span class="breakdown-label">Suscripciones Proveedores (PRO)</span>
+              <span class="breakdown-value">€{{revenueBreakdown.providerPro.toLocaleString()}}/mes</span>
+            </div>
+            <div class="breakdown-bar">
+              <div class="bar-fill provider" [style.width.%]="(revenueBreakdown.providerPro / metrics.mrr) * 100"></div>
+            </div>
+            <span class="breakdown-percent">{{((revenueBreakdown.providerPro / metrics.mrr) * 100).toFixed(1)}}%</span>
+          </div>
+
+          <div class="breakdown-item">
+            <div class="breakdown-info">
+              <span class="breakdown-label">Suscripciones Proveedores (Base)</span>
+              <span class="breakdown-value">€{{revenueBreakdown.providerBase.toLocaleString()}}/mes</span>
+            </div>
+            <div class="breakdown-bar">
+              <div class="bar-fill base" [style.width.%]="(revenueBreakdown.providerBase / metrics.mrr) * 100"></div>
+            </div>
+            <span class="breakdown-percent">{{((revenueBreakdown.providerBase / metrics.mrr) * 100).toFixed(1)}}%</span>
+          </div>
+
+          <div class="breakdown-item">
+            <div class="breakdown-info">
+              <span class="breakdown-label">Comisiones por Transacciones</span>
+              <span class="breakdown-value">€{{revenueBreakdown.commissions.toLocaleString()}}/mes</span>
+            </div>
+            <div class="breakdown-bar">
+              <div class="bar-fill commission" [style.width.%]="(revenueBreakdown.commissions / metrics.mrr) * 100"></div>
+            </div>
+            <span class="breakdown-percent">{{((revenueBreakdown.commissions / metrics.mrr) * 100).toFixed(1)}}%</span>
+          </div>
+        </div>
+      </app-card>
+
+      <app-card class="churn-card">
+        <h3>Retención y Churn</h3>
+        <div class="churn-metrics">
+          <div class="churn-stat">
+            <span class="stat-value positive">{{churnMetrics.retentionRate}}%</span>
+            <span class="stat-label">Tasa de Retención</span>
+          </div>
+          <div class="churn-stat">
+            <span class="stat-value negative">{{churnMetrics.churnRate}}%</span>
+            <span class="stat-label">Tasa de Churn</span>
+          </div>
+          <div class="churn-stat">
+            <span class="stat-value">{{churnMetrics.churnedThisMonth}}</span>
+            <span class="stat-label">Churns este mes</span>
+          </div>
+          <div class="churn-stat">
+            <span class="stat-value negative">€{{churnMetrics.lostRevenue.toLocaleString()}}</span>
+            <span class="stat-label">Ingresos Perdidos</span>
+          </div>
+        </div>
+
+        <h4 class="mt-6">Usuarios en Riesgo</h4>
+        <div class="at-risk-list">
+          <div *ngFor="let user of atRiskUsers" class="at-risk-item">
+            <div class="user-info">
+              <span class="user-email">{{user.email}}</span>
+              <span class="user-plan">{{user.plan}}</span>
+            </div>
+            <div class="risk-indicator" [class]="'risk-' + user.riskLevel">
+              {{user.riskLevel === 'high' ? '🔴' : user.riskLevel === 'medium' ? '🟡' : '🟢'}}
+              {{user.daysInactive}} días inactivo
+            </div>
+            <app-button variant="secondary" size="small">Contactar</app-button>
+          </div>
+        </div>
+      </app-card>
+    </div>
+
+    <!-- Recent Transactions -->
+    <app-card class="transactions-card">
+      <div class="card-header">
+        <h3>Transacciones Recientes</h3>
+        <app-button variant="secondary" size="small">Ver Todas</app-button>
+      </div>
+      <table class="transactions-table">
+        <thead>
+          <tr>
+            <th>Fecha</th>
+            <th>Usuario</th>
+            <th>Tipo</th>
+            <th>Descripción</th>
+            <th>Monto</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let tx of recentTransactions">
+            <td>{{tx.date}}</td>
+            <td>{{tx.user}}</td>
+            <td>
+              <span class="tx-type" [class]="'type-' + tx.type">
+                {{tx.type === 'subscription' ? '📅' : tx.type === 'commission' ? '💱' : '💳'}} {{tx.typeLabel}}
+              </span>
+            </td>
+            <td>{{tx.description}}</td>
+            <td class="tx-amount" [class.positive]="tx.amount > 0" [class.negative]="tx.amount < 0">
+              {{tx.amount > 0 ? '+' : ''}}€{{tx.amount.toLocaleString()}}
+            </td>
+            <td>
+              <span class="tx-status" [class]="'status-' + tx.status">
+                {{tx.status === 'completed' ? '✅' : tx.status === 'pending' ? '⏳' : '❌'}} {{tx.statusLabel}}
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </app-card>
+  </div>
+</div>

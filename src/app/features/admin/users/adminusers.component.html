@@ -1,0 +1,384 @@
+<div class="admin-users-page">
+  <app-navbar 
+    [userRole]="'ADMIN'" 
+    [userName]="'Admin User'"
+    [notificationCount]="5"
+  ></app-navbar>
+  
+  <div class="container">
+    <div class="page-header">
+      <div>
+        <h1>👥 Usuarios</h1>
+        <p class="subtitle">Gestión de CEOs y Proveedores</p>
+      </div>
+      <div class="header-actions">
+        <app-button 
+          *ngIf="activeTab === 'ceos'"
+          variant="primary" 
+          (clickEvent)="inviteUser('ceo')"
+        >
+          + Invite CEO
+        </app-button>
+        <app-button 
+          *ngIf="activeTab === 'providers'"
+          variant="primary" 
+          (clickEvent)="inviteUser('provider')"
+        >
+          + Invite Proveedor
+        </app-button>
+        <app-button 
+          *ngIf="activeTab === 'providers' && providerStats.pending > 0"
+          variant="warning" 
+          (clickEvent)="activeTab = 'pending'"
+        >
+          Pending ({{providerStats.pending}})
+        </app-button>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <button 
+        class="tab"
+        [class.active]="activeTab === 'ceos'"
+        (click)="activeTab = 'ceos'; filterUsers()"
+      >
+        CEOs
+      </button>
+      <button 
+        class="tab"
+        [class.active]="activeTab === 'providers'"
+        (click)="activeTab = 'providers'; filterUsers()"
+      >
+        Proveedores
+      </button>
+      <button 
+        class="tab"
+        [class.active]="activeTab === 'pending'"
+        (click)="activeTab = 'pending'; selectedStatus = 'pending'; filterUsers()"
+      >
+        Pendientes de Aprobación
+      </button>
+    </div>
+
+    <!-- Stats Bar -->
+    <div class="stats-bar" *ngIf="activeTab === 'ceos'">
+      <div class="stat-item">
+        <span class="stat-label">Mostrando:</span>
+        <span class="stat-value">{{ceoStats.total}} CEOs</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-label">Free:</span>
+        <span class="stat-value">{{ceoStats.free}}</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-label">PRO IA:</span>
+        <span class="stat-value">{{ceoStats.pro}}</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-label">Active:</span>
+        <span class="stat-value">{{ceoStats.active}}</span>
+      </div>
+    </div>
+
+    <div class="stats-bar" *ngIf="activeTab === 'providers'">
+      <div class="stat-item">
+        <span class="stat-label">Stats:</span>
+        <span class="stat-value">{{providerStats.total}} total</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-label">|</span>
+        <span class="stat-value">{{providerStats.active}} active</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-label">|</span>
+        <span class="stat-value">{{providerStats.paused}} churned</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-label">MRR Proveedores:</span>
+        <span class="stat-value">€{{providerStats.mrr.toLocaleString()}}/mes</span>
+      </div>
+    </div>
+
+    <!-- Filters and Search -->
+    <div class="filters-bar">
+      <div class="search-box">
+        <input 
+          type="text" 
+          [(ngModel)]="searchQuery"
+          (input)="filterUsers()"
+          [placeholder]="activeTab === 'ceos' ? 'Buscar CEOs...' : 'Buscar Proveedores...'"
+          class="search-input"
+        />
+        <span class="search-icon">🔍</span>
+      </div>
+      
+      <div class="filter-buttons">
+        <button 
+          class="filter-btn"
+          [class.active]="selectedStatus === 'all'"
+          (click)="selectedStatus = 'all'; filterUsers()"
+        >
+          Todos
+        </button>
+        <button 
+          class="filter-btn"
+          [class.active]="selectedStatus === 'active'"
+          (click)="selectedStatus = 'active'; filterUsers()"
+        >
+          Activos
+        </button>
+        <button 
+          *ngIf="activeTab === 'providers'"
+          class="filter-btn"
+          [class.active]="selectedStatus === 'pending'"
+          (click)="selectedStatus = 'pending'; filterUsers()"
+        >
+          Pendientes
+        </button>
+        <button 
+          class="filter-btn"
+          [class.active]="selectedStatus === 'inactive'"
+          (click)="selectedStatus = 'inactive'; filterUsers()"
+        >
+          {{activeTab === 'providers' ? 'Pausados' : 'Inactivos'}}
+        </button>
+      </div>
+
+      <app-button variant="secondary" (clickEvent)="exportCSV()">
+        Export CSV
+      </app-button>
+    </div>
+
+    <!-- Users Table -->
+    <app-card class="users-table-card">
+      <table class="users-table">
+        <thead>
+          <tr>
+            <th>
+              <input 
+                type="checkbox" 
+                (change)="toggleSelectAll()"
+                [checked]="areAllSelected()"
+              />
+            </th>
+            <th>Email</th>
+            <th *ngIf="activeTab === 'providers'">Empresa</th>
+            <th>Plan</th>
+            <th>Active</th>
+            <th>Joined</th>
+            <th *ngIf="activeTab === 'ceos'">Actividad</th>
+            <th *ngIf="activeTab === 'providers'">Leads</th>
+            <th *ngIf="activeTab === 'providers'">Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- CEOs Table -->
+          <ng-container *ngIf="activeTab === 'ceos'">
+            <tr 
+              *ngFor="let user of filteredCEOs"
+              class="user-row"
+              [class.selected]="selectedUser?.id === user.id"
+              (click)="selectUser(user)"
+            >
+            <td>
+              <input 
+                type="checkbox" 
+                [checked]="selectedUsers.includes(user.id)"
+                (click)="$event.stopPropagation(); toggleUserSelection(user.id)"
+              />
+            </td>
+            <td>
+              <div class="user-info">
+                <div class="user-email">{{user.email}}</div>
+                <div class="user-company" *ngIf="user.company">{{user.company}}</div>
+              </div>
+            </td>
+            <td>
+              <div class="plan-info">
+                <span class="plan-name">{{user.plan}}</span>
+                <span class="plan-price" *ngIf="user.planPrice">{{user.planPrice}}</span>
+              </div>
+            </td>
+            <td>
+              <span class="status-badge" [class.active]="user.active">
+                {{user.active ? '✅' : '❌'}} {{user.active ? user.lastActive : '30d'}}
+              </span>
+            </td>
+            <td>{{user.joined}}</td>
+            <td>
+              <div class="activity-info" *ngIf="user.actions">
+                <span>Búsquedas: {{user.actions}}</span>
+                <span *ngIf="user.dealRooms">• Deal Rooms: {{user.dealRooms}}</span>
+              </div>
+            </td>
+            <td>
+              <div class="action-buttons">
+                <button class="btn-icon" (click)="editUser(user); $event.stopPropagation()" title="Ver detalles">
+                  👁️
+                </button>
+                <button class="btn-icon" (click)="editUser(user); $event.stopPropagation()" title="Editar">
+                  ⚙️
+                </button>
+              </div>
+            </td>
+            </tr>
+          </ng-container>
+
+          <!-- Providers Table -->
+          <ng-container *ngIf="activeTab === 'providers'">
+            <tr 
+              *ngFor="let user of filteredProviders"
+              class="user-row"
+              [class.selected]="selectedUser?.id === user.id"
+              (click)="selectUser(user)"
+            >
+            <td>
+              <input 
+                type="checkbox" 
+                [checked]="selectedUsers.includes(user.id)"
+                (click)="$event.stopPropagation(); toggleUserSelection(user.id)"
+              />
+            </td>
+            <td>
+              <div class="user-info">
+                <div class="user-email">{{user.email}}</div>
+              </div>
+            </td>
+            <td>
+              <div class="user-company">{{user.company}}</div>
+              <div class="user-location" *ngIf="user.company">Madrid</div>
+            </td>
+            <td>
+              <div class="plan-info">
+                <span class="plan-name">{{user.plan}}</span>
+                <span class="plan-price" *ngIf="user.planPrice">{{user.planPrice}}</span>
+              </div>
+            </td>
+            <td>
+              <span class="status-badge" [class.active]="user.active">
+                {{user.active ? '✅' : user.status === 'pending' ? '⏳' : '⏸️'}} 
+                {{user.status === 'pending' ? 'Pending' : user.status === 'paused' ? 'Paused' : 'Active'}}
+              </span>
+              <div class="rating" *ngIf="user.rating">
+                Rating: {{user.rating}}
+              </div>
+            </td>
+            <td>{{user.joined}}</td>
+            <td>{{user.leads || 0}}</td>
+            <td>
+              <div class="action-buttons">
+                <button 
+                  *ngIf="user.status === 'pending'"
+                  class="btn-approve"
+                  (click)="approveProvider(user); $event.stopPropagation()"
+                >
+                  ✅
+                </button>
+                <button 
+                  *ngIf="user.status === 'pending'"
+                  class="btn-reject"
+                  (click)="rejectProvider(user); $event.stopPropagation()"
+                >
+                  ❌
+                </button>
+                <button 
+                  *ngIf="user.status !== 'pending'"
+                  class="btn-icon"
+                  (click)="editUser(user); $event.stopPropagation()"
+                >
+                  👁️
+                </button>
+                <button 
+                  *ngIf="user.status !== 'pending'"
+                  class="btn-icon"
+                  (click)="editUser(user); $event.stopPropagation()"
+                >
+                  ⚙️
+                </button>
+              </div>
+            </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+
+      <!-- Bulk Actions -->
+      <div class="bulk-actions" *ngIf="selectedUsers.length > 0">
+        <span class="bulk-info">{{selectedUsers.length}} seleccionados</span>
+        <select class="bulk-select" (change)="bulkAction($any($event.target).value)">
+          <option value="">Acción masiva...</option>
+          <option value="activate">Activar</option>
+          <option value="suspend">Suspender</option>
+          <option value="delete">Eliminar</option>
+        </select>
+      </div>
+    </app-card>
+
+    <!-- User Detail Panel -->
+    <app-card *ngIf="selectedUser" class="user-detail-panel">
+      <div class="detail-header">
+        <h3>{{selectedUser.email}}</h3>
+        <button class="close-btn" (click)="selectedUser = null">×</button>
+      </div>
+      
+      <div class="detail-content">
+        <div class="detail-section">
+          <div class="detail-item">
+            <span class="detail-label">Plan:</span>
+            <span class="detail-value">{{selectedUser.plan}} {{selectedUser.planPrice || ''}}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Joined:</span>
+            <span class="detail-value">{{selectedUser.joined}}</span>
+          </div>
+        </div>
+
+        <div class="detail-section" *ngIf="selectedUser.type === 'ceo'">
+          <h4>ACTIVITY:</h4>
+          <div class="detail-item">
+            <span class="detail-label">Búsquedas IA:</span>
+            <span class="detail-value">{{selectedUser.actions || 0}} (avg 12/día)</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Proveedores contactados:</span>
+            <span class="detail-value">8</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Deal Rooms:</span>
+            <span class="detail-value">{{selectedUser.dealRooms || 0}} activos</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Last seen:</span>
+            <span class="detail-value">{{selectedUser.lastActive}}</span>
+          </div>
+        </div>
+
+        <div class="detail-section">
+          <h4>BILLING:</h4>
+          <div class="detail-item">
+            <span class="detail-label">Next payment:</span>
+            <span class="detail-value">15 Ene ({{selectedUser.planPrice || 'N/A'}})</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">LTV:</span>
+            <span class="detail-value">€297</span>
+          </div>
+        </div>
+
+        <div class="detail-actions">
+          <app-button variant="secondary" (clickEvent)="editUser(selectedUser!)">
+            Editar
+          </app-button>
+          <app-button variant="warning" (clickEvent)="suspendUser(selectedUser!)">
+            Suspend
+          </app-button>
+          <app-button variant="danger" (clickEvent)="deleteUser(selectedUser!)">
+            Delete
+          </app-button>
+        </div>
+      </div>
+    </app-card>
+  </div>
+</div>

@@ -1,0 +1,44 @@
+<div class="profile-hub-page">
+  <app-navbar 
+    [userRole]="'CLIENT'" 
+    [userName]="'Carlos Martínez'"
+    [notificationCount]="3"
+    [messageCount]="2"
+    [projectCount]="4"
+  ></app-navbar>
+
+  <div class="hub-container">
+    <div class="hub-header">
+      <h1>Mi Cuenta</h1>
+      <div class="tabs-container">
+        <button 
+          class="tab-btn" 
+          [class.active]="activeTab === 'profile'"
+          (click)="setActiveTab('profile')"
+        >
+          <span class="icon">👤</span> Mi Perfil
+        </button>
+        <button 
+          class="tab-btn" 
+          [class.active]="activeTab === 'company'"
+          (click)="setActiveTab('company')"
+        >
+          <span class="icon">🏢</span> Mi Empresa
+        </button>
+        <button 
+          class="tab-btn" 
+          [class.active]="activeTab === 'badges'"
+          (click)="setActiveTab('badges')"
+        >
+          <span class="icon">🏆</span> Badges y Recompensas
+        </button>
+      </div>
+    </div>
+
+    <div class="hub-content">
+      <app-clientprofile *ngIf="activeTab === 'profile'" [showNavbar]="false"></app-clientprofile>
+      <app-clientcompany *ngIf="activeTab === 'company'" [showNavbar]="false"></app-clientcompany>
+      <app-clientbadges *ngIf="activeTab === 'badges'" [showNavbar]="false"></app-clientbadges>
+    </div>
+  </div>
+</div>

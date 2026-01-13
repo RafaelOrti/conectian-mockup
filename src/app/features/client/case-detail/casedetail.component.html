@@ -1,0 +1,133 @@
+<div>
+  <app-navbar [userRole]="'CLIENT'" [userName]="'Carlos Martínez'" [notificationCount]="3"></app-navbar>
+  
+  <div class="case-detail-container">
+    <!-- Hero Section -->
+    <section class="case-hero">
+      <div class="hero-content">
+        <app-badge type="success" class="relevance-badge">
+          {{ caseData.relevanceScore }}% coincidencia
+        </app-badge>
+        <h1>{{ caseData.title }}</h1>
+        
+        <!-- Video Section -->
+        <div class="case-video-container">
+          <div class="video-placeholder">
+            <div class="play-button">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M8 5v14l11-7z"/>
+              </svg>
+            </div>
+            <span class="video-label">Ver Demo Interactiva</span>
+          </div>
+        </div>
+        
+        <!-- Provider Info Bar -->
+        <div class="provider-bar">
+          <div class="provider-info">
+            <span class="provider-logo">{{ caseData.provider.logo }}</span>
+            <div>
+              <h3>{{ caseData.provider.name }}</h3>
+              <div class="provider-stats">
+                <app-badge *ngIf="caseData.provider.verified" type="success" icon="✅">Verificado</app-badge>
+                <span class="rating">⭐ {{ caseData.provider.rating }}</span>
+                <span class="projects">{{ caseData.provider.projects }} proyectos</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Main Content -->
+    <div class="case-content">
+      <!-- Left Column -->
+      <main class="case-main">
+        <!-- Challenge Section -->
+        <app-card class="section-card">
+          <div class="section-header">
+            <span class="section-icon">❓</span>
+            <h2>El Desafío</h2>
+          </div>
+          <p class="section-text">{{ caseData.challenge }}</p>
+          <div class="context-tag">
+            <strong>Contexto:</strong> {{ caseData.industry }}
+          </div>
+        </app-card>
+        
+        <!-- Solution Section -->
+        <app-card class="section-card">
+          <div class="section-header">
+            <span class="section-icon">🧠</span>
+            <h2>La Solución Implementada</h2>
+          </div>
+          <p class="section-text" style="white-space: pre-line;">{{ caseData.solution }}</p>
+          
+          <!-- Tech Stack -->
+          <div class="tech-stack">
+            <h4>Stack Tecnológico:</h4>
+            <div class="tech-tags">
+              <span *ngFor="let tech of caseData.techStack" class="tech-tag">
+                {{ tech }}
+              </span>
+            </div>
+          </div>
+        </app-card>
+        
+        <!-- Results Section -->
+        <app-card class="section-card">
+          <div class="section-header">
+            <span class="section-icon">📊</span>
+            <h2>Resultados Cuantificables</h2>
+          </div>
+          
+          <!-- KPI Cards -->
+          <div class="results-grid">
+            <div *ngFor="let result of caseData.results" class="result-card" [class]="'result-' + result.color">
+              <div class="result-icon">{{ result.icon }}</div>
+              <div class="result-value">{{ result.value }}</div>
+              <div class="result-label">{{ result.label }}</div>
+            </div>
+          </div>
+          
+          <!-- Chart Placeholder -->
+          <div class="chart-section">
+            <h4>Tasa de Fraude: Antes vs. Después</h4>
+            <div class="chart-placeholder">
+              📈 Línea de tendencia mostrando reducción de {{ caseData.chartData.before[0] }}% a {{ caseData.chartData.after[3] }}%
+            </div>
+          </div>
+        </app-card>
+      </main>
+      
+      <!-- Right Sidebar -->
+      <aside class="case-sidebar">
+        <app-card>
+          <h3>Resumen de Métricas</h3>
+          <div class="metric-row">
+            <span class="metric-label">Industria:</span>
+            <span class="metric-value">{{ caseData.industry }}</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">Timeline:</span>
+            <span class="metric-value">{{ caseData.timeline }}</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">Tamaño equipo:</span>
+            <span class="metric-value">{{ caseData.teamSize }}</span>
+          </div>
+        </app-card>
+        
+        <!-- CTAs -->
+        <div class="cta-section">
+          <app-button variant="primary" (clickEvent)="startConversation()" style="width: 100%; margin-bottom: 1rem;">
+            💬 Iniciar Conversación Segura
+          </app-button>
+          <app-button variant="secondary" (clickEvent)="viewProviderProfile()" style="width: 100%;">
+            Ver Perfil del Proveedor
+          </app-button>
+        </div>
+      </aside>
+    </div>
+  </div>
+</div>

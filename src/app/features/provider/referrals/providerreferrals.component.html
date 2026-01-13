@@ -1,0 +1,114 @@
+<div class="provider-referrals-page">
+  <app-navbar 
+    [userRole]="'PROVIDER'" 
+    [userName]="'TechSolutions AI'"
+    [notificationCount]="5"
+    [messageCount]="3"
+    [projectCount]="8"
+  ></app-navbar>
+  
+  <div class="container">
+    <div class="page-header">
+      <div>
+        <h1>🌟 Referidos y Networking</h1>
+        <p class="subtitle">Expande tu red y colabora con otros proveedores</p>
+      </div>
+      <app-button variant="primary" icon="🤝">Invitar Partner</app-button>
+    </div>
+
+    <div class="referrals-layout">
+      <!-- Stats Cards -->
+      <div class="stats-grid">
+        <app-card class="stat-card">
+          <div class="stat-icon network">🌐</div>
+          <div class="stat-info">
+            <span class="stat-value">24</span>
+            <span class="stat-label">Partners Activos</span>
+          </div>
+        </app-card>
+        <app-card class="stat-card">
+          <div class="stat-icon deals">💼</div>
+          <div class="stat-info">
+            <span class="stat-value">8</span>
+            <span class="stat-label">Deals Compartidos</span>
+          </div>
+        </app-card>
+        <app-card class="stat-card">
+          <div class="stat-icon commission">💰</div>
+          <div class="stat-info">
+            <span class="stat-value">€1,250</span>
+            <span class="stat-label">Comisiones Generadas</span>
+          </div>
+        </app-card>
+      </div>
+
+      <!-- Networking Opportunities -->
+      <section class="networking-section">
+        <h2>Oportunidades de Networking</h2>
+        <div class="opportunities-grid">
+          <app-card class="opportunity-card">
+            <div class="opp-header">
+              <span class="tag collaboration">Colaboración</span>
+              <span class="date">Hace 2 días</span>
+            </div>
+            <h3>Proyecto de Visión Artificial</h3>
+            <p>Empresa de robótica busca partner especializado en Computer Vision para proyecto industrial.</p>
+            <div class="opp-footer">
+              <div class="company-info">
+                <div class="avatar">R</div>
+                <span>Robotics Corp</span>
+              </div>
+              <button class="connect-btn">Conectar</button>
+            </div>
+          </app-card>
+
+          <app-card class="opportunity-card">
+            <div class="opp-header">
+              <span class="tag joint-venture">Joint Venture</span>
+              <span class="date">Hace 5 días</span>
+            </div>
+            <h3>Expansión a Mercado LATAM</h3>
+            <p>Consultora busca socio tecnológico para implementar soluciones de IA en banca latinoamericana.</p>
+            <div class="opp-footer">
+              <div class="company-info">
+                <div class="avatar">F</div>
+                <span>FinTech Global</span>
+              </div>
+              <button class="connect-btn">Conectar</button>
+            </div>
+          </app-card>
+
+          <app-card class="opportunity-card">
+            <div class="opp-header">
+              <span class="tag referral">Referido</span>
+              <span class="date">Hace 1 semana</span>
+            </div>
+            <h3>Cliente Enterprise busca NLP</h3>
+            <p>Tenemos un cliente grande que necesita procesamiento de lenguaje natural. Buscamos experto.</p>
+            <div class="opp-footer">
+              <div class="company-info">
+                <div class="avatar">D</div>
+                <span>Data Solutions</span>
+              </div>
+              <button class="connect-btn">Conectar</button>
+            </div>
+          </app-card>
+        </div>
+      </section>
+
+      <!-- Referral Link Section -->
+      <app-card class="referral-link-card">
+        <div class="link-content">
+          <div class="link-info">
+            <h3>Invita a otros proveedores</h3>
+            <p>Gana comisiones por cada proveedor que se una a la plataforma a través de tu enlace.</p>
+          </div>
+          <div class="link-box">
+            <input type="text" value="https://conectian.com/partner/techsolutions-ai" readonly>
+            <button class="copy-btn">Copiar</button>
+          </div>
+        </div>
+      </app-card>
+    </div>
+  </div>
+</div>

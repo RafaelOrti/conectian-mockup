@@ -1,0 +1,234 @@
+@import '../../../../styles/variables';
+
+.client-profile-page {
+  min-height: 100vh;
+  background: $bg-dark;
+  color: $text-primary;
+  padding-top: 80px; // Fix for navbar overlap
+
+  &.no-navbar {
+    padding-top: 0;
+    min-height: auto;
+  }
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: $spacing-8;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: $spacing-8;
+
+  h1 {
+    font-size: $font-size-3xl;
+    font-weight: $font-weight-bold;
+    margin-bottom: $spacing-2;
+  }
+
+  .subtitle {
+    color: $text-secondary;
+    font-size: $font-size-lg;
+  }
+}
+
+.profile-layout {
+  display: flex;
+  gap: $spacing-8;
+
+  .profile-sidebar {
+    width: 300px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-6;
+
+    .user-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: $spacing-6;
+
+      .avatar-section {
+        position: relative;
+        margin-bottom: $spacing-4;
+
+        .avatar-large {
+          width: 100px;
+          height: 100px;
+          border-radius: 50%;
+          background: linear-gradient(135deg, #0d86ff 0%, #6b5cf0 100%);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: $font-size-3xl;
+          font-weight: bold;
+          color: white;
+        }
+
+        .change-avatar-btn {
+          position: absolute;
+          bottom: 0;
+          right: 0;
+          width: 32px;
+          height: 32px;
+          border-radius: 50%;
+          background: $bg-dark-lighter;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          color: $text-primary;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: $font-size-sm;
+
+          &:hover {
+            background: rgba(255, 255, 255, 0.1);
+          }
+        }
+      }
+
+      h2 {
+        font-size: $font-size-xl;
+        margin-bottom: $spacing-1;
+      }
+
+      .role {
+        color: $primary-blue;
+        font-weight: $font-weight-medium;
+        margin-bottom: $spacing-1;
+      }
+
+      .company {
+        color: $text-secondary;
+        font-size: $font-size-sm;
+        margin-bottom: $spacing-6;
+      }
+
+      .stats-row {
+        display: flex;
+        gap: $spacing-6;
+        width: 100%;
+        justify-content: center;
+        padding-top: $spacing-4;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+
+        .stat {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+
+          .val {
+            font-weight: bold;
+            font-size: $font-size-lg;
+          }
+
+          .lbl {
+            font-size: $font-size-xs;
+            color: $text-secondary;
+          }
+        }
+      }
+    }
+
+    .profile-nav {
+      display: flex;
+      flex-direction: column;
+      gap: $spacing-2;
+
+      .nav-item {
+        padding: $spacing-3 $spacing-4;
+        text-align: left;
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: $border-radius-base;
+        color: $text-secondary;
+        cursor: pointer;
+        transition: all 0.2s;
+
+        &:hover {
+          background: rgba(255, 255, 255, 0.05);
+          color: $text-primary;
+        }
+
+        &.active {
+          background: rgba(13, 134, 255, 0.1);
+          border-color: rgba(13, 134, 255, 0.3);
+          color: $primary-blue;
+          font-weight: $font-weight-medium;
+        }
+
+        &.danger {
+          color: $danger-red;
+          border-color: rgba(244, 68, 74, 0.2);
+
+          &:hover {
+            background: rgba(244, 68, 74, 0.1);
+          }
+        }
+      }
+    }
+  }
+
+  .profile-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-6;
+
+    .content-card {
+      h3 {
+        font-size: $font-size-xl;
+        margin-bottom: $spacing-6;
+        padding-bottom: $spacing-4;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .form-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: $spacing-6;
+
+        .form-group {
+          display: flex;
+          flex-direction: column;
+          gap: $spacing-2;
+
+          &.full-width {
+            grid-column: span 2;
+          }
+
+          label {
+            font-size: $font-size-sm;
+            color: $text-secondary;
+            font-weight: $font-weight-medium;
+          }
+
+          .form-input, .form-textarea {
+            padding: $spacing-3;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: $border-radius-base;
+            color: $text-primary;
+            font-size: $font-size-base;
+
+            &:focus {
+              outline: none;
+              border-color: $primary-blue;
+            }
+
+            &:disabled {
+              opacity: 0.5;
+              cursor: not-allowed;
+            }
+          }
+        }
+      }
+    }
+  }
+}

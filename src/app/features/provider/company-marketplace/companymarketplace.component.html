@@ -1,0 +1,355 @@
+<div class="company-marketplace-page">
+  <app-navbar 
+    [userRole]="'PROVIDER'"
+    [userName]="'María López'"
+    [notificationCount]="2"
+  ></app-navbar>
+  
+  <div class="marketplace-layout">
+    <!-- Left Sidebar - Filters -->
+    <aside class="filters-sidebar">
+      <div class="filters-header">
+        <h3>FILTROS</h3>
+      </div>
+      
+      <div class="filter-section">
+        <label class="filter-label">Sector</label>
+        <div class="checkbox-group">
+          <label 
+            *ngFor="let sector of sectors"
+            class="checkbox-option"
+          >
+            <input 
+              type="checkbox"
+              [checked]="selectedSectors.includes(sector)"
+              (change)="toggleFilter(selectedSectors, sector)"
+            />
+            <span>{{ sector }}</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="filter-section">
+        <label class="filter-label">Tamaño de Empresa</label>
+        <div class="checkbox-group">
+          <label 
+            *ngFor="let size of companySizes"
+            class="checkbox-option"
+          >
+            <input 
+              type="checkbox"
+              [checked]="selectedCompanySizes.includes(size.value)"
+              (change)="toggleFilter(selectedCompanySizes, size.value)"
+            />
+            <span>{{ size.label }}</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="filter-section">
+        <label class="filter-label">Tecnología Base</label>
+        <div class="checkbox-group">
+          <label 
+            *ngFor="let tech of technologies"
+            class="checkbox-option"
+          >
+            <input 
+              type="checkbox"
+              [checked]="selectedTechnologies.includes(tech)"
+              (change)="toggleFilter(selectedTechnologies, tech)"
+            />
+            <span>{{ tech }}</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="filter-section">
+        <label class="filter-label">Facturación Anual</label>
+        <div class="revenue-range">
+          <input 
+            type="number" 
+            [(ngModel)]="minRevenue"
+            placeholder="Mín"
+            class="revenue-input"
+          />
+          <span>-</span>
+          <input 
+            type="number" 
+            [(ngModel)]="maxRevenue"
+            placeholder="Máx"
+            class="revenue-input"
+          />
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="marketplace-content">
+      <!-- Tabs -->
+      <div class="tabs">
+        <button 
+          class="tab"
+          [class.active]="activeTab === 'companies'"
+          (click)="activeTab = 'companies'"
+        >
+          Empresas
+        </button>
+        <button 
+          class="tab"
+          [class.active]="activeTab === 'use-cases'"
+          (click)="activeTab = 'use-cases'"
+        >
+          Casos de Uso
+        </button>
+        <button 
+          class="tab"
+          [class.active]="activeTab === 'rfps'"
+          (click)="activeTab = 'rfps'"
+        >
+          Demandas (RFPs)
+        </button>
+      </div>
+
+      <!-- Companies Tab -->
+      <div *ngIf="activeTab === 'companies'" class="tab-content">
+        <div class="content-header">
+          <div>
+            <h1>EMPRESAS OBJETIVO</h1>
+            <div class="sort-controls">
+              <span>Ordenar por:</span>
+              <select 
+                [(ngModel)]="sortBy"
+                (change)="sortCompanies()"
+                class="sort-select"
+              >
+                <option value="relevancia">Relevancia</option>
+                <option value="nombre">Nombre</option>
+                <option value="rfps">Número de RFPs</option>
+              </select>
+            </div>
+          </div>
+          <div class="search-box">
+            <input 
+              type="text" 
+              [(ngModel)]="searchQuery"
+              (input)="filterCompanies()"
+              placeholder="Buscar empresas..."
+              class="search-input"
+            />
+            <span class="search-icon">🔍</span>
+          </div>
+        </div>
+
+        <!-- Companies Grid -->
+        <div class="companies-grid">
+          <div 
+            *ngFor="let company of filteredCompanies"
+            class="company-card"
+            (click)="viewCompany(company)"
+          >
+            <app-card>
+              <div class="company-header">
+                <div class="company-logo">{{ company.logo }}</div>
+                <div class="company-info">
+                  <h3 class="company-name">{{ company.name }}</h3>
+                  <div class="company-tags">
+                    <span 
+                      *ngFor="let tag of company.tags"
+                      class="company-tag"
+                    >
+                      {{ tag }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="company-details">
+                <div class="detail-row">
+                  <span class="detail-label">Innovación:</span>
+                  <span 
+                    class="innovation-badge"
+                    [class.high]="company.innovationLevel === 'ALTO'"
+                    [class.medium]="company.innovationLevel === 'MEDIO'"
+                    [class.low]="company.innovationLevel === 'BAJO'"
+                  >
+                    {{ company.innovationLevel }}
+                  </span>
+                </div>
+                <div class="detail-row">
+                  <span class="detail-label">Cloud:</span>
+                  <span class="detail-value">{{ company.cloud }}</span>
+                </div>
+                <div class="detail-row" *ngIf="company.annualRevenue">
+                  <span class="detail-label">Facturación:</span>
+                  <span class="detail-value">{{ company.annualRevenue }}</span>
+                </div>
+                <div class="detail-row" *ngIf="company.employees">
+                  <span class="detail-label">Empleados:</span>
+                  <span class="detail-value">{{ company.employees }}</span>
+                </div>
+                <div class="detail-row">
+                  <span class="detail-label">Sector:</span>
+                  <span class="detail-value">{{ company.sector }}</span>
+                </div>
+                <div class="detail-row">
+                  <span class="detail-label">Tecnologías:</span>
+                  <div class="tech-tags">
+                    <span 
+                      *ngFor="let tech of company.technologies.slice(0, 3)"
+                      class="tech-tag"
+                    >
+                      {{ tech }}
+                    </span>
+                    <span 
+                      *ngIf="company.technologies.length > 3"
+                      class="tech-tag-more"
+                    >
+                      +{{ company.technologies.length - 3 }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="company-footer">
+                <div class="rfp-count" *ngIf="company.rfpCount && company.rfpCount > 0">
+                  <span class="rfp-badge">{{ company.rfpCount }} RFPs</span>
+                </div>
+                <app-button 
+                  variant="primary" 
+                  (clickEvent)="sendProposal(company); $event.stopPropagation()"
+                >
+                  Enviar Propuesta
+                </app-button>
+              </div>
+            </app-card>
+          </div>
+        </div>
+
+        <!-- Empty State -->
+        <div *ngIf="filteredCompanies.length === 0" class="empty-state">
+          <app-card>
+            <div class="empty-content">
+              <span class="empty-icon">🏢</span>
+              <h2>No se encontraron empresas</h2>
+              <p>Intenta ajustar los filtros de búsqueda</p>
+            </div>
+          </app-card>
+        </div>
+      </div>
+
+      <!-- Use Cases Tab -->
+      <div *ngIf="activeTab === 'use-cases'" class="tab-content">
+        <div class="content-header">
+          <div>
+            <h1>CASOS DE USO</h1>
+            <p class="results-count">{{ useCases.length }} resultados encontrados</p>
+          </div>
+          <div class="sort-controls">
+            <span>Ordenar por:</span>
+            <select class="sort-select">
+              <option>Más relevantes</option>
+              <option>Más recientes</option>
+              <option>Mejor valorados</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="companies-grid">
+          <div 
+            *ngFor="let case of useCases"
+            class="company-card"
+          >
+            <app-card>
+              <div class="company-header">
+                <div class="company-logo">{{ case.provider.logo }}</div>
+                <div class="company-info">
+                  <h3 class="company-name">{{ case.title }}</h3>
+                  <div class="company-tags">
+                    <span class="company-tag">{{ case.provider.name }}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="company-details">
+                <div class="detail-row">
+                  <span class="detail-label">Relevancia:</span>
+                  <span class="innovation-badge high">{{ case.relevanceScore }}%</span>
+                </div>
+                <div class="detail-row" *ngFor="let kpi of case.kpis">
+                  <span class="detail-label">{{ kpi.label }}:</span>
+                  <span class="detail-value">{{ kpi.value }}</span>
+                </div>
+                <div class="detail-row">
+                  <span class="detail-label">Tags:</span>
+                  <div class="tech-tags">
+                    <span *ngFor="let tag of case.tags" class="tech-tag">{{ tag }}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="company-footer">
+                <app-button variant="primary" style="width: 100%">Ver Detalle</app-button>
+              </div>
+            </app-card>
+          </div>
+        </div>
+      </div>
+
+      <!-- RFPs Tab -->
+      <div *ngIf="activeTab === 'rfps'" class="tab-content">
+        <div class="content-header">
+          <h1>DEMANDAS (RFPs)</h1>
+        </div>
+        <app-card>
+          <div class="empty-content">
+            <span class="empty-icon">📋</span>
+            <h2>RFPs en construcción</h2>
+            <p>Próximamente podrás ver y responder a RFPs publicados por empresas</p>
+          </div>
+        </app-card>
+      </div>
+    </main>
+
+    <!-- Right Sidebar - Proposal -->
+    <aside class="proposal-sidebar" *ngIf="selectedUseCase || true">
+      <app-card>
+        <div class="proposal-header">
+          <h3>TU PROPUESTA</h3>
+          <button class="close-btn" (click)="selectedUseCase = null">×</button>
+        </div>
+        
+        <div class="proposal-content">
+          <label class="proposal-label">Selecciona tu Caso de Uso</label>
+          <select 
+            [(ngModel)]="proposalData.useCase"
+            class="proposal-select"
+          >
+            <option value="">Selecciona un caso de uso...</option>
+            <option value="chatbot-onboarding">Chatbot Asistente Onboarding RRHH</option>
+            <option value="vision-artificial">Visión Artificial para Control Calidad</option>
+            <option value="prediccion-fraude">Predicción de Fraude Transaccional</option>
+          </select>
+
+          <div class="proposal-info">
+            <div class="info-item">
+              <span class="info-label">Engagement:</span>
+              <span class="info-value">{{ proposalData.engagement }}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Incluye:</span>
+              <span class="info-value">{{ proposalData.users }} usuarios</span>
+            </div>
+          </div>
+
+          <app-button 
+            variant="primary" 
+            (clickEvent)="sendProposal(selectedUseCase || {})"
+            style="width: 100%;"
+          >
+            ✉️ Enviar Propuesta
+          </app-button>
+        </div>
+      </app-card>
+    </aside>
+  </div>
+</div>

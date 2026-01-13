@@ -1,0 +1,184 @@
+<div class="provider-badges-page" [class.no-navbar]="!showNavbar">
+  <app-navbar 
+    *ngIf="showNavbar"
+    [userRole]="'PROVIDER'"
+    [userName]="'Innovación Tech S.L.'"
+    [notificationCount]="5"
+    [messageCount]="3"
+  ></app-navbar>
+  
+  <div class="container">
+    <!-- Header -->
+    <div class="page-header">
+      <h1>🏆 Badges y Recompensas</h1>
+      <p class="page-subtitle">Construye tu reputación, desbloquea badges y accede a recompensas exclusivas</p>
+    </div>
+
+    <!-- Reputation Score -->
+    <app-card class="reputation-card" variant="gradient">
+      <div class="reputation-content">
+        <div class="reputation-icon">⭐</div>
+        <div class="reputation-info">
+          <div class="reputation-score">{{ reputationScore }}</div>
+          <div class="reputation-level">Nivel: {{ reputationLevel }}</div>
+          <div class="reputation-progress">
+            <div class="progress-bar">
+              <div class="progress-fill" [style.width.%]="reputationProgress"></div>
+            </div>
+            <span class="progress-text">{{ reputationProgress }}% hacia el siguiente nivel</span>
+          </div>
+        </div>
+      </div>
+    </app-card>
+
+    <div class="badges-grid">
+      <!-- Earned Badges -->
+      <div class="badges-section">
+        <h2>✅ Badges Obtenidos</h2>
+        <div class="badges-list">
+          <app-card 
+            *ngFor="let badge of getEarnedBadges()"
+            class="badge-card earned"
+            variant="elevated"
+            hover="true"
+          >
+            <div class="badge-icon-large" [style.color]="getLevelColor(badge.level)">
+              {{ badge.icon }}
+            </div>
+            <div class="badge-info">
+              <h3>{{ badge.name }}</h3>
+              <div class="badge-level" [style.color]="getLevelColor(badge.level)">
+                {{ badge.level }}
+              </div>
+              <p class="badge-description">{{ badge.description }}</p>
+              <div *ngIf="badge.earnedDate" class="badge-date">
+                Obtenido: {{ badge.earnedDate }}
+              </div>
+              <div *ngIf="badge.rewards && badge.rewards.length > 0" class="badge-rewards">
+                <strong>Recompensas:</strong>
+                <ul>
+                  <li *ngFor="let reward of badge.rewards">{{ reward }}</li>
+                </ul>
+              </div>
+            </div>
+          </app-card>
+        </div>
+      </div>
+
+      <!-- In Progress Badges -->
+      <div class="badges-section">
+        <h2>🔄 Badges en Progreso</h2>
+        <div class="badges-list">
+          <app-card 
+            *ngFor="let badge of getInProgressBadges()"
+            class="badge-card in-progress"
+            variant="bordered"
+            hover="true"
+          >
+            <div class="badge-icon-large" [style.color]="getLevelColor(badge.level)">
+              {{ badge.icon }}
+            </div>
+            <div class="badge-info">
+              <h3>{{ badge.name }}</h3>
+              <div class="badge-level" [style.color]="getLevelColor(badge.level)">
+                {{ badge.level }}
+              </div>
+              <p class="badge-description">{{ badge.description }}</p>
+              <div class="badge-progress">
+                <div class="progress-bar">
+                  <div 
+                    class="progress-fill" 
+                    [style.width.%]="getProgressPercentage(badge)"
+                    [style.background-color]="getLevelColor(badge.level)"
+                  ></div>
+                </div>
+                <div class="progress-text">
+                  {{ badge.progress }}/{{ badge.maxProgress }}
+                </div>
+              </div>
+              <div *ngIf="badge.rewards && badge.rewards.length > 0" class="badge-rewards">
+                <strong>Recompensas al completar:</strong>
+                <ul>
+                  <li *ngFor="let reward of badge.rewards">{{ reward }}</li>
+                </ul>
+              </div>
+            </div>
+          </app-card>
+        </div>
+      </div>
+
+      <!-- Locked Badges -->
+      <div class="badges-section">
+        <h2>🔒 Badges Bloqueados</h2>
+        <div class="badges-list">
+          <app-card 
+            *ngFor="let badge of getLockedBadges()"
+            class="badge-card locked"
+            variant="bordered"
+          >
+            <div class="badge-icon-large locked-icon">
+              {{ badge.icon }}
+            </div>
+            <div class="badge-info">
+              <h3>{{ badge.name }}</h3>
+              <div class="badge-level" [style.color]="getLevelColor(badge.level)">
+                {{ badge.level }}
+              </div>
+              <p class="badge-description">{{ badge.description }}</p>
+              <div class="badge-progress">
+                <div class="progress-bar">
+                  <div 
+                    class="progress-fill" 
+                    [style.width.%]="getProgressPercentage(badge)"
+                    [style.background-color]="getLevelColor(badge.level)"
+                  ></div>
+                </div>
+                <div class="progress-text">
+                  {{ badge.progress }}/{{ badge.maxProgress }}
+                </div>
+              </div>
+              <div *ngIf="badge.rewards && badge.rewards.length > 0" class="badge-rewards">
+                <strong>Recompensas al desbloquear:</strong>
+                <ul>
+                  <li *ngFor="let reward of badge.rewards">{{ reward }}</li>
+                </ul>
+              </div>
+            </div>
+          </app-card>
+        </div>
+      </div>
+    </div>
+
+    <!-- Achievements -->
+    <div class="achievements-section">
+      <h2>🎯 Logros y Puntos</h2>
+      <div class="achievements-grid">
+        <app-card 
+          *ngFor="let achievement of achievements"
+          class="achievement-card"
+          variant="bordered"
+          [class.completed]="achievement.status === 'completed'"
+          [class.in-progress]="achievement.status === 'in-progress'"
+          [class.locked]="achievement.status === 'locked'"
+        >
+          <div class="achievement-icon">{{ achievement.icon }}</div>
+          <div class="achievement-info">
+            <h4>{{ achievement.title }}</h4>
+            <p>{{ achievement.description }}</p>
+            <div class="achievement-meta">
+              <span class="achievement-category">
+                {{ getCategoryIcon(achievement.category) }} {{ achievement.category }}
+              </span>
+              <span class="achievement-points">+{{ achievement.points }} pts</span>
+            </div>
+          </div>
+          <div class="achievement-status">
+            <span *ngIf="achievement.status === 'completed'" class="status-badge completed">✓ Completado</span>
+            <span *ngIf="achievement.status === 'in-progress'" class="status-badge in-progress">En progreso</span>
+            <span *ngIf="achievement.status === 'locked'" class="status-badge locked">🔒 Bloqueado</span>
+          </div>
+        </app-card>
+      </div>
+    </div>
+  </div>
+</div>

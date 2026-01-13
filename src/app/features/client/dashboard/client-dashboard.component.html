@@ -1,0 +1,513 @@
+<div class="client-dashboard">
+  <!-- Professional Navbar -->
+  <app-navbar 
+    [userRole]="'CLIENT'"
+    [userName]="'Carlos Martínez'"
+    [notificationCount]="3"
+    [messageCount]="2"
+    [showSearch]="true"
+  ></app-navbar>
+  
+  <div class="dashboard-layout">
+    <!-- Left Sidebar - Filters / Chatbot -->
+    <aside class="sidebar-filters">
+      <!-- Toggle Buttons -->
+      <div class="sidebar-toggle">
+        <button 
+          class="toggle-btn"
+          [class.active]="sidebarMode === 'filters'"
+          (click)="sidebarMode = 'filters'"
+        >
+          <span>🔍</span> Filtros
+        </button>
+        <button 
+          class="toggle-btn"
+          [class.active]="sidebarMode === 'chatbot'"
+          (click)="sidebarMode = 'chatbot'"
+        >
+          <span>💬</span> Chatbot
+        </button>
+      </div>
+
+      <!-- Filters Mode -->
+      <div *ngIf="sidebarMode === 'filters'" class="filters-content">
+        <div class="filters-header">
+          <h3>Filtros</h3>
+          <button class="clear-filters" (click)="clearFilters()">Limpiar</button>
+        </div>
+        
+        <!-- Sector - Multiselect -->
+        <div class="filter-section">
+          <h4>Sector</h4>
+          <select [(ngModel)]="filters.sector" class="filter-select" multiple size="5">
+            <option value="fintech">Fintech & Banca</option>
+            <option value="retail">Retail & E-commerce</option>
+            <option value="logistica">Logística & Supply Chain</option>
+            <option value="salud">Salud & Healthcare</option>
+            <option value="marketing">Marketing & Publicidad</option>
+            <option value="manufactura">Manufactura</option>
+            <option value="energia">Energía</option>
+            <option value="educacion">Educación</option>
+          </select>
+        </div>
+
+        <!-- Servicio / Producto / Formación - Chips -->
+        <div class="filter-section">
+          <h4>Servicio / Producto / Formación</h4>
+          <div class="chips-container">
+            <button 
+              *ngFor="let option of ['Servicio', 'Producto', 'Formación']"
+              class="chip"
+              [class.active]="filters.servicioProductoFormacion.includes(option)"
+              (click)="toggleChip('servicioProductoFormacion', option)"
+            >
+              {{ option }}
+            </button>
+          </div>
+        </div>
+
+        <!-- Coste - Range Slider -->
+        <div class="filter-section">
+          <h4>Coste (€)</h4>
+          <div class="range-inputs">
+            <input 
+              type="number" 
+              [(ngModel)]="filters.coste.min" 
+              class="range-input"
+              placeholder="Mín"
+            />
+            <span class="range-separator">—</span>
+            <input 
+              type="number" 
+              [(ngModel)]="filters.coste.max" 
+              class="range-input"
+              placeholder="Máx"
+            />
+          </div>
+          <input 
+            type="range" 
+            [(ngModel)]="filters.coste.max"
+            [min]="0"
+            [max]="100000"
+            class="range-slider"
+          />
+        </div>
+
+        <!-- Tamaño y Madurez del Proveedor - Radio Buttons -->
+        <div class="filter-section">
+          <h4>Tamaño y Madurez del Proveedor</h4>
+          <div class="radio-group">
+            <label *ngFor="let option of ['Startup', 'Scale-up', 'Enterprise', 'Cualquiera']" class="radio-label">
+              <input 
+                type="radio" 
+                name="tamanoMadurezProveedor"
+                [value]="option"
+                [(ngModel)]="filters.tamanoMadurezProveedor"
+              />
+              <span>{{ option }}</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Madurez del Use Case - Radio Buttons -->
+        <div class="filter-section">
+          <h4>Madurez del Use Case</h4>
+          <div class="radio-group">
+            <label *ngFor="let option of ['Piloto', 'Producción', 'Escalado', 'Cualquiera']" class="radio-label">
+              <input 
+                type="radio" 
+                name="madurezUseCase"
+                [value]="option"
+                [(ngModel)]="filters.madurezUseCase"
+              />
+              <span>{{ option }}</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Tipo de IA - Toggle -->
+        <div class="filter-section">
+          <h4>Tipo de IA</h4>
+          <div class="toggle-group">
+            <button 
+              class="toggle-option"
+              [class.active]="filters.tipoIA === 'cerrada'"
+              (click)="filters.tipoIA = filters.tipoIA === 'cerrada' ? '' : 'cerrada'"
+            >
+              Cerrada
+            </button>
+            <button 
+              class="toggle-option"
+              [class.active]="filters.tipoIA === 'abierta'"
+              (click)="filters.tipoIA = filters.tipoIA === 'abierta' ? '' : 'abierta'"
+            >
+              Abierta
+            </button>
+            <button 
+              class="toggle-option"
+              [class.active]="filters.tipoIA === 'mixta'"
+              (click)="filters.tipoIA = filters.tipoIA === 'mixta' ? '' : 'mixta'"
+            >
+              Mixta
+            </button>
+          </div>
+        </div>
+
+        <!-- Modalidad Técnica - Checkboxes -->
+        <div class="filter-section">
+          <h4>Modalidad Técnica</h4>
+          <div class="checkbox-group">
+            <label *ngFor="let option of ['On-premise', 'Cloud', 'Híbrida', 'SaaS']" class="checkbox-label">
+              <input 
+                type="checkbox"
+                [value]="option"
+                [checked]="filters.modalidadTecnica.includes(option)"
+                (change)="toggleArray('modalidadTecnica', option, $event)"
+              />
+              <span>{{ option }}</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Intervención Humana - Toggle Switch -->
+        <div class="filter-section">
+          <h4>Intervención Humana</h4>
+          <label class="switch">
+            <input 
+              type="checkbox"
+              [(ngModel)]="filters.intervencionHumana"
+            />
+            <span class="slider"></span>
+            <span class="switch-label">{{ filters.intervencionHumana ? 'Sí' : 'No' }}</span>
+          </label>
+        </div>
+
+        <!-- Stack Tecnológico - Autocomplete -->
+        <div class="filter-section">
+          <h4>Stack Tecnológico</h4>
+          <input 
+            type="text"
+            class="autocomplete-input"
+            placeholder="Buscar tecnologías..."
+            (keyup.enter)="addToArray('stackTecnologico', $event)"
+          />
+          <div class="tags-container">
+            <span *ngFor="let tag of filters.stackTecnologico" class="tag">
+              {{ tag }}
+              <button class="tag-remove" (click)="removeFromArray('stackTecnologico', tag)">×</button>
+            </span>
+          </div>
+        </div>
+
+        <!-- Integraciones - Autocomplete -->
+        <div class="filter-section">
+          <h4>Integraciones</h4>
+          <input 
+            type="text"
+            class="autocomplete-input"
+            placeholder="Buscar integraciones..."
+            (keyup.enter)="addToArray('integraciones', $event)"
+          />
+          <div class="tags-container">
+            <span *ngFor="let tag of filters.integraciones" class="tag">
+              {{ tag }}
+              <button class="tag-remove" (click)="removeFromArray('integraciones', tag)">×</button>
+            </span>
+          </div>
+        </div>
+
+        <!-- Tiempo de integración - Dropdown -->
+        <div class="filter-section">
+          <h4>Tiempo de integración</h4>
+          <select [(ngModel)]="filters.tiempoIntegracion" class="filter-select">
+            <option value="">Cualquiera</option>
+            <option value="1-2 semanas">1-2 semanas</option>
+            <option value="1 mes">1 mes</option>
+            <option value="2-3 meses">2-3 meses</option>
+            <option value="3-6 meses">3-6 meses</option>
+            <option value="6+ meses">6+ meses</option>
+          </select>
+        </div>
+
+        <!-- Idiomas - Multiselect -->
+        <div class="filter-section">
+          <h4>Idiomas</h4>
+          <select [(ngModel)]="filters.idiomas" class="filter-select" multiple size="4">
+            <option value="es">Español</option>
+            <option value="en">Inglés</option>
+            <option value="fr">Francés</option>
+            <option value="de">Alemán</option>
+            <option value="it">Italiano</option>
+            <option value="pt">Portugués</option>
+          </select>
+        </div>
+
+        <!-- Tamaño de la Empresa - Checkboxes -->
+        <div class="filter-section">
+          <h4>Tamaño de la Empresa (Proveedor)</h4>
+          <div class="checkbox-group">
+            <label *ngFor="let option of ['Startup', 'Scale-up', 'Enterprise']" class="checkbox-label">
+              <input 
+                type="checkbox"
+                [value]="option"
+                [checked]="filters.tamanoEmpresa.includes(option)"
+                (change)="toggleArray('tamanoEmpresa', option, $event)"
+              />
+              <span>{{ option }}</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Ubicación / Soberanía del Dato - Dropdown -->
+        <div class="filter-section">
+          <h4>Ubicación / Soberanía del Dato</h4>
+          <select [(ngModel)]="filters.ubicacionSoberania" class="filter-select">
+            <option value="">Cualquiera</option>
+            <option value="es">España</option>
+            <option value="eu">Unión Europea</option>
+            <option value="us">Estados Unidos</option>
+            <option value="uk">Reino Unido</option>
+            <option value="latam">Latinoamérica</option>
+          </select>
+        </div>
+
+        <!-- Regulación - Checkboxes -->
+        <div class="filter-section">
+          <h4>Regulación</h4>
+          <div class="checkbox-group">
+            <label *ngFor="let option of ['GDPR', 'HIPAA', 'SOC 2', 'ISO 27001', 'PCI DSS']" class="checkbox-label">
+              <input 
+                type="checkbox"
+                [value]="option"
+                [checked]="filters.regulacion.includes(option)"
+                (change)="toggleArray('regulacion', option, $event)"
+              />
+              <span>{{ option }}</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Certificaciones - Checkboxes -->
+        <div class="filter-section">
+          <h4>Certificaciones</h4>
+          <div class="checkbox-group">
+            <label *ngFor="let option of ['ISO 9001', 'ISO 14001', 'CMMI', 'ITIL']" class="checkbox-label">
+              <input 
+                type="checkbox"
+                [value]="option"
+                [checked]="filters.certificaciones.includes(option)"
+                (change)="toggleArray('certificaciones', option, $event)"
+              />
+              <span>{{ option }}</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Seguridad de datos - Checkboxes -->
+        <div class="filter-section">
+          <h4>Seguridad de datos</h4>
+          <div class="checkbox-group">
+            <label *ngFor="let option of ['Encriptación', 'Backup automático', 'Redundancia', 'Auditoría']" class="checkbox-label">
+              <input 
+                type="checkbox"
+                [value]="option"
+                [checked]="filters.seguridadDatos.includes(option)"
+                (change)="toggleArray('seguridadDatos', option, $event)"
+              />
+              <span>{{ option }}</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="filter-section">
+          <button class="my-cases-btn" (click)="viewMyRFIDCases()">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+              <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/>
+              <path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"/>
+            </svg>
+            Mis casos publicados
+          </button>
+        </div>
+      </div>
+
+      <!-- Chatbot Mode -->
+      <div *ngIf="sidebarMode === 'chatbot'" class="chatbot-content">
+        <div class="chatbot-header">
+          <h3>💬 Asistente IA</h3>
+          <p class="chatbot-subtitle">Busca soluciones con lenguaje natural</p>
+        </div>
+        
+        <div class="chatbot-input-wrapper">
+          <textarea 
+            class="chatbot-input"
+            placeholder="Ej: Necesito reducir fraude en transacciones, Automatizar atención al cliente..."
+            [(ngModel)]="chatQuery"
+            (keyup.enter)="onChatSubmit()"
+            rows="4"
+          ></textarea>
+          <button class="chatbot-submit-btn" (click)="onChatSubmit()">
+            <span>🔍</span> Buscar
+          </button>
+        </div>
+        
+        <div class="quick-suggestions">
+          <span class="suggestion-label">Búsquedas populares:</span>
+          <button 
+            *ngFor="let suggestion of suggestions"
+            class="suggestion-chip"
+            (click)="onSuggestionClick(suggestion)"
+          >
+            {{ suggestion }}
+          </button>
+        </div>
+      </div>
+    </aside>
+    
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Search Hero -->
+      <section class="search-hero">
+        <div class="search-container">
+          <h1>Encuentra la solución de IA perfecta</h1>
+          <p class="search-subtitle">Explora casos de uso reales o publica tu necesidad</p>
+          
+          <div class="hero-actions">
+            <button class="hero-btn primary" (click)="publishRFP()">
+              <span>📢</span> Publicar Necesidad (RFP)
+            </button>
+            <button class="hero-btn secondary" (click)="scrollToCases()">
+              <span>🔍</span> Consultar Casos
+            </button>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Featured Cases Section -->
+      <section class="cases-section featured-section" *ngIf="featuredCases.length > 0">
+        <div class="section-header">
+          <h2>🌟 Casos Destacados</h2>
+        </div>
+        
+        <div class="cases-grid">
+          <article 
+            *ngFor="let case of featuredCases"
+            class="case-card featured"
+            (click)="onCaseClick(case)"
+          >
+            <!-- Relevance Score -->
+            <div class="case-header">
+              <span class="relevance-badge featured-badge">
+                <span class="premium-icon">⭐</span>
+                {{ case.relevanceScore }}% coincidencia
+              </span>
+            </div>
+            
+            <!-- Title -->
+            <h3 class="case-title">{{ case.title }}</h3>
+            
+            <!-- Provider Info -->
+            <div class="case-provider">
+              <span class="provider-avatar-sm">{{ case.provider.logo }}</span>
+              <span class="provider-name">{{ case.provider.name }}</span>
+              <span *ngIf="case.provider.verified" class="verified-icon">
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
+                  <path fill-rule="evenodd" d="M10.067.87a2.89 2.89 0 0 0-4.134 0l-.622.638-.89-.011a2.89 2.89 0 0 0-2.924 2.924l.01.89-.636.622a2.89 2.89 0 0 0 0 4.134l.637.622-.011.89a2.89 2.89 0 0 0 2.924 2.924l.89-.01.622.636a2.89 2.89 0 0 0 4.134 0l.622-.637.89.011a2.89 2.89 0 0 0 2.924-2.924l-.01-.89.636-.622a2.89 2.89 0 0 0 0-4.134l-.637-.622.011-.89a2.89 2.89 0 0 0-2.924-2.924l-.89.01-.622-.636zm.287 5.984l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7 8.793l2.646-2.647a.5.5 0 0 1 .708.708z"/>
+                </svg>
+              </span>
+            </div>
+            
+            <!-- KPIs -->
+            <div class="case-metrics">
+              <div *ngFor="let kpi of case.kpis" class="metric-item">
+                <span class="metric-label">{{ kpi.label }}</span>
+                <span class="metric-value">{{ kpi.value }}</span>
+              </div>
+            </div>
+            
+            <!-- Tags -->
+            <div class="case-tags">
+              <span *ngFor="let tag of case.tags" class="tag">{{ tag }}</span>
+            </div>
+            
+            <!-- Footer -->
+            <div class="case-footer">
+              <button class="view-case-btn">
+                Ver caso de estudio
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                  <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
+                </svg>
+              </button>
+            </div>
+          </article>
+        </div>
+      </section>
+      
+      <!-- Regular Case Studies Grid -->
+      <section class="cases-section">
+        <div class="section-header">
+          <div>
+            <h2>Casos de uso</h2>
+            <p class="results-count">{{ regularCases.length }} resultados encontrados</p>
+          </div>
+          <select class="sort-select">
+            <option>Más relevantes</option>
+            <option>Más recientes</option>
+            <option>Mejor valorados</option>
+          </select>
+        </div>
+        
+        <div class="cases-grid">
+          <article 
+            *ngFor="let case of regularCases"
+            class="case-card"
+            (click)="onCaseClick(case)"
+          >
+            <!-- Relevance Score -->
+            <div class="case-header">
+              <span class="relevance-badge">
+                {{ case.relevanceScore }}% coincidencia
+              </span>
+            </div>
+            
+            <!-- Title -->
+            <h3 class="case-title">{{ case.title }}</h3>
+            
+            <!-- Provider Info -->
+            <div class="case-provider">
+              <span class="provider-avatar-sm">{{ case.provider.logo }}</span>
+              <span class="provider-name">{{ case.provider.name }}</span>
+              <span *ngIf="case.provider.verified" class="verified-icon">
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
+                  <path fill-rule="evenodd" d="M10.067.87a2.89 2.89 0 0 0-4.134 0l-.622.638-.89-.011a2.89 2.89 0 0 0-2.924 2.924l.01.89-.636.622a2.89 2.89 0 0 0 0 4.134l.637.622-.011.89a2.89 2.89 0 0 0 2.924 2.924l.89-.01.622.636a2.89 2.89 0 0 0 4.134 0l.622-.637.89.011a2.89 2.89 0 0 0 2.924-2.924l-.01-.89.636-.622a2.89 2.89 0 0 0 0-4.134l-.637-.622.011-.89a2.89 2.89 0 0 0-2.924-2.924l-.89.01-.622-.636zm.287 5.984l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7 8.793l2.646-2.647a.5.5 0 0 1 .708.708z"/>
+                </svg>
+              </span>
+            </div>
+            
+            <!-- KPIs -->
+            <div class="case-metrics">
+              <div *ngFor="let kpi of case.kpis" class="metric-item">
+                <span class="metric-label">{{ kpi.label }}</span>
+                <span class="metric-value">{{ kpi.value }}</span>
+              </div>
+            </div>
+            
+            <!-- Tags -->
+            <div class="case-tags">
+              <span *ngFor="let tag of case.tags" class="tag">{{ tag }}</span>
+            </div>
+            
+            <!-- Footer -->
+            <div class="case-footer">
+              <button class="view-case-btn">
+                Ver caso de estudio
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                  <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
+                </svg>
+              </button>
+            </div>
+          </article>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>

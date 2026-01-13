@@ -1,0 +1,276 @@
+<div class="analytics-page">
+  <app-navbar 
+    [userRole]="userRole"
+    [userName]="userName"
+    [notificationCount]="userRole === 'PROVIDER' ? 2 : 3"
+    [messageCount]="2"
+  ></app-navbar>
+  
+  <div class="analytics-layout">
+    <main class="main-content">
+      <div class="page-header">
+        <div>
+          <h1>📊 {{ getPageTitle() }}</h1>
+          <p class="subtitle">{{ getPageSubtitle() }}</p>
+        </div>
+        <div class="header-actions">
+          <select class="period-selector">
+            <option>Últimos 30 días</option>
+            <option>Últimos 7 días</option>
+            <option>Este mes</option>
+          </select>
+        </div>
+      </div>
+      
+      <!-- Pipeline Overview -->
+      <div class="pipeline-section" *ngIf="userRole === 'PROVIDER'">
+        <h2>Pipeline de Leads</h2>
+        <div class="pipeline-cards">
+          <div class="pipeline-card">
+            <div class="pipeline-header">
+              <span class="pipeline-label">Nuevo</span>
+              <span class="pipeline-count">{{pipeline.nuevo}}</span>
+            </div>
+            <div class="pipeline-bar" style="width: 60%; background: #0d86ff;"></div>
+          </div>
+          
+          <div class="pipeline-card">
+            <div class="pipeline-header">
+              <span class="pipeline-label">Contactado</span>
+              <span class="pipeline-count">{{pipeline.contactado}}</span>
+            </div>
+            <div class="pipeline-bar" style="width: 40%; background: #6b5cf0;"></div>
+          </div>
+          
+          <div class="pipeline-card">
+            <div class="pipeline-header">
+              <span class="pipeline-label">Negociación</span>
+              <span class="pipeline-count">{{pipeline.enNegociacion}}</span>
+            </div>
+            <div class="pipeline-bar" style="width: 25%; background: #f96908;"></div>
+          </div>
+          
+          <div class="pipeline-card">
+            <div class="pipeline-header">
+              <span class="pipeline-label">Cerrado</span>
+              <span class="pipeline-count">{{pipeline.cerrado}}</span>
+            </div>
+            <div class="pipeline-bar" style="width: 15%; background: #18b981;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pipeline Overview para Cliente -->
+      <div class="pipeline-section" *ngIf="userRole === 'CLIENT'">
+        <h2>Pipeline de Proyectos</h2>
+        <div class="pipeline-cards">
+          <div class="pipeline-card">
+            <div class="pipeline-header">
+              <span class="pipeline-label">Explorando</span>
+              <span class="pipeline-count">{{pipeline.explorando}}</span>
+            </div>
+            <div class="pipeline-bar" style="width: 50%; background: #0d86ff;"></div>
+          </div>
+          
+          <div class="pipeline-card">
+            <div class="pipeline-header">
+              <span class="pipeline-label">En Contacto</span>
+              <span class="pipeline-count">{{pipeline.enContacto}}</span>
+            </div>
+            <div class="pipeline-bar" style="width: 30%; background: #6b5cf0;"></div>
+          </div>
+          
+          <div class="pipeline-card">
+            <div class="pipeline-header">
+              <span class="pipeline-label">Negociación</span>
+              <span class="pipeline-count">{{pipeline.enNegociacion}}</span>
+            </div>
+            <div class="pipeline-bar" style="width: 20%; background: #f96908;"></div>
+          </div>
+          
+          <div class="pipeline-card">
+            <div class="pipeline-header">
+              <span class="pipeline-label">Activos</span>
+              <span class="pipeline-count">{{pipeline.activos}}</span>
+            </div>
+            <div class="pipeline-bar" style="width: 30%; background: #18b981;"></div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- KPIs Grid -->
+      <div class="kpis-grid">
+        <!-- Visibilidad / Casos Explorados -->
+        <div class="kpi-card" *ngIf="userRole === 'PROVIDER'">
+          <div class="kpi-header">
+            <span class="kpi-label">Visibilidad</span>
+            <span class="kpi-trend positive">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                <path d="M8 3.5a.5.5 0 01.5.5v8a.5.5 0 01-1 0V4a.5.5 0 01.5-.5z"/>
+                <path d="M7.646 11.854a.5.5 0 00.708 0l3-3a.5.5 0 00-.708-.708L8 10.793 5.354 8.146a.5.5 0 10-.708.708l3 3z"/>
+              </svg>
+              +{{kpis.visibilityGrowth}}%
+            </span>
+          </div>
+          <div class="kpi-value">{{kpis.visibilityViews}}</div>
+          <div class="kpi-footer">visualizaciones últimos 7 días</div>
+        </div>
+
+        <div class="kpi-card" *ngIf="userRole === 'CLIENT'">
+          <div class="kpi-header">
+            <span class="kpi-label">Casos Explorados</span>
+            <span class="kpi-trend positive">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                <path d="M8 3.5a.5.5 0 01.5.5v8a.5.5 0 01-1 0V4a.5.5 0 01.5-.5z"/>
+                <path d="M7.646 11.854a.5.5 0 00.708 0l3-3a.5.5 0 00-.708-.708L8 10.793 5.354 8.146a.5.5 0 10-.708.708l3 3z"/>
+              </svg>
+              +{{kpis.casosCrecimiento}}%
+            </span>
+          </div>
+          <div class="kpi-value">{{kpis.casosExplorados}}</div>
+          <div class="kpi-footer">casos explorados este mes</div>
+        </div>
+        
+        <!-- Leads Activos / Proyectos Activos -->
+        <div class="kpi-card" *ngIf="userRole === 'PROVIDER'">
+          <div class="kpi-header">
+            <span class="kpi-label">Leads Activos</span>
+          </div>
+          <div class="kpi-value">{{kpis.leadsActive}}</div>
+          <div class="kpi-footer">
+            Tiempo respuesta: {{kpis.responseTime}}<br>
+            Conversion rate: {{kpis.conversionRate}}%
+          </div>
+        </div>
+
+        <div class="kpi-card" *ngIf="userRole === 'CLIENT'">
+          <div class="kpi-header">
+            <span class="kpi-label">Proyectos Activos</span>
+          </div>
+          <div class="kpi-value">{{kpis.proyectosActivos}}</div>
+          <div class="kpi-footer">
+            Tiempo promedio: {{kpis.tiempoPromedio}}<br>
+            Tasa de éxito: {{kpis.tasaExito}}%
+          </div>
+        </div>
+        
+        <!-- Revenue Tracking / Ahorro Estimado -->
+        <div class="kpi-card highlight" *ngIf="userRole === 'PROVIDER'">
+          <div class="kpi-header">
+            <span class="kpi-label">Revenue en Pipeline</span>
+          </div>
+          <div class="kpi-value">${{kpis.revenueInPipeline.toLocaleString()}}</div>
+          <div class="kpi-footer">{{kpis.dealsClosedThisMonth}} deals cerrados este mes</div>
+        </div>
+
+        <div class="kpi-card highlight" *ngIf="userRole === 'CLIENT'">
+          <div class="kpi-header">
+            <span class="kpi-label">Ahorro Estimado</span>
+          </div>
+          <div class="kpi-value">${{kpis.ahorroEstimado.toLocaleString()}}</div>
+          <div class="kpi-footer">{{kpis.proyectosCompletados}} proyectos completados</div>
+        </div>
+        
+        <!-- Lead Score / Proveedores Contactados -->
+        <div class="kpi-card" *ngIf="userRole === 'PROVIDER'">
+          <div class="kpi-header">
+            <span class="kpi-label">Calidad de Leads</span>
+          </div>
+          <div class="lead-score-grid">
+            <div class="score-item">
+              <span class="score-label">A</span>
+              <span class="score-value success">{{kpis.leadScoreA}}%</span>
+            </div>
+            <div class="score-item">
+              <span class="score-label">B</span>
+              <span class="score-value warning">{{kpis.leadScoreB}}%</span>
+            </div>
+            <div class="score-item">
+              <span class="score-label">C</span>
+              <span class="score-value danger">{{kpis.leadScoreC}}%</span>
+            </div>
+          </div>
+          <div class="kpi-footer">{{kpis.leadScoreA}}% calidad premium</div>
+        </div>
+
+        <div class="kpi-card" *ngIf="userRole === 'CLIENT'">
+          <div class="kpi-header">
+            <span class="kpi-label">Proveedores Contactados</span>
+          </div>
+          <div class="kpi-value">{{kpis.proveedoresContactados}}</div>
+          <div class="kpi-footer">
+            {{kpis.casosGuardados}} casos guardados<br>
+            {{kpis.casosCompartidos}} casos compartidos
+          </div>
+        </div>
+      </div>
+      
+      <!-- Bottom Grid -->
+      <div class="content-grid">
+        <!-- Top Cases -->
+        <div class="card">
+          <div class="card-header">
+            <h3>{{ userRole === 'PROVIDER' ? 'Casos Más Vistos' : 'Casos Más Relevantes' }}</h3>
+            <a href="#" class="view-all">Ver todos</a>
+          </div>
+          <div class="top-cases-list">
+            <div *ngFor="let case of topCases; let i = index" class="case-item">
+              <span class="case-rank">{{i+1}}</span>
+              <div class="case-content">
+                <div class="case-title">{{case.title}}</div>
+                <div class="case-views">
+                  <span *ngIf="userRole === 'PROVIDER'">{{case.views}} visualizaciones</span>
+                  <span *ngIf="userRole === 'CLIENT'">{{case.views}} vistas • {{case.relevance}}% relevancia</span>
+                </div>
+              </div>
+              <button class="case-action">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                  <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Trend Chart -->
+        <div class="card">
+          <div class="card-header">
+            <h3>{{ userRole === 'PROVIDER' ? 'Tendencia de Leads' : 'Tendencia de Casos' }}</h3>
+            <select class="period-select">
+              <option>Últimos 3 meses</option>
+              <option>Últimos 6 meses</option>
+              <option>Este año</option>
+            </select>
+          </div>
+          <div class="chart-placeholder">
+            <svg width="100%" height="200" viewBox="0 0 400 200">
+              <polyline 
+                points="0,150 100,120 200,80 300,60 400,40" 
+                fill="none" 
+                stroke="#0d86ff" 
+                stroke-width="3"
+              />
+              <circle cx="0" cy="150" r="4" fill="#0d86ff"/>
+              <circle cx="100" cy="120" r="4" fill="#0d86ff"/>
+              <circle cx="200" cy="80" r="4" fill="#0d86ff"/>
+              <circle cx="300" cy="60" r="4" fill="#0d86ff"/>
+              <circle cx="400" cy="40" r="4" fill="#0d86ff"/>
+              <text x="0" y="190" fill="#a0aec0" font-size="12">Mes 1</text>
+              <text x="100" y="190" fill="#a0aec0" font-size="12">Mes 2</text>
+              <text x="200" y="190" fill="#a0aec0" font-size="12">Mes 3</text>
+            </svg>
+            <div class="chart-stats">
+              <div class="stat">
+                <span class="stat-label">Crecimiento</span>
+                <span class="stat-value positive">
+                  +{{ userRole === 'PROVIDER' ? kpis.leadsTrendGrowth : kpis.casosCrecimiento }}%
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+

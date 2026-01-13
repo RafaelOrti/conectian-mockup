@@ -1,0 +1,149 @@
+@import '../../../../styles/variables';
+
+.provider-payments-page {
+  min-height: 100vh;
+  background: $bg-dark;
+  color: $text-primary;
+  padding-top: 80px; // Fix for navbar overlap
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: $spacing-8;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: $spacing-8;
+
+  h1 {
+    font-size: $font-size-3xl;
+    font-weight: $font-weight-bold;
+    margin-bottom: $spacing-2;
+  }
+
+  .subtitle {
+    color: $text-secondary;
+    font-size: $font-size-lg;
+  }
+}
+
+.payments-layout {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-8;
+}
+
+.balance-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: $spacing-8;
+  background: linear-gradient(135deg, rgba(13, 134, 255, 0.1) 0%, rgba(107, 92, 240, 0.1) 100%);
+  border: 1px solid rgba(13, 134, 255, 0.2);
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: $spacing-6;
+  }
+
+  .balance-info {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-2;
+
+    .label { color: $text-secondary; font-size: $font-size-sm; text-transform: uppercase; letter-spacing: 1px; }
+    .amount { font-size: 48px; font-weight: bold; color: $text-primary; line-height: 1; }
+    .pending { color: $text-muted; font-size: $font-size-sm; }
+  }
+
+  .balance-actions {
+    display: flex;
+    gap: $spacing-4;
+
+    .action-btn {
+      padding: $spacing-3 $spacing-6;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: $border-radius-base;
+      color: $text-primary;
+      cursor: pointer;
+      font-weight: $font-weight-medium;
+      transition: all 0.2s;
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.1);
+      }
+
+      &.primary {
+        background: $primary-blue;
+        border-color: $primary-blue;
+        
+        &:hover {
+          background: $primary-blue-hover;
+        }
+      }
+    }
+  }
+}
+
+.transactions-section {
+  h2 { font-size: $font-size-xl; margin-bottom: $spacing-6; }
+
+  .transactions-card {
+    padding: 0;
+    overflow: hidden;
+
+    .transactions-table {
+      width: 100%;
+      border-collapse: collapse;
+
+      th {
+        text-align: left;
+        padding: $spacing-4;
+        background: rgba(255, 255, 255, 0.02);
+        color: $text-secondary;
+        font-weight: $font-weight-medium;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      td {
+        padding: $spacing-4;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        color: $text-primary;
+        font-size: $font-size-sm;
+      }
+
+      .tx-id { font-family: monospace; color: $text-muted; }
+      
+      .amount {
+        font-weight: bold;
+        &.positive { color: $success-green; }
+      }
+
+      .status-badge {
+        display: inline-block;
+        padding: 4px 8px;
+        border-radius: $border-radius-base;
+        font-size: $font-size-xs;
+        
+        &.completed { background: rgba(24, 185, 129, 0.1); color: $success-green; }
+        &.pending { background: rgba(249, 105, 8, 0.1); color: $warning-orange; }
+      }
+
+      .download-btn {
+        background: none;
+        border: none;
+        cursor: pointer;
+        opacity: 0.7;
+        transition: opacity 0.2s;
+
+        &:hover { opacity: 1; }
+      }
+    }
+  }
+}

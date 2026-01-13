@@ -1,0 +1,519 @@
+@import '../../../../styles/variables';
+
+.use-case-form {
+  // Progress Container
+  .progress-container {
+    margin-bottom: $spacing-6;
+  }
+
+  .progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: $spacing-4;
+    flex-wrap: wrap;
+    gap: $spacing-4;
+
+    h1 {
+      font-size: $font-size-3xl;
+      font-weight: $font-weight-bold;
+      color: #ffffff;
+      margin: 0;
+      background: linear-gradient(135deg, #0d86ff 0%, #6b5cf0 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .progress-info {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: $spacing-1;
+
+      .step-indicator {
+        font-size: $font-size-sm;
+        font-weight: $font-weight-semibold;
+        color: $primary-blue;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .step-title {
+        font-size: $font-size-base;
+        color: $text-secondary;
+      }
+    }
+  }
+
+  .progress-bar {
+    width: 100%;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: $border-radius-full;
+    overflow: hidden;
+    margin-bottom: $spacing-6;
+
+    .progress-fill {
+      height: 100%;
+      background: $ai-gradient;
+      border-radius: $border-radius-full;
+      transition: width 0.3s ease;
+    }
+  }
+
+  .progress-steps {
+    display: flex;
+    justify-content: space-between;
+    gap: $spacing-4;
+    margin-bottom: $spacing-6;
+  }
+
+  .progress-step {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $spacing-2;
+    padding: $spacing-3;
+    cursor: pointer;
+    border-radius: $border-radius-base;
+    transition: all $transition-base;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .step-number {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      color: $text-secondary;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: $font-weight-bold;
+      transition: all $transition-base;
+    }
+
+    .step-label {
+      font-size: $font-size-xs;
+      color: $text-secondary;
+      text-align: center;
+    }
+
+    &.active {
+      .step-number {
+        background: $ai-gradient;
+        color: #ffffff;
+        box-shadow: 0 4px 12px rgba(13, 134, 255, 0.4);
+      }
+
+      .step-label {
+        color: $primary-blue;
+        font-weight: $font-weight-semibold;
+      }
+    }
+
+    &.completed {
+      .step-number {
+        background: rgba(76, 175, 80, 0.2);
+        color: $success-green;
+        border: 2px solid $success-green;
+      }
+    }
+  }
+
+  // Form Card
+  .form-card {
+    padding: $spacing-8;
+  }
+
+  .step-content {
+    h2 {
+      font-size: $font-size-2xl;
+      font-weight: $font-weight-bold;
+      color: #ffffff;
+      margin-bottom: $spacing-2;
+    }
+
+    .step-description {
+      font-size: $font-size-base;
+      color: $text-secondary;
+      margin-bottom: $spacing-8;
+    }
+  }
+
+  // Form Sections
+  .form-section {
+    margin-bottom: $spacing-6;
+  }
+
+  .form-label {
+    display: block;
+    font-size: $font-size-base;
+    font-weight: $font-weight-semibold;
+    color: #ffffff;
+    margin-bottom: $spacing-3;
+
+    .required {
+      color: #ff4444;
+      margin-left: 2px;
+    }
+
+    .hint {
+      display: block;
+      font-size: $font-size-sm;
+      font-weight: $font-weight-normal;
+      color: $text-secondary;
+      margin-top: $spacing-1;
+    }
+  }
+
+  .form-input,
+  .form-textarea,
+  .form-select {
+    width: 100%;
+    padding: $spacing-4;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: $border-radius-base;
+    color: #ffffff;
+    font-size: $font-size-base;
+    transition: all $transition-base;
+
+    &:focus {
+      outline: none;
+      border-color: $primary-blue;
+      background: rgba(255, 255, 255, 0.08);
+      box-shadow: 0 0 0 3px rgba(13, 134, 255, 0.1);
+    }
+
+    &::placeholder {
+      color: rgba(255, 255, 255, 0.4);
+    }
+  }
+
+  .form-textarea {
+    resize: vertical;
+    min-height: 120px;
+    font-family: inherit;
+  }
+
+  .form-select {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23ffffff' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right $spacing-3 center;
+    padding-right: $spacing-10;
+  }
+
+  // Radio Groups
+  .radio-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-3;
+  }
+
+  .radio-option {
+    flex: 1;
+    min-width: 150px;
+    padding: $spacing-4;
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: $border-radius-base;
+    cursor: pointer;
+    transition: all $transition-base;
+    display: flex;
+    align-items: center;
+    gap: $spacing-3;
+
+    input[type="radio"] {
+      margin: 0;
+      cursor: pointer;
+    }
+
+    .radio-label {
+      flex: 1;
+      color: #ffffff;
+      font-size: $font-size-base;
+    }
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(13, 134, 255, 0.3);
+    }
+
+    &.selected {
+      background: rgba(13, 134, 255, 0.15);
+      border-color: $primary-blue;
+      box-shadow: 0 0 0 3px rgba(13, 134, 255, 0.1);
+    }
+  }
+
+  // Checkbox Groups
+  .checkbox-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-3;
+  }
+
+  .checkbox-option {
+    flex: 1;
+    min-width: 150px;
+    padding: $spacing-3 $spacing-4;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: $border-radius-base;
+    cursor: pointer;
+    transition: all $transition-base;
+    display: flex;
+    align-items: center;
+    gap: $spacing-3;
+
+    input[type="checkbox"] {
+      margin: 0;
+      cursor: pointer;
+    }
+
+    span {
+      color: #ffffff;
+      font-size: $font-size-base;
+    }
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(13, 134, 255, 0.3);
+    }
+
+    input[type="checkbox"]:checked + span,
+    &:has(input[type="checkbox"]:checked) {
+      background: rgba(13, 134, 255, 0.15);
+      border-color: $primary-blue;
+    }
+  }
+
+  // Chip Group
+  .chip-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-3;
+  }
+
+  .chip {
+    padding: $spacing-3 $spacing-5;
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: $border-radius-full;
+    color: #ffffff;
+    font-size: $font-size-base;
+    cursor: pointer;
+    transition: all $transition-base;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(13, 134, 255, 0.5);
+    }
+
+    &.active {
+      background: $ai-gradient;
+      border-color: $primary-blue;
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(13, 134, 255, 0.3);
+    }
+  }
+
+  // Price Range
+  .price-range {
+    .price-input-group {
+      display: flex;
+      align-items: center;
+      gap: $spacing-3;
+      margin-bottom: $spacing-2;
+
+      .form-input {
+        flex: 1;
+      }
+
+      .price-separator {
+        color: $text-secondary;
+        font-weight: $font-weight-bold;
+      }
+
+      .form-select {
+        width: auto;
+        min-width: 100px;
+      }
+    }
+  }
+
+  // Tags Input
+  .tags-input {
+    display: flex;
+    gap: $spacing-3;
+    margin-bottom: $spacing-3;
+
+    .form-input {
+      flex: 1;
+    }
+
+    .add-tag-btn {
+      padding: $spacing-4 $spacing-6;
+      background: $primary-blue;
+      border: none;
+      border-radius: $border-radius-base;
+      color: #ffffff;
+      font-size: $font-size-lg;
+      font-weight: $font-weight-bold;
+      cursor: pointer;
+      transition: all $transition-base;
+
+      &:hover {
+        background: lighten($primary-blue, 10%);
+        transform: scale(1.05);
+      }
+    }
+  }
+
+  .tags-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-2;
+  }
+
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: $spacing-2;
+    padding: $spacing-2 $spacing-4;
+    background: rgba(13, 134, 255, 0.2);
+    border: 1px solid rgba(13, 134, 255, 0.4);
+    border-radius: $border-radius-full;
+    color: #ffffff;
+    font-size: $font-size-sm;
+
+    .tag-remove {
+      background: transparent;
+      border: none;
+      color: #ffffff;
+      font-size: $font-size-lg;
+      cursor: pointer;
+      padding: 0;
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      transition: all $transition-base;
+
+      &:hover {
+        background: rgba(255, 68, 68, 0.2);
+        color: #ff4444;
+      }
+    }
+  }
+
+  // Form Actions
+  .form-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: $spacing-4;
+    margin-top: $spacing-8;
+    padding-top: $spacing-6;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .btn-primary,
+  .btn-secondary,
+  .btn-draft {
+    padding: $spacing-4 $spacing-8;
+    border: none;
+    border-radius: $border-radius-base;
+    font-size: $font-size-base;
+    font-weight: $font-weight-semibold;
+    cursor: pointer;
+    transition: all $transition-base;
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  .btn-primary {
+    background: $ai-gradient;
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(13, 134, 255, 0.3);
+
+    &:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(13, 134, 255, 0.4);
+    }
+  }
+
+  .btn-secondary {
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+
+    &:hover:not(:disabled) {
+      background: rgba(255, 255, 255, 0.15);
+    }
+  }
+
+  .btn-draft {
+    background: rgba(255, 255, 255, 0.05);
+    color: $text-secondary;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+    }
+  }
+
+  // Responsive
+  @media (max-width: $breakpoint-md) {
+    .progress-header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .progress-steps {
+      flex-direction: column;
+    }
+
+    .progress-step {
+      flex-direction: row;
+      justify-content: flex-start;
+    }
+
+    .radio-group,
+    .checkbox-group {
+      flex-direction: column;
+    }
+
+    .radio-option,
+    .checkbox-option {
+      min-width: 100%;
+    }
+
+    .price-input-group {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .form-actions {
+      flex-direction: column;
+
+      button {
+        width: 100%;
+      }
+    }
+  }
+}
+

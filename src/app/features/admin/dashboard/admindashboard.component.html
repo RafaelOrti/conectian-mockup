@@ -1,0 +1,208 @@
+<div class="admin-dashboard">
+  <!-- Professional Navbar -->
+  <app-navbar 
+    [userRole]="'ADMIN'" 
+    [userName]="'Admin User'"
+    [notificationCount]="5"
+  ></app-navbar>
+  
+  <div class="dashboard-layout">
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="page-header">
+        <div>
+          <h1>Dashboard</h1>
+          <p class="subtitle">Panel de control administrativo</p>
+        </div>
+        <div class="header-actions">
+          <select class="period-selector">
+            <option>Últimos 30 días</option>
+            <option>Últimos 7 días</option>
+            <option>Este mes</option>
+            <option>Este año</option>
+          </select>
+        </div>
+      </div>
+      
+      <!-- KPIs Grid -->
+      <div class="kpis-grid">
+        <div class="kpi-card highlight">
+          <div class="kpi-header">
+            <span class="kpi-label">MRR</span>
+            <span class="kpi-trend positive">↑ +{{kpis.mrrGrowth}}%</span>
+          </div>
+          <div class="kpi-value">€{{kpis.mrr.toLocaleString()}}</div>
+          <div class="kpi-footer">Ingresos recurrentes mensuales</div>
+        </div>
+        
+        <div class="kpi-card">
+          <div class="kpi-header">
+            <span class="kpi-label">Usuarios</span>
+            <span class="kpi-trend positive">↑ +{{kpis.usersGrowth}}%</span>
+          </div>
+          <div class="kpi-value">{{kpis.totalUsers}}</div>
+          <div class="kpi-footer">Total usuarios activos</div>
+        </div>
+        
+        <div class="kpi-card">
+          <div class="kpi-header">
+            <span class="kpi-label">Matches</span>
+            <span class="kpi-trend positive">↑ +{{kpis.matchesGrowth}}%</span>
+          </div>
+          <div class="kpi-value">{{kpis.matches}}</div>
+          <div class="kpi-footer">Matches este mes</div>
+        </div>
+        
+        <div class="kpi-card">
+          <div class="kpi-header">
+            <span class="kpi-label">Churn</span>
+            <span class="kpi-trend negative">↓ {{kpis.churnChange}}%</span>
+          </div>
+          <div class="kpi-value warning">{{kpis.churnRate}}%</div>
+          <div class="kpi-footer">Tasa de cancelación</div>
+        </div>
+        
+        <div class="kpi-card">
+          <div class="kpi-header">
+            <span class="kpi-label">NPS</span>
+            <span class="kpi-trend neutral">→ {{kpis.npsChange}}%</span>
+          </div>
+          <div class="kpi-value">{{kpis.nps}}</div>
+          <div class="kpi-footer">Net Promoter Score</div>
+        </div>
+      </div>
+      
+      <!-- Revenue Chart Section -->
+      <div class="card revenue-section">
+        <div class="card-header">
+          <h3>📈 Revenue (Últimos 30 días)</h3>
+        </div>
+        <div class="chart-placeholder">
+          <p class="chart-note">[Gráfico líneas MRR - Integrar Chart.js o similar]</p>
+          <div class="mock-chart">
+            <div class="chart-bars">
+              <div class="chart-bar" style="height: 40%"></div>
+              <div class="chart-bar" style="height: 55%"></div>
+              <div class="chart-bar" style="height: 70%"></div>
+              <div class="chart-bar" style="height: 85%"></div>
+              <div class="chart-bar" style="height: 100%"></div>
+            </div>
+            <div class="chart-labels">
+              <span>Sem 1</span>
+              <span>Sem 2</span>
+              <span>Sem 3</span>
+              <span>Sem 4</span>
+              <span>Hoy</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Alerts Section -->
+      <div class="card alerts-section" *ngIf="alerts.length > 0">
+        <div class="card-header">
+          <h3>⚠️ Alerts</h3>
+        </div>
+        <div class="alerts-list">
+          <div 
+            *ngFor="let alert of alerts" 
+            class="alert-item"
+            [class.alert-warning]="alert.type === 'warning'"
+            [class.alert-error]="alert.type === 'error'"
+            [class.alert-success]="alert.type === 'success'"
+          >
+            <span class="alert-icon">
+              <span *ngIf="alert.type === 'warning'">⚠️</span>
+              <span *ngIf="alert.type === 'error'">❌</span>
+              <span *ngIf="alert.type === 'success'">✅</span>
+            </span>
+            <span class="alert-message">{{alert.message}}</span>
+            <button *ngIf="alert.action" class="alert-action" (click)="handleAlertAction(alert)">
+              {{alert.action}}
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Quick Actions -->
+      <div class="quick-actions">
+        <app-button variant="primary" (clickEvent)="navigateToApprovals()">
+          Aprobar Proveedores
+        </app-button>
+        <app-button variant="primary" (clickEvent)="navigateToCases()">
+          Review Casos Uso
+        </app-button>
+        <app-button variant="secondary" (clickEvent)="navigateToChurnReport()">
+          Ver Churn Report
+        </app-button>
+        <app-button variant="secondary" (clickEvent)="navigateToAnalytics()">
+          Analytics Completo
+        </app-button>
+      </div>
+      
+      <!-- Activity & Cases Grid -->
+      <div class="content-grid">
+        <!-- Recent Activity -->
+        <div class="card">
+          <div class="card-header">
+            <h3>🔥 Actividad Reciente (Últimas 24h)</h3>
+            <a href="#" class="view-all">Ver todo</a>
+          </div>
+          <div class="activity-list">
+            <div 
+              *ngFor="let activity of recentActivity" 
+              class="activity-item"
+              (click)="viewActivityDetails(activity)"
+            >
+              <div class="activity-icon" [class.client]="activity.type === 'cliente'">
+                <span *ngIf="activity.type === 'cliente'">👤</span>
+                <span *ngIf="activity.type === 'proveedor'">🏢</span>
+              </div>
+              <div class="activity-content">
+                <div class="activity-title">{{activity.name}}</div>
+                <div class="activity-meta">{{activity.action}} • {{activity.timestamp}}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Pending Cases -->
+        <div class="card">
+          <div class="card-header">
+            <h3>Casos Pendientes de Aprobación</h3>
+            <span class="badge">{{pendingCases.length}}</span>
+          </div>
+          <div class="cases-list">
+            <div 
+              *ngFor="let case of pendingCases" 
+              class="case-item"
+            >
+              <div class="case-content">
+                <div class="case-title">{{case.title}}</div>
+                <div class="case-meta">
+                  <span>{{case.submittedBy}}</span>
+                  <span>•</span>
+                  <span>{{case.date}}</span>
+                </div>
+              </div>
+              <div class="case-actions">
+                <button 
+                  class="btn-approve"
+                  (click)="approveCase(case)"
+                >
+                  Aprobar
+                </button>
+                <button 
+                  class="btn-reject"
+                  (click)="rejectCase(case)"
+                >
+                  Rechazar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>

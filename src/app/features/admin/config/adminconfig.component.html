@@ -1,0 +1,133 @@
+<div class="admin-config-page">
+  <app-navbar 
+    [userRole]="'ADMIN'" 
+    [userName]="'Admin User'"
+    [notificationCount]="5"
+  ></app-navbar>
+  
+  <div class="container">
+    <div class="page-header">
+      <div>
+        <h1>⚙️ Configuración</h1>
+        <p class="subtitle">Ajustes generales de la plataforma y sistema</p>
+      </div>
+      <app-button variant="primary" icon="💾">Guardar Cambios</app-button>
+    </div>
+
+    <div class="config-layout">
+      <!-- Sidebar Navigation -->
+      <app-card class="config-sidebar">
+        <nav class="config-nav">
+          <button class="nav-item active">
+            <span class="icon">🏢</span> General
+          </button>
+          <button class="nav-item">
+            <span class="icon">🔔</span> Notificaciones
+          </button>
+          <button class="nav-item">
+            <span class="icon">🔐</span> Seguridad
+          </button>
+          <button class="nav-item">
+            <span class="icon">💳</span> Pagos
+          </button>
+          <button class="nav-item">
+            <span class="icon">🔌</span> Integraciones
+          </button>
+          <button class="nav-item">
+            <span class="icon">📧</span> Email Templates
+          </button>
+        </nav>
+      </app-card>
+
+      <!-- Main Content -->
+      <div class="config-content">
+        <!-- General Settings -->
+        <app-card class="config-section">
+          <h3>Información de la Plataforma</h3>
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Nombre de la Plataforma</label>
+              <input type="text" value="Conectian AI Marketplace" class="form-input">
+            </div>
+            <div class="form-group">
+              <label>Email de Soporte</label>
+              <input type="email" value="support@conectian.com" class="form-input">
+            </div>
+            <div class="form-group full-width">
+              <label>Descripción SEO</label>
+              <textarea class="form-textarea" rows="3">La plataforma líder para conectar empresas con soluciones de Inteligencia Artificial.</textarea>
+            </div>
+          </div>
+        </app-card>
+
+        <!-- Feature Flags -->
+        <app-card class="config-section">
+          <h3>Funcionalidades (Feature Flags)</h3>
+          <div class="toggles-list">
+            <div class="toggle-item">
+              <div class="toggle-info">
+                <span class="toggle-label">Registro de Nuevos Usuarios</span>
+                <span class="toggle-desc">Permitir que nuevos usuarios se registren en la plataforma</span>
+              </div>
+              <label class="switch">
+                <input type="checkbox" checked>
+                <span class="slider"></span>
+              </label>
+            </div>
+            
+            <div class="toggle-item">
+              <div class="toggle-info">
+                <span class="toggle-label">Modo Mantenimiento</span>
+                <span class="toggle-desc">Activar pantalla de mantenimiento para todos los usuarios excepto admin</span>
+              </div>
+              <label class="switch">
+                <input type="checkbox">
+                <span class="slider"></span>
+              </label>
+            </div>
+
+            <div class="toggle-item">
+              <div class="toggle-info">
+                <span class="toggle-label">Beta Features</span>
+                <span class="toggle-desc">Habilitar características beta para usuarios seleccionados</span>
+              </div>
+              <label class="switch">
+                <input type="checkbox" checked>
+                <span class="slider"></span>
+              </label>
+            </div>
+          </div>
+        </app-card>
+
+        <!-- Localization -->
+        <app-card class="config-section">
+          <h3>Localización y Región</h3>
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Idioma por Defecto</label>
+              <select class="form-select">
+                <option value="es">Español</option>
+                <option value="en">Inglés</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Zona Horaria</label>
+              <select class="form-select">
+                <option value="madrid">Europe/Madrid (GMT+1)</option>
+                <option value="london">Europe/London (GMT+0)</option>
+                <option value="ny">America/New_York (GMT-5)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Moneda Principal</label>
+              <select class="form-select">
+                <option value="eur">EUR (€)</option>
+                <option value="usd">USD ($)</option>
+              </select>
+            </div>
+          </div>
+        </app-card>
+      </div>
+    </div>
+  </div>
+</div>

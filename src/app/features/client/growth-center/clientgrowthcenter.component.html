@@ -1,0 +1,94 @@
+<div class="growth-center-page" [class.no-navbar]="!showNavbar">
+  <app-navbar 
+    *ngIf="showNavbar"
+    [userRole]="'CLIENT'" 
+    [userName]="'Carlos Martínez'"
+    [notificationCount]="3"
+    [messageCount]="2"
+    [projectCount]="4"
+  ></app-navbar>
+  
+  <div class="container">
+    <div class="page-header">
+      <div>
+        <h1>🚀 Centro de Crecimiento</h1>
+        <p class="subtitle">Identifica oportunidades y escala tu negocio con IA</p>
+      </div>
+    </div>
+
+    <div class="growth-layout">
+      <!-- Opportunity Map -->
+      <section class="map-section">
+        <app-card class="map-card">
+          <div class="card-header">
+            <h3>Mapa de Oportunidades</h3>
+            <div class="map-controls">
+              <button class="control-btn active">Global</button>
+              <button class="control-btn">Regional</button>
+            </div>
+          </div>
+          <div class="map-placeholder">
+            <div class="map-bg">
+              <span>🌍 Visualización de Mercados Potenciales</span>
+            </div>
+            <div class="hotspot h1" title="Alta Demanda">🔥</div>
+            <div class="hotspot h2" title="Crecimiento Rápido">⚡</div>
+            <div class="hotspot h3" title="Mercado Emergente">🌱</div>
+          </div>
+        </app-card>
+      </section>
+
+      <!-- Growth Metrics -->
+      <section class="metrics-section">
+        <div class="metrics-grid">
+          <app-card class="metric-card">
+            <span class="metric-label">Potencial de Mercado</span>
+            <span class="metric-value">€2.5M</span>
+            <span class="metric-trend up">↑ 12% vs año anterior</span>
+          </app-card>
+          <app-card class="metric-card">
+            <span class="metric-label">Eficiencia Operativa</span>
+            <span class="metric-value">+24%</span>
+            <span class="metric-trend up">↑ Optimización continua</span>
+          </app-card>
+          <app-card class="metric-card">
+            <span class="metric-label">Nuevos Clientes</span>
+            <span class="metric-value">1,240</span>
+            <span class="metric-trend stable">→ Estable</span>
+          </app-card>
+        </div>
+
+        <!-- Recommendations -->
+        <app-card class="recommendations-card">
+          <h3>Recomendaciones de IA</h3>
+          <div class="recommendations-list">
+            <div class="recommendation-item">
+              <div class="rec-icon">🤖</div>
+              <div class="rec-content">
+                <h4>Automatización de Ventas</h4>
+                <p>Implementar CRM con IA podría aumentar conversión un 15%.</p>
+              </div>
+              <button class="action-btn">Explorar</button>
+            </div>
+            <div class="recommendation-item">
+              <div class="rec-icon">📊</div>
+              <div class="rec-content">
+                <h4>Análisis Predictivo</h4>
+                <p>Prevé tendencias de mercado con 3 meses de antelación.</p>
+              </div>
+              <button class="action-btn">Explorar</button>
+            </div>
+            <div class="recommendation-item">
+              <div class="rec-icon">💬</div>
+              <div class="rec-content">
+                <h4>Soporte Multilingüe</h4>
+                <p>Expande a nuevos mercados con traducción automática en tiempo real.</p>
+              </div>
+              <button class="action-btn">Explorar</button>
+            </div>
+          </div>
+        </app-card>
+      </section>
+    </div>
+  </div>
+</div>

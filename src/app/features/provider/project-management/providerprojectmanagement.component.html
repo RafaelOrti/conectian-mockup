@@ -1,0 +1,81 @@
+<div>
+  <app-navbar 
+    [userRole]="'PROVIDER'"
+    [userName]="'María González'"
+    [notificationCount]="5"
+  ></app-navbar>
+  
+  <div class="project-management-container">
+    <!-- Header -->
+    <header class="page-header">
+      <h1>Gestión de Proyectos</h1>
+      <p class="page-subtitle">Casos de uso aceptados con Deal Room activo</p>
+    </header>
+
+    <!-- Projects List -->
+    <div class="projects-grid" *ngIf="projects.length > 0; else emptyState">
+      <div 
+        *ngFor="let project of projects" 
+        class="project-card"
+        (click)="openDealRoom(project.dealRoomId)"
+      >
+        <app-card>
+          <div class="project-header">
+            <div class="project-title-section">
+              <h2 class="project-title">{{ project.title }}</h2>
+              <div class="project-meta">
+                <span class="client-info">
+                  <span class="client-logo">{{ project.client.logo }}</span>
+                  <span class="client-name">{{ project.client.name }}</span>
+                </span>
+              </div>
+            </div>
+            <div class="project-status">
+              <span [class]="'status-badge ' + getStatusClass(project.status)">
+                {{ getStatusLabel(project.status) }}
+              </span>
+            </div>
+          </div>
+
+          <div class="project-details">
+            <div class="detail-item" *ngIf="project.value">
+              <span class="detail-label">💰 Valor:</span>
+              <span class="detail-value">${{ project.value.toLocaleString() }}</span>
+            </div>
+            <div class="detail-item" *ngIf="project.timeline">
+              <span class="detail-label">⏱️ Timeline:</span>
+              <span class="detail-value">{{ project.timeline }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">📅 Aceptado:</span>
+              <span class="detail-value">{{ project.acceptedDate }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">🕐 Última actividad:</span>
+              <span class="detail-value">{{ project.lastActivity }}</span>
+            </div>
+          </div>
+
+          <div class="project-actions">
+            <app-button variant="primary" (clickEvent)="openDealRoom(project.dealRoomId); $event.stopPropagation()">
+              Abrir Deal Room →
+            </app-button>
+          </div>
+        </app-card>
+      </div>
+    </div>
+
+    <ng-template #emptyState>
+      <div class="empty-state">
+        <app-card>
+          <div class="empty-content">
+            <span class="empty-icon">📁</span>
+            <h2>No hay proyectos activos</h2>
+            <p>Cuando un cliente acepte tu caso de uso y se cree un Deal Room, aparecerá aquí.</p>
+          </div>
+        </app-card>
+      </div>
+    </ng-template>
+  </div>
+</div>
+

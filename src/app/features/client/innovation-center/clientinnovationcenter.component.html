@@ -1,0 +1,121 @@
+<div class="innovation-center-page" [class.no-navbar]="!showNavbar">
+  <app-navbar 
+    *ngIf="showNavbar"
+    [userRole]="'CLIENT'" 
+    [userName]="'Carlos Martínez'"
+    [notificationCount]="3"
+    [messageCount]="2"
+    [projectCount]="4"
+  ></app-navbar>
+  
+  <div class="container">
+    <div class="page-header">
+      <div>
+        <h1>💡 Centro de Innovación</h1>
+        <p class="subtitle">Gestiona y monitorea tus iniciativas de transformación digital</p>
+      </div>
+      <app-button variant="primary" icon="🚀">Nueva Iniciativa</app-button>
+    </div>
+
+    <!-- KPI Cards -->
+    <div class="kpi-grid">
+      <app-card class="kpi-card">
+        <div class="kpi-icon active">⚡</div>
+        <div class="kpi-content">
+          <span class="kpi-value">8</span>
+          <span class="kpi-label">Pilotos Activos</span>
+        </div>
+      </app-card>
+      <app-card class="kpi-card">
+        <div class="kpi-icon success">✅</div>
+        <div class="kpi-content">
+          <span class="kpi-value">12</span>
+          <span class="kpi-label">Implementados</span>
+        </div>
+      </app-card>
+      <app-card class="kpi-card">
+        <div class="kpi-icon roi">📈</div>
+        <div class="kpi-content">
+          <span class="kpi-value">145%</span>
+          <span class="kpi-label">ROI Promedio</span>
+        </div>
+      </app-card>
+      <app-card class="kpi-card">
+        <div class="kpi-icon investment">💰</div>
+        <div class="kpi-content">
+          <span class="kpi-value">€450k</span>
+          <span class="kpi-label">Inversión Total</span>
+        </div>
+      </app-card>
+    </div>
+
+    <!-- Active Initiatives -->
+    <section class="initiatives-section">
+      <h2>Iniciativas en Curso</h2>
+      <div class="initiatives-grid">
+        <app-card class="initiative-card" *ngFor="let item of initiatives">
+          <div class="card-header">
+            <span class="category-badge">{{item.category}}</span>
+            <span class="status-dot" [class]="item.status"></span>
+          </div>
+          <h3>{{item.title}}</h3>
+          <p class="description">{{item.description}}</p>
+          
+          <div class="progress-section">
+            <div class="progress-info">
+              <span>Progreso</span>
+              <span>{{item.progress}}%</span>
+            </div>
+            <div class="progress-bar">
+              <div class="fill" [style.width.%]="item.progress"></div>
+            </div>
+          </div>
+
+          <div class="card-footer">
+            <div class="partners">
+              <span class="label">Partner:</span>
+              <span class="partner-name">{{item.partner}}</span>
+            </div>
+            <button class="details-btn">Ver Detalles →</button>
+          </div>
+        </app-card>
+      </div>
+    </section>
+
+    <!-- Innovation Radar -->
+    <section class="radar-section">
+      <app-card>
+        <div class="radar-header">
+          <h2>Radar de Tecnologías</h2>
+          <p>Tecnologías emergentes relevantes para tu sector</p>
+        </div>
+        <div class="radar-content">
+          <!-- Placeholder for Radar Chart -->
+          <div class="radar-placeholder">
+            <div class="radar-circle outer"></div>
+            <div class="radar-circle middle"></div>
+            <div class="radar-circle inner"></div>
+            <div class="tech-point p1" title="Generative AI">🤖</div>
+            <div class="tech-point p2" title="Blockchain">🔗</div>
+            <div class="tech-point p3" title="IoT">📡</div>
+            <div class="tech-point p4" title="Quantum Computing">⚛️</div>
+          </div>
+          <div class="radar-legend">
+            <div class="legend-item">
+              <span class="dot adopt"></span> Adoptar
+            </div>
+            <div class="legend-item">
+              <span class="dot trial"></span> Probar
+            </div>
+            <div class="legend-item">
+              <span class="dot assess"></span> Evaluar
+            </div>
+            <div class="legend-item">
+              <span class="dot hold"></span> Esperar
+            </div>
+          </div>
+        </div>
+      </app-card>
+    </section>
+  </div>
+</div>

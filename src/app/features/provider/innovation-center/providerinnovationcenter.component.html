@@ -1,0 +1,200 @@
+<div class="innovation-center-page" [class.no-navbar]="!showNavbar">
+  <app-navbar 
+    *ngIf="showNavbar"
+    [userRole]="'PROVIDER'"
+    [userName]="'Innovación Tech S.L.'"
+    [notificationCount]="5"
+    [messageCount]="3"
+  ></app-navbar>
+  
+  <div class="container">
+    <!-- Header -->
+    <div class="page-header">
+      <h1>💡 Centro de Innovación</h1>
+      <p class="page-subtitle">Gestiona tu equipo, badges, referidos y casos de uso destacados</p>
+    </div>
+
+    <div class="innovation-grid">
+      <!-- Left Column -->
+      <div class="left-column">
+        <!-- Estructura Organizativa -->
+        <app-card class="team-section" variant="elevated">
+          <div class="section-header">
+            <h2>👥 Estructura Organizativa</h2>
+            <app-button 
+              variant="primary" 
+              size="small"
+              icon="➕"
+              (clickEvent)="inviteTeamMember()"
+            >
+              Invitar
+            </app-button>
+          </div>
+          
+          <div class="team-list">
+            <div 
+              *ngFor="let member of teamMembers"
+              class="team-member-card"
+            >
+              <div class="member-avatar">
+                <span>{{ member.name.charAt(0) }}</span>
+              </div>
+              <div class="member-info">
+                <div class="member-name">{{ member.name }}</div>
+                <div class="member-role">{{ member.role }}</div>
+                <div class="member-status">
+                  <span class="status-dot" [style.background-color]="member.linkedInConnected ? '#18b981' : '#f96908'"></span>
+                  <span>{{ member.linkedInConnected ? 'LinkedIn Conectado' : 'Pendiente' }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </app-card>
+
+        <!-- Verificación y Badges -->
+        <app-card class="verification-section" variant="gradient">
+          <div class="verification-content">
+            <div class="badge-icon-large">{{ getCurrentBadge().icon }}</div>
+            <h3>Verificación {{ getCurrentBadge().level }}</h3>
+            <p class="verification-text">
+              {{ getCurrentBadge().description }}
+            </p>
+            <div class="progress-container">
+              <div class="progress-bar">
+                <div 
+                  class="progress-fill" 
+                  [style.width.%]="getProgressPercentage(getCurrentBadge())"
+                ></div>
+              </div>
+              <div class="progress-text">
+                {{ getCurrentBadge().progress }}/{{ getCurrentBadge().maxProgress }} Empresas invitadas
+              </div>
+            </div>
+            <app-button variant="secondary" size="small" icon="➡️">
+              Gana un Sello {{ getCurrentBadge().level === 'BRONCE' ? 'Plata' : 'Oro' }}
+            </app-button>
+          </div>
+        </app-card>
+
+        <!-- Top Casos de Uso -->
+        <app-card class="use-cases-section">
+          <h2>⭐ Top Casos de Uso</h2>
+          <div class="use-cases-list">
+            <div 
+              *ngFor="let useCase of topUseCases"
+              class="use-case-item"
+            >
+              <div class="use-case-header">
+                <h4>{{ useCase.title }}</h4>
+                <span class="sector-badge">{{ useCase.sector }}</span>
+              </div>
+              <div class="use-case-stats">
+                <div class="stat">
+                  <span class="stat-icon">👁️</span>
+                  <span>{{ useCase.views }} vistas</span>
+                </div>
+                <div class="stat">
+                  <span class="stat-icon">🚪</span>
+                  <span>{{ useCase.dealRoomRequests }} solicitudes</span>
+                </div>
+              </div>
+              <app-button 
+                variant="ghost" 
+                size="small"
+                [routerLink]="['/provider/cases', useCase.id]"
+              >
+                Ver Detalles →
+              </app-button>
+            </div>
+          </div>
+        </app-card>
+      </div>
+
+      <!-- Right Column -->
+      <div class="right-column">
+        <!-- Módulo de Gamificación y Badges -->
+        <app-card class="gamification-section" variant="elevated">
+          <h2>🎮 Gamificación y Badges</h2>
+          <div class="badge-display">
+            <div class="badge-icon">{{ getCurrentBadge().icon }}</div>
+            <div class="badge-info">
+              <h3>{{ getCurrentBadge().name }} {{ getCurrentBadge().level }}</h3>
+              <p>{{ getCurrentBadge().description }}</p>
+              <div class="progress-container">
+                <div class="progress-bar">
+                  <div 
+                    class="progress-fill" 
+                    [style.width.%]="getProgressPercentage(getCurrentBadge())"
+                  ></div>
+                </div>
+                <div class="progress-text">
+                  {{ getCurrentBadge().progress }}/{{ getCurrentBadge().maxProgress }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </app-card>
+
+        <!-- Referidos y Networking -->
+        <app-card class="referrals-section">
+          <div class="section-header">
+            <h2>🌟 Referidos y Networking</h2>
+          </div>
+          
+          <div class="invite-cards">
+            <app-card class="invite-card" variant="bordered" hover="true">
+              <div class="invite-icon">🤝</div>
+              <h4>Invitar Empresa Partner</h4>
+              <p>Invita a una empresa que pueda ser un gran aliado para nosotros.</p>
+              <app-button 
+                variant="success" 
+                size="small"
+                icon="➕"
+                (clickEvent)="inviteCompany('partner')"
+              >
+                Invitación Partner
+              </app-button>
+            </app-card>
+            
+            <app-card class="invite-card" variant="bordered" hover="true">
+              <div class="invite-icon">🔧</div>
+              <h4>Invitar Proveedor Externo</h4>
+              <p>Invita a un proveedor que pueda ofrecer soluciones de lo que necesitamos.</p>
+              <app-button 
+                variant="primary" 
+                size="small"
+                icon="➕"
+                (clickEvent)="inviteCompany('provider')"
+              >
+                Invitación Proveedor
+              </app-button>
+            </app-card>
+          </div>
+
+          <div class="referrals-list">
+            <h4>Historial de Invitaciones</h4>
+            <div 
+              *ngFor="let referral of referrals"
+              class="referral-item"
+            >
+              <div class="referral-info">
+                <div class="referral-company">{{ referral.companyName }}</div>
+                <div class="referral-details">
+                  Invitado por: {{ referral.invitedBy }}
+                </div>
+              </div>
+              <div class="referral-status">
+                <span 
+                  class="status-badge"
+                  [style.background-color]="getStatusColor(referral.status)"
+                >
+                  {{ getStatusLabel(referral.status) }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </app-card>
+      </div>
+    </div>
+  </div>
+</div>

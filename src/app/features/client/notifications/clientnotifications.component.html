@@ -1,0 +1,61 @@
+<div class="notifications-page">
+  <app-navbar 
+    [userRole]="'CLIENT'"
+    [userName]="'Carlos Martínez'"
+    [notificationCount]="unreadCount"
+  ></app-navbar>
+  
+  <div class="container">
+    <div class="notifications-header">
+      <div>
+        <h1>🔔 Notificaciones</h1>
+        <p class="text-secondary">Mantente al día con las últimas actualizaciones y mensajes</p>
+      </div>
+      <div class="header-actions" *ngIf="unreadCount > 0">
+        <app-button variant="secondary" (clickEvent)="markAllAsRead()">
+          Marcar todas como leídas
+        </app-button>
+      </div>
+    </div>
+
+    <div class="notifications-list" *ngIf="notifications.length > 0; else emptyState">
+      <div 
+        *ngFor="let notification of notifications" 
+        class="notification-item"
+        [class]="getNotificationClass(notification)"
+        (click)="handleNotificationClick(notification)"
+      >
+        <div class="notification-icon">
+          <span>{{ notification.icon }}</span>
+          <span *ngIf="!notification.read" class="unread-indicator"></span>
+        </div>
+        <div class="notification-content">
+          <div class="notification-header">
+            <h3 class="notification-title">{{ notification.title }}</h3>
+            <span class="notification-time">{{ notification.timestamp }}</span>
+          </div>
+          <p class="notification-message">{{ notification.message }}</p>
+        </div>
+        <div class="notification-actions">
+          <button 
+            class="delete-btn"
+            (click)="deleteNotification(notification, $event)"
+            aria-label="Eliminar notificación"
+          >
+            ✕
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <ng-template #emptyState>
+      <app-card class="empty-state-card">
+        <div class="empty-state-content">
+          <span class="empty-icon">🔔</span>
+          <h2>No hay notificaciones</h2>
+          <p>Cuando tengas nuevas actualizaciones, aparecerán aquí</p>
+        </div>
+      </app-card>
+    </ng-template>
+  </div>
+</div>

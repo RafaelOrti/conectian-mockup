@@ -1,0 +1,24 @@
+<div class="case-management-page">
+  <app-navbar [userRole]="'PROVIDER'"></app-navbar>
+  
+  <div class="container">
+    <div class="page-header">
+      <div>
+        <h1>Mis Casos de Uso</h1>
+        <p class="subtitle">Gestiona y publica tus casos de éxito</p>
+      </div>
+      <app-button variant="primary" icon="➕" (clickEvent)="createCase()">
+        Añadir Caso de Uso
+      </app-button>
+    </div>
+
+    <app-card>
+      <div class="empty-state">
+        <div class="icon">📁</div>
+        <h3>No tienes casos publicados aún</h3>
+        <p>Publica tu primer caso de éxito para atraer clientes.</p>
+        <app-button variant="secondary" (clickEvent)="createCase()">Crear Caso</app-button>
+      </div>
+    </app-card>
+  </div>
+</div>

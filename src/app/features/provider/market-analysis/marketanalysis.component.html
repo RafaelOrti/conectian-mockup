@@ -1,0 +1,179 @@
+<div class="market-analysis-page" [class.no-navbar]="!showNavbar">
+  <app-navbar 
+    *ngIf="showNavbar"
+    [userRole]="'PROVIDER'"
+    [userName]="'María González'"
+    [notificationCount]="5"
+  ></app-navbar>
+  
+  <div class="container">
+    <!-- Header -->
+    <div class="page-header">
+      <h1>📊 Análisis de Mercado</h1>
+      <p class="page-subtitle">Inteligencia de negocio para optimizar tu estrategia y captar más oportunidades</p>
+    </div>
+
+    <div class="analysis-grid">
+      <!-- A. Market Radar - Demand Analysis -->
+      <app-card class="market-radar-section" variant="elevated">
+        <h2>🔍 A. Análisis de Demanda Real (Market Radar)</h2>
+        <p class="section-description">
+          Visualiza las tendencias del mercado y identifica oportunidades desatendidas
+        </p>
+
+        <div class="trends-list">
+          <div 
+            *ngFor="let trend of sectorTrends"
+            class="trend-card"
+          >
+            <div class="trend-header">
+              <h3>{{ trend.sector }}</h3>
+              <span 
+                class="opportunity-badge"
+                [style.background-color]="getOpportunityColor(trend.opportunity)"
+              >
+                {{ getOpportunityLabel(trend.opportunity) }}
+              </span>
+            </div>
+            <div class="trend-stats">
+              <div class="stat">
+                <span class="stat-icon">📈</span>
+                <div class="stat-info">
+                  <div class="stat-value">+{{ trend.searchGrowth }}%</div>
+                  <div class="stat-label">Crecimiento búsquedas</div>
+                </div>
+              </div>
+              <div class="stat">
+                <span class="stat-icon">👥</span>
+                <div class="stat-info">
+                  <div class="stat-value">{{ trend.providersCount }}</div>
+                  <div class="stat-label">Proveedores totales</div>
+                </div>
+              </div>
+              <div class="stat">
+                <span class="stat-icon">🥇</span>
+                <div class="stat-info">
+                  <div class="stat-value">{{ trend.goldSealCount }}</div>
+                  <div class="stat-label">Con Sello Oro</div>
+                </div>
+              </div>
+            </div>
+            <div class="trend-insight">
+              <p>
+                <strong>Insight:</strong> Este mes las búsquedas de "{{ trend.sector }}" han subido un {{ trend.searchGrowth }}%, 
+                pero solo hay {{ trend.goldSealCount }} proveedores con Sello Oro en esta categoría.
+              </p>
+              <app-button variant="primary" size="small" icon="➕">
+                Crear Caso de Uso
+              </app-button>
+            </div>
+          </div>
+        </div>
+      </app-card>
+
+      <!-- B. Pitch Optimizer - Conversion Audit -->
+      <app-card class="pitch-optimizer-section" variant="elevated">
+        <h2>🎯 B. Auditoría de Conversión (Pitch Optimizer)</h2>
+        <p class="section-description">
+          Analiza el embudo de conversión de tus Casos de Uso y optimiza para más leads
+        </p>
+
+        <div class="conversion-list">
+          <div 
+            *ngFor="let useCase of useCaseConversions"
+            class="conversion-card"
+          >
+            <div class="conversion-header">
+              <h3>{{ useCase.title }}</h3>
+              <div class="conversion-rate">
+                <span class="rate-value">{{ useCase.conversionRate }}%</span>
+                <span class="rate-label">Tasa de conversión</span>
+              </div>
+            </div>
+            <div class="conversion-funnel">
+              <div class="funnel-step">
+                <span class="step-icon">👁️</span>
+                <span class="step-value">{{ useCase.views }}</span>
+                <span class="step-label">Vistas</span>
+              </div>
+              <div class="funnel-arrow">→</div>
+              <div class="funnel-step">
+                <span class="step-icon">💬</span>
+                <span class="step-value">{{ useCase.contacts }}</span>
+                <span class="step-label">Contactos</span>
+              </div>
+            </div>
+            <div class="conversion-insight" *ngIf="useCase.missingFeatures.length > 0">
+              <p class="insight-text">
+                <strong>Recomendación:</strong> Tu Caso de Uso "{{ useCase.title }}" lo ven muchos, 
+                pero nadie te contacta. Te falta añadir:
+              </p>
+              <ul class="missing-features">
+                <li *ngFor="let feature of useCase.missingFeatures">
+                  {{ feature }}
+                </li>
+              </ul>
+              <app-button variant="secondary" size="small" icon="✏️">
+                Mejorar Caso de Uso
+              </app-button>
+            </div>
+            <div class="conversion-success" *ngIf="useCase.missingFeatures.length === 0">
+              <p>✓ Tu Caso de Uso está bien optimizado</p>
+            </div>
+          </div>
+        </div>
+      </app-card>
+
+      <!-- C. Competition Gap Analysis -->
+      <app-card class="gap-analysis-section" variant="elevated">
+        <h2>⚖️ C. Análisis de Gap de Competencia</h2>
+        <p class="section-description">
+          Compara tus precios con el mercado y ajusta tu estrategia de pricing
+        </p>
+
+        <div class="gap-list">
+          <div 
+            *ngFor="let gap of competitorGaps"
+            class="gap-card"
+          >
+            <div class="gap-header">
+              <h3>{{ gap.sector }}</h3>
+            </div>
+            <div class="price-comparison">
+              <div class="price-item">
+                <span class="price-label">Precio medio mercado</span>
+                <span class="price-value">€{{ gap.averagePrice | number }}</span>
+              </div>
+              <div class="price-item">
+                <span class="price-label">Tu precio medio</span>
+                <span 
+                  class="price-value"
+                  [style.color]="getPriceDifferenceColor(gap.priceDifference)"
+                >
+                  €{{ gap.yourAveragePrice | number }}
+                </span>
+              </div>
+              <div class="price-difference">
+                <span 
+                  class="difference-badge"
+                  [style.background-color]="getPriceDifferenceColor(gap.priceDifference)"
+                >
+                  {{ gap.priceDifference > 0 ? '+' : '' }}{{ gap.priceDifference }}%
+                </span>
+              </div>
+            </div>
+            <div class="gap-recommendation">
+              <p>
+                <strong>Recomendación:</strong> {{ gap.recommendation }}
+              </p>
+              <app-button variant="primary" size="small" icon="💰">
+                Ajustar Estrategia
+              </app-button>
+            </div>
+          </div>
+        </div>
+      </app-card>
+    </div>
+  </div>
+</div>
+

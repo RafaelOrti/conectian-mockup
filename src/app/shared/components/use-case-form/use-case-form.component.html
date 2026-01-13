@@ -1,0 +1,500 @@
+<div class="use-case-form">
+  <!-- Progress Bar -->
+  <div class="progress-container">
+    <div class="progress-header">
+      <h1>📝 {{ title }}</h1>
+      <div class="progress-info">
+        <span class="step-indicator">PASO {{ currentStep }} de {{ totalSteps }}</span>
+        <span class="step-title">{{ getStepTitle() }}</span>
+      </div>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill" [style.width.%]="getProgress()"></div>
+    </div>
+    <div class="progress-steps">
+      <div 
+        *ngFor="let step of [1,2,3,4]" 
+        class="progress-step"
+        [class.active]="currentStep === step"
+        [class.completed]="currentStep > step"
+        (click)="goToStep(step)"
+      >
+        <span class="step-number">{{ step }}</span>
+        <span class="step-label">{{ getStepLabel(step) }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Form Content -->
+  <app-card class="form-card">
+    <form (ngSubmit)="submitForm()">
+      <!-- PASO 1: LA SOLUCIÓN -->
+      <div *ngIf="currentStep === 1" class="step-content">
+        <h2>PASO 1: LA SOLUCIÓN</h2>
+        <p class="step-description">Define la identidad del producto y su encaje de mercado</p>
+
+        <div class="form-section">
+          <label class="form-label">
+            Título <span class="required">*</span>
+          </label>
+          <input 
+            type="text" 
+            [(ngModel)]="formData.title"
+            name="title"
+            class="form-input"
+            placeholder="Ej: Asistente Virtual para Onboarding"
+            required
+          />
+        </div>
+
+        <div class="form-section">
+          <label class="form-label">
+            Descripción Corta <span class="required">*</span>
+            <span class="hint">(Aparecerá en el listado)</span>
+          </label>
+          <input 
+            type="text" 
+            [(ngModel)]="formData.shortDescription"
+            name="shortDescription"
+            class="form-input"
+            placeholder="Descripción breve del caso de uso"
+            required
+          />
+        </div>
+
+        <div class="form-section">
+          <label class="form-label">
+            Descripción Detallada
+          </label>
+          <textarea 
+            [(ngModel)]="formData.detailedDescription"
+            name="detailedDescription"
+            class="form-textarea"
+            rows="5"
+            placeholder="Explica el problema, la solución y los beneficios..."
+          ></textarea>
+        </div>
+
+        <div class="form-section">
+          <label class="form-label">
+            Tipo de Aplicación <span class="required">*</span>
+          </label>
+          <div class="radio-group">
+            <label 
+              *ngFor="let type of applicationTypes"
+              class="radio-option"
+              [class.selected]="formData.applicationType === type.value"
+            >
+              <input 
+                type="radio" 
+                [(ngModel)]="formData.applicationType"
+                name="applicationType"
+                [value]="type.value"
+                required
+              />
+              <span class="radio-label">{{ type.label }}</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <label class="form-label">
+            Sector / Industria <span class="required">*</span>
+            <span class="hint">¿A qué verticales se dirige principalmente?</span>
+          </label>
+          <div class="checkbox-group">
+            <label 
+              *ngFor="let sector of sectors"
+              class="checkbox-option"
+            >
+              <input 
+                type="checkbox"
+                [checked]="formData.sectors.includes(sector)"
+                (change)="toggleArray(formData.sectors, sector)"
+              />
+              <span>{{ sector }}</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <label class="form-label">
+            Tamaño del Cliente Ideal
+            <span class="hint">¿Para qué tamaño de empresa está optimizado?</span>
+          </label>
+          <div class="checkbox-group">
+            <label 
+              *ngFor="let size of clientSizes"
+              class="checkbox-option"
+            >
+              <input 
+                type="checkbox"
+                [checked]="formData.clientSize.includes(size.value)"
+                (change)="toggleArray(formData.clientSize, size.value)"
+              />
+              <span>{{ size.label }}</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <label class="form-label">
+            Formato de la Oferta
+          </label>
+          <div class="chip-group">
+            <button
+              type="button"
+              *ngFor="let format of offerFormats"
+              class="chip"
+              [class.active]="formData.offerFormat.includes(format.value)"
+              (click)="toggleArray(formData.offerFormat, format.value)"
+            >
+              {{ format.label }}
+            </button>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <label class="form-label">
+            Madurez del Caso de Uso
+          </label>
+          <div class="radio-group">
+            <label 
+              *ngFor="let maturity of maturityLevels"
+              class="radio-option"
+              [class.selected]="formData.maturity === maturity.value"
+            >
+              <input 
+                type="radio" 
+                [(ngModel)]="formData.maturity"
+                name="maturity"
+                [value]="maturity.value"
+              />
+              <span class="radio-label">{{ maturity.label }}</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- PASO 2: MODELO DE NEGOCIO -->
+      <div *ngIf="currentStep === 2" class="step-content">
+        <h2>PASO 2: MODELO DE NEGOCIO</h2>
+        <p class="step-description">Define precios y modalidades de entrega</p>
+
+        <div class="form-section">
+          <label class="form-label">
+            Modalidad Técnica <span class="required">*</span>
+            <span class="hint">¿Cómo se entrega la solución?</span>
+          </label>
+          <div class="checkbox-group">
+            <label 
+              *ngFor="let modality of technicalModalities"
+              class="checkbox-option"
+            >
+              <input 
+                type="checkbox"
+                [checked]="formData.technicalModality.includes(modality.value)"
+                (change)="toggleArray(formData.technicalModality, modality.value)"
+              />
+              <span>{{ modality.label }}</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <label class="form-label">
+            Rango de Precios
+            <span class="hint">(Opcional pero recomendado para SEO)</span>
+          </label>
+          <div class="price-range">
+            <div class="price-input-group">
+              <input 
+                type="number" 
+                [(ngModel)]="formData.priceMin"
+                name="priceMin"
+                class="form-input"
+                placeholder="Mínimo"
+                min="0"
+              />
+              <span class="price-separator">-</span>
+              <input 
+                type="number" 
+                [(ngModel)]="formData.priceMax"
+                name="priceMax"
+                class="form-input"
+                placeholder="Máximo"
+                min="0"
+              />
+              <select 
+                [(ngModel)]="formData.pricePeriod"
+                name="pricePeriod"
+                class="form-select"
+              >
+                <option *ngFor="let period of pricePeriods" [value]="period.value">
+                  / {{ period.label }}
+                </option>
+              </select>
+            </div>
+            <p class="hint">Ej: De 5.000€ a 20.000€ / año</p>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <label class="form-label">
+            Idiomas Soportados
+            <span class="hint">¿En qué idiomas dais soporte e interfaz?</span>
+          </label>
+          <div class="checkbox-group">
+            <label 
+              *ngFor="let lang of languages"
+              class="checkbox-option"
+            >
+              <input 
+                type="checkbox"
+                [checked]="formData.supportedLanguages.includes(lang)"
+                (change)="toggleArray(formData.supportedLanguages, lang)"
+              />
+              <span>{{ lang }}</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- PASO 3: EL MOTOR -->
+      <div *ngIf="currentStep === 3" class="step-content">
+        <h2>PASO 3: EL MOTOR</h2>
+        <p class="step-description">Detalles técnicos para el CTO del cliente</p>
+
+        <div class="form-section">
+          <label class="form-label">
+            Tipo de IA (Modelo)
+          </label>
+          <div class="radio-group">
+            <label 
+              *ngFor="let aiType of aiTypes"
+              class="radio-option"
+              [class.selected]="formData.aiType === aiType.value"
+            >
+              <input 
+                type="radio" 
+                [(ngModel)]="formData.aiType"
+                name="aiType"
+                [value]="aiType.value"
+              />
+              <span class="radio-label">{{ aiType.label }}</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <label class="form-label">
+            Nivel de Intervención Humana
+          </label>
+          <div class="radio-group">
+            <label 
+              *ngFor="let intervention of humanInterventions"
+              class="radio-option"
+              [class.selected]="formData.humanIntervention === intervention.value"
+            >
+              <input 
+                type="radio" 
+                [(ngModel)]="formData.humanIntervention"
+                name="humanIntervention"
+                [value]="intervention.value"
+              />
+              <span class="radio-label">{{ intervention.label }}</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <label class="form-label">
+            Stack Tecnológico / Compatibilidad
+            <span class="hint">(Recomendado para más visibilidad)</span>
+          </label>
+          <div class="tags-input">
+            <input 
+              type="text" 
+              [(ngModel)]="techStackInput"
+              name="techStackInput"
+              class="form-input"
+              placeholder="Ej: Python, Azure, AWS, TensorFlow"
+              (keyup.enter)="addTechStackTag()"
+            />
+            <button type="button" class="add-tag-btn" (click)="addTechStackTag()">+</button>
+          </div>
+          <div class="tags-list" *ngIf="formData.techStack.length > 0">
+            <span 
+              *ngFor="let tag of formData.techStack"
+              class="tag"
+            >
+              {{ tag }}
+              <button type="button" class="tag-remove" (click)="removeTechStackTag(tag)">×</button>
+            </span>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <label class="form-label">
+            Integraciones Nativas
+            <span class="hint">¿Con qué se conecta 'out of the box'? (Recomendado)</span>
+          </label>
+          <div class="tags-input">
+            <input 
+              type="text" 
+              [(ngModel)]="nativeIntegrationsInput"
+              name="nativeIntegrationsInput"
+              class="form-input"
+              placeholder="Ej: Salesforce, SAP, HubSpot, Slack"
+              (keyup.enter)="addIntegrationTag()"
+            />
+            <button type="button" class="add-tag-btn" (click)="addIntegrationTag()">+</button>
+          </div>
+          <div class="tags-list" *ngIf="formData.nativeIntegrations.length > 0">
+            <span 
+              *ngFor="let tag of formData.nativeIntegrations"
+              class="tag"
+            >
+              {{ tag }}
+              <button type="button" class="tag-remove" (click)="removeIntegrationTag(tag)">×</button>
+            </span>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <label class="form-label">
+            Tiempo de Integración Estimado
+          </label>
+          <select 
+            [(ngModel)]="formData.integrationTime"
+            name="integrationTime"
+            class="form-select"
+          >
+            <option value="">Selecciona...</option>
+            <option *ngFor="let time of integrationTimes" [value]="time.value">
+              {{ time.label }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <!-- PASO 4: CONFIANZA Y SEGURIDAD -->
+      <div *ngIf="currentStep === 4" class="step-content">
+        <h2>PASO 4: CONFIANZA Y SEGURIDAD</h2>
+        <p class="step-description">Supera las barreras de Compliance y Legal</p>
+
+        <div class="form-section">
+          <label class="form-label">
+            Ubicación / Soberanía del Dato
+            <span class="hint">¿Dónde se alojan los datos?</span>
+          </label>
+          <select 
+            [(ngModel)]="formData.dataLocation"
+            name="dataLocation"
+            class="form-select"
+          >
+            <option value="">Selecciona...</option>
+            <option *ngFor="let location of dataLocations" [value]="location.value">
+              {{ location.label }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-section">
+          <label class="form-label">
+            Seguridad de Datos
+          </label>
+          <div class="checkbox-group">
+            <label 
+              *ngFor="let security of dataSecurityOptions"
+              class="checkbox-option"
+            >
+              <input 
+                type="checkbox"
+                [checked]="formData.dataSecurity.includes(security.value)"
+                (change)="toggleArray(formData.dataSecurity, security.value)"
+              />
+              <span>{{ security.label }}</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <label class="form-label">
+            Regulación (Compliance)
+          </label>
+          <div class="checkbox-group">
+            <label 
+              *ngFor="let compliance of complianceOptions"
+              class="checkbox-option"
+            >
+              <input 
+                type="checkbox"
+                [checked]="formData.compliance.includes(compliance.value)"
+                (change)="toggleArray(formData.compliance, compliance.value)"
+              />
+              <span>{{ compliance.label }}</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <label class="form-label">
+            Certificaciones
+            <span class="hint">(Recomendado para más visibilidad)</span>
+          </label>
+          <div class="checkbox-group">
+            <label 
+              *ngFor="let cert of certificationsOptions"
+              class="checkbox-option"
+            >
+              <input 
+                type="checkbox"
+                [checked]="formData.certifications.includes(cert.value)"
+                (change)="toggleArray(formData.certifications, cert.value)"
+              />
+              <span>{{ cert.label }}</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Navigation Buttons -->
+      <div class="form-actions">
+        <button 
+          type="button" 
+          class="btn-secondary"
+          (click)="previousStep()"
+          [disabled]="currentStep === 1"
+        >
+          ← Atrás
+        </button>
+        <button 
+          type="button" 
+          class="btn-draft"
+          (click)="saveDraft()"
+        >
+          💾 Guardar Borrador
+        </button>
+        <button 
+          *ngIf="currentStep < totalSteps"
+          type="button" 
+          class="btn-primary"
+          (click)="nextStep()"
+          [disabled]="!validateCurrentStep()"
+        >
+          Siguiente →
+        </button>
+        <button 
+          *ngIf="currentStep === totalSteps"
+          type="submit" 
+          class="btn-primary"
+          [disabled]="!validateCurrentStep()"
+        >
+          ✅ Publicar Caso de Uso
+        </button>
+      </div>
+    </form>
+  </app-card>
+</div>
+

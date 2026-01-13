@@ -1,0 +1,510 @@
+@import '../../../../styles/variables';
+
+.growth-center-page {
+  min-height: 100vh;
+  background: $bg-dark;
+  color: $text-primary;
+  padding-top: 80px;
+  &.no-navbar {
+    padding-top: 0;
+    min-height: auto;
+  }
+  padding-bottom: $spacing-8;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: $spacing-8;
+}
+
+.page-header {
+  margin-bottom: $spacing-8;
+  text-align: center;
+  
+  h1 {
+    font-size: $font-size-4xl;
+    font-weight: $font-weight-bold;
+    color: $text-primary;
+    margin-bottom: $spacing-4;
+    background: linear-gradient(135deg, #ffffff 0%, #a0aec0 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  .page-subtitle {
+    font-size: $font-size-lg;
+    color: $text-secondary;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+}
+
+.growth-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: $spacing-6;
+  
+  @media (max-width: $breakpoint-lg) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-6;
+  
+  h2 {
+    font-size: $font-size-xl;
+    font-weight: $font-weight-bold;
+    color: $text-primary;
+    margin: 0;
+  }
+}
+
+// Block 1: Team Management and Trust Seals
+.team-seals-section {
+  h2 {
+    font-size: $font-size-xl;
+    font-weight: $font-weight-bold;
+    color: $text-primary;
+    margin-bottom: $spacing-6;
+  }
+}
+
+.team-verification {
+  margin-bottom: $spacing-6;
+  
+  h3 {
+    font-size: $font-size-base;
+    font-weight: $font-weight-semibold;
+    color: $text-primary;
+    margin-bottom: $spacing-4;
+  }
+}
+
+.team-members-list {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-3;
+}
+
+.team-member-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: $spacing-4;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: $border-radius-lg;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  
+  .member-info {
+    display: flex;
+    align-items: center;
+    gap: $spacing-3;
+    flex: 1;
+    
+    .member-avatar-small {
+      width: 40px;
+      height: 40px;
+      border-radius: $border-radius-full;
+      background: linear-gradient(135deg, #0d86ff 0%, #6b5cf0 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: $font-weight-bold;
+      font-size: $font-size-base;
+      flex-shrink: 0;
+    }
+    
+    .member-details {
+      .member-name {
+        font-size: $font-size-sm;
+        font-weight: $font-weight-semibold;
+        color: $text-primary;
+        margin-bottom: $spacing-1;
+      }
+      
+      .member-email {
+        font-size: $font-size-xs;
+        color: $text-secondary;
+      }
+    }
+  }
+  
+  .member-status {
+    display: flex;
+    align-items: center;
+    gap: $spacing-2;
+    
+    .status-badge {
+      padding: $spacing-1 $spacing-3;
+      border-radius: $border-radius-full;
+      font-size: $font-size-xs;
+      font-weight: $font-weight-medium;
+      color: white;
+    }
+    
+    .linkedin-badge {
+      font-size: $font-size-xs;
+      color: $text-muted;
+      
+      &.connected {
+        color: #18b981;
+      }
+    }
+  }
+}
+
+.gamification-card {
+  margin-top: $spacing-6;
+  padding: $spacing-5;
+  background: rgba(13, 134, 255, 0.1);
+  border-radius: $border-radius-lg;
+  border: 1px solid rgba(13, 134, 255, 0.2);
+}
+
+.seal-display {
+  display: flex;
+  align-items: center;
+  gap: $spacing-4;
+  
+  .seal-icon-large {
+    font-size: 48px;
+    flex-shrink: 0;
+  }
+  
+  .seal-info {
+    flex: 1;
+    
+    h3 {
+      font-size: $font-size-lg;
+      font-weight: $font-weight-bold;
+      color: $text-primary;
+      margin-bottom: $spacing-2;
+    }
+    
+    .seal-description {
+      font-size: $font-size-sm;
+      color: $text-secondary;
+      margin-bottom: $spacing-4;
+    }
+  }
+}
+
+.progress-container {
+  .progress-bar {
+    width: 100%;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: $border-radius-full;
+    overflow: hidden;
+    margin-bottom: $spacing-2;
+    
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #0d86ff 0%, #6b5cf0 100%);
+      border-radius: $border-radius-full;
+      transition: width 0.3s ease;
+    }
+  }
+  
+  .progress-text {
+    font-size: $font-size-sm;
+    color: $text-secondary;
+  }
+}
+
+// Block 2: Credit Wallet and Referrals
+.credits-referrals-section {
+  h2 {
+    font-size: $font-size-xl;
+    font-weight: $font-weight-bold;
+    color: $text-primary;
+    margin-bottom: $spacing-6;
+  }
+}
+
+.credit-wallet {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: $spacing-5;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: $border-radius-lg;
+  margin-bottom: $spacing-6;
+  
+  .credit-display {
+    display: flex;
+    align-items: center;
+    gap: $spacing-4;
+    flex: 1;
+    
+    .credit-icon {
+      font-size: 48px;
+      flex-shrink: 0;
+    }
+    
+    .credit-info {
+      .credit-label {
+        font-size: $font-size-sm;
+        color: $text-secondary;
+        margin-bottom: $spacing-1;
+      }
+      
+      .credit-amount {
+        font-size: $font-size-3xl;
+        font-weight: $font-weight-bold;
+        color: $text-primary;
+        margin-bottom: $spacing-2;
+      }
+      
+      .credit-description {
+        font-size: $font-size-xs;
+        color: $text-muted;
+      }
+    }
+  }
+}
+
+.referral-link-section {
+  h3 {
+    font-size: $font-size-base;
+    font-weight: $font-weight-semibold;
+    color: $text-primary;
+    margin-bottom: $spacing-4;
+  }
+}
+
+.referral-link-container {
+  display: flex;
+  gap: $spacing-2;
+  margin-bottom: $spacing-4;
+  
+  .referral-input {
+    flex: 1;
+    padding: $spacing-3;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: $border-radius-base;
+    color: $text-primary;
+    font-size: $font-size-sm;
+    
+    &:focus {
+      outline: none;
+      border-color: $primary-blue;
+    }
+  }
+}
+
+.referral-stats {
+  display: flex;
+  gap: $spacing-6;
+  
+  .stat-item {
+    display: flex;
+    flex-direction: column;
+    
+    .stat-value {
+      font-size: $font-size-xl;
+      font-weight: $font-weight-bold;
+      color: $text-primary;
+      margin-bottom: $spacing-1;
+    }
+    
+    .stat-label {
+      font-size: $font-size-xs;
+      color: $text-secondary;
+    }
+  }
+}
+
+// Block 3: Portfolio and Success Cases
+.portfolio-section {
+  h2 {
+    font-size: $font-size-xl;
+    font-weight: $font-weight-bold;
+    color: $text-primary;
+    margin-bottom: $spacing-6;
+  }
+}
+
+.impact-metrics {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: $spacing-4;
+  margin-bottom: $spacing-6;
+}
+
+.metric-card {
+  display: flex;
+  align-items: center;
+  gap: $spacing-4;
+  padding: $spacing-4;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: $border-radius-lg;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  
+  .metric-icon {
+    font-size: 32px;
+    flex-shrink: 0;
+  }
+  
+  .metric-info {
+    .metric-value {
+      font-size: $font-size-2xl;
+      font-weight: $font-weight-bold;
+      color: $text-primary;
+      margin-bottom: $spacing-1;
+    }
+    
+    .metric-label {
+      font-size: $font-size-sm;
+      color: $text-secondary;
+    }
+  }
+}
+
+.use-cases-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: $spacing-4;
+}
+
+.use-case-card {
+  padding: $spacing-4;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: $border-radius-lg;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: all 0.3s ease;
+  
+  &:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(13, 134, 255, 0.3);
+    transform: translateY(-2px);
+  }
+  
+  .use-case-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: $spacing-3;
+    
+    h4 {
+      font-size: $font-size-base;
+      font-weight: $font-weight-semibold;
+      color: $text-primary;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .sector-badge {
+      padding: $spacing-1 $spacing-2;
+      background: rgba(13, 134, 255, 0.2);
+      border-radius: $border-radius-base;
+      font-size: $font-size-xs;
+      color: $primary-blue;
+      font-weight: $font-weight-medium;
+    }
+  }
+  
+  .use-case-stats {
+    display: flex;
+    gap: $spacing-4;
+    margin-bottom: $spacing-3;
+    
+    .stat {
+      display: flex;
+      align-items: center;
+      gap: $spacing-2;
+      font-size: $font-size-sm;
+      color: $text-secondary;
+      
+      .stat-icon {
+        font-size: $font-size-base;
+      }
+    }
+  }
+}
+
+// Block 4: Referrals History
+.referrals-history-section {
+  h2 {
+    font-size: $font-size-xl;
+    font-weight: $font-weight-bold;
+    color: $text-primary;
+    margin-bottom: $spacing-6;
+  }
+}
+
+.referrals-list {
+  margin-bottom: $spacing-6;
+}
+
+.referral-history-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: $spacing-4;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: $border-radius-lg;
+  margin-bottom: $spacing-3;
+  
+  .referral-client-info {
+    display: flex;
+    align-items: center;
+    gap: $spacing-3;
+    flex: 1;
+    
+    .client-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: $border-radius-full;
+      background: linear-gradient(135deg, #0d86ff 0%, #6b5cf0 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: $font-weight-bold;
+      font-size: $font-size-base;
+      flex-shrink: 0;
+    }
+    
+    .client-details {
+      .client-name {
+        font-size: $font-size-sm;
+        font-weight: $font-weight-semibold;
+        color: $text-primary;
+        margin-bottom: $spacing-1;
+      }
+      
+      .referral-date {
+        font-size: $font-size-xs;
+        color: $text-secondary;
+      }
+    }
+  }
+  
+  .referral-credits {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    
+    .credits-amount {
+      font-size: $font-size-lg;
+      font-weight: $font-weight-bold;
+      color: #18b981;
+      margin-bottom: $spacing-1;
+    }
+    
+    .credits-label {
+      font-size: $font-size-xs;
+      color: $text-secondary;
+    }
+  }
+}
+

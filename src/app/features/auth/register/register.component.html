@@ -1,0 +1,190 @@
+<div class="register-page">
+  <!-- Background -->
+  <div class="register-background"></div>
+  
+  <!-- Register Container -->
+  <div class="register-container fade-in">
+    <!-- Sidebar Steps -->
+    <aside class="steps-sidebar">
+      <div class="logo-section">
+        <span class="logo-icon">🤖</span>
+        <h2>CONECTIAN</h2>
+      </div>
+      
+      <div class="steps-list">
+        <div class="step-item" [class.active]="currentStep === 1" [class.completed]="currentStep > 1">
+          <div class="step-number">1</div>
+          <div class="step-info">
+            <span class="step-title">Tipo de Cuenta</span>
+          </div>
+        </div>
+        
+        <div class="step-item" [class.active]="currentStep === 2" [class.completed]="currentStep > 2">
+          <div class="step-number">2</div>
+          <div class="step-info">
+            <span class="step-title">Datos Básicos</span>
+          </div>
+        </div>
+        
+        <div class="step-item" [class.active]="currentStep === 3" [class.completed]="currentStep > 3">
+          <div class="step-number">3</div>
+          <div class="step-info">
+            <span class="step-title">Empresa</span>
+            <span class="step-badge">✨ autocompletado</span>
+          </div>
+        </div>
+        
+        <div class="step-item" [class.active]="currentStep === 4" [class.completed]="currentStep > 4">
+          <div class="step-number">4</div>
+          <div class="step-info">
+            <span class="step-title">Confirmación</span>
+          </div>
+        </div>
+        
+        <div class="step-item" [class.active]="currentStep === 5" [class.completed]="currentStep > 5">
+          <div class="step-number">5</div>
+          <div class="step-info">
+            <span class="step-title">Preferencias</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+    
+    <!-- Main Content -->
+    <main class="register-main">
+      <!-- Progress Bar -->
+      <div class="progress-bar-container">
+        <div class="progress-bar" [style.width.%]="progressPercentage"></div>
+      </div>
+      
+      <app-card padding="large">
+        <!-- Step 1: Tipo de Cuenta -->
+        <div *ngIf="currentStep === 1" class="step-content">
+          <h1>Selecciona tu Tipo de Cuenta</h1>
+          <p class="text-secondary">¿Cómo quieres usar Conectian?</p>
+          
+          <div class="account-types">
+            <div class="account-card" (click)="selectAccountType('client')">
+              <div class="account-icon">🏢</div>
+              <h3>Cliente</h3>
+              <p>Para empresas buscando soluciones de IA e innovación. Encuentra proveedores, compara servicios y acelera tu negocio.</p>
+              <app-button variant="primary">Seleccionar</app-button>
+            </div>
+            
+            <div class="account-card" (click)="selectAccountType('provider')">
+              <div class="account-icon">🧠</div>
+              <h3>Proveedor</h3>
+              <p>Para desarrolladores y empresas de IA. Ofrece tus modelos, servicios y experiencia a una audiencia global.</p>
+              <app-button variant="primary">Seleccionar</app-button>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Step 2: Datos Básicos -->
+        <div *ngIf="currentStep === 2" class="step-content">
+          <h1>Datos Básicos</h1>
+          <p class="text-secondary">Crea tu cuenta en Conectian</p>
+          
+          <form class="register-form">
+            <div class="form-group">
+              <label>Correo Electrónico</label>
+              <input type="email" class="input" [(ngModel)]="registrationData.email" name="email" placeholder="tu@empresa.com" required />
+            </div>
+            
+            <div class="form-group">
+              <label>Contraseña</label>
+              <input type="password" class="input" [(ngModel)]="registrationData.password" name="password" placeholder="••••••••" required />
+            </div>
+            
+            <div class="form-actions">
+              <app-button variant="secondary" (clickEvent)="previousStep()">Atrás</app-button>
+              <app-button variant="primary" (clickEvent)="nextStep()">Siguiente</app-button>
+            </div>
+          </form>
+        </div>
+        
+        <!-- Step 3: Empresa (Autocompletado) -->
+        <div *ngIf="currentStep === 3" class="step-content">
+          <h1>Información de tu Empresa</h1>
+          <p class="text-secondary">✨ Autocompletaremos tus datos automáticamente</p>
+          
+          <form class="register-form">
+            <div class="form-group">
+              <label>Dominio Web de tu Empresa</label>
+              <input type="text" class="input" [(ngModel)]="registrationData.companyDomain" name="domain" placeholder="ejemplo: repsol.com" />
+              <button type="button" class="btn btn-primary mt-4" (click)="autocompleteCompany()" [disabled]="loading || !registrationData.companyDomain">
+                {{ loading ? '⏳ Analizando...' : '🔍 Autocompletary' }}
+              </button>
+            </div>
+            
+            <div *ngIf="registrationData.companyData" class="company-preview">
+              <h3>Datos Encontrados</h3>
+              <div class="company-info">
+                <div class="company-logo">{{ registrationData.companyData.logo }}</div>
+                <div>
+                  <h4>{{ registrationData.companyData.name }}</h4>
+                  <p class="text-secondary">{{ registrationData.companyData.sector }} • {{ registrationData.companyData.employees }} empleados</p>
+                  <p class="text-muted">📍 {{ registrationData.companyData.location }}</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-actions">
+              <app-button variant="secondary" (clickEvent)="previousStep()">Atrás</app-button>
+              <app-button variant="primary" (clickEvent)="nextStep()" [disabled]="!registrationData.companyData">Siguiente</app-button>
+            </div>
+          </form>
+        </div>
+        
+        <!-- Step 4: Confirmación -->
+        <div *ngIf="currentStep === 4" class="step-content">
+          <h1>Confirma tus Datos</h1>
+          <p class="text-secondary">Revisa la información antes de continuar</p>
+          
+          <div class="confirmation-summary">
+            <div class="summary-item">
+              <span class="summary-label">Tipo de cuenta:</span>
+              <span class="summary-value">{{ registrationData.accountType === 'client' ? 'Cliente' : 'Proveedor' }}</span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-label">Email:</span>
+              <span class="summary-value">{{ registrationData.email }}</span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-label">Empresa:</span>
+              <span class="summary-value">{{ registrationData.companyData?.name }}</span>
+            </div>
+          </div>
+          
+          <div class="form-actions">
+            <app-button variant="secondary" (clickEvent)="previousStep()">Atrás</app-button>
+            <app-button variant="primary" (clickEvent)="nextStep()">Confirmar</app-button>
+          </div>
+        </div>
+        
+        <!-- Step 5: Preferencias -->
+        <div *ngIf="currentStep === 5" class="step-content">
+          <h1>Preferencias Iniciales</h1>
+          <p class="text-secondary" *ngIf="registrationData.accountType === 'client'">¿Qué desafíos quieres resolver con IA?</p>
+          <p class="text-secondary" *ngIf="registrationData.accountType === 'provider'">¿En qué sectores tienes experiencia?</p>
+          
+          <div class="challenge-grid">
+            <div 
+              *ngFor="let challenge of challengeOptions"
+              class="challenge-chip"
+              [class.selected]="registrationData.preferences.challenges.includes(challenge)"
+              (click)="toggleChallenge(challenge)"
+            >
+              {{ challenge }}
+            </div>
+          </div>
+          
+          <div class="form-actions">
+            <app-button variant="secondary" (clickEvent)="previousStep()">Atrás</app-button>
+            <app-button variant="primary" (clickEvent)="onSubmit()" [loading]="loading">Completar Registro</app-button>
+          </div>
+        </div>
+      </app-card>
+    </main>
+  </div>
+</div>

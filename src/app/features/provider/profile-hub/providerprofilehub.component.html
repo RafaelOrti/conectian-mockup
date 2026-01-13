@@ -1,0 +1,42 @@
+<div class="profile-hub-page">
+  <app-navbar 
+    [userRole]="'PROVIDER'" 
+    [userName]="'María González'"
+    [notificationCount]="5"
+  ></app-navbar>
+
+  <div class="hub-container">
+    <div class="hub-header">
+      <h1>Mi Cuenta</h1>
+      <div class="tabs-container">
+        <button 
+          class="tab-btn" 
+          [class.active]="activeTab === 'profile'"
+          (click)="setActiveTab('profile')"
+        >
+          <span class="icon">👤</span> Mi Perfil
+        </button>
+        <button 
+          class="tab-btn" 
+          [class.active]="activeTab === 'company'"
+          (click)="setActiveTab('company')"
+        >
+          <span class="icon">🏢</span> Mi Empresa
+        </button>
+        <button 
+          class="tab-btn" 
+          [class.active]="activeTab === 'badges'"
+          (click)="setActiveTab('badges')"
+        >
+          <span class="icon">🏆</span> Badges y Recompensas
+        </button>
+      </div>
+    </div>
+
+    <div class="hub-content">
+      <app-provider-profile *ngIf="activeTab === 'profile'" [showNavbar]="false"></app-provider-profile>
+      <app-providercompany *ngIf="activeTab === 'company'" [showNavbar]="false"></app-providercompany>
+      <app-providerbadges *ngIf="activeTab === 'badges'" [showNavbar]="false"></app-providerbadges>
+    </div>
+  </div>
+</div>

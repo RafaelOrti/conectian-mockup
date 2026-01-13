@@ -1,0 +1,148 @@
+<div class="admin-monitoring-page">
+  <app-navbar 
+    [userRole]="'ADMIN'" 
+    [userName]="'Admin User'"
+    [notificationCount]="5"
+  ></app-navbar>
+  
+  <div class="container">
+    <div class="page-header">
+      <div>
+        <h1>📊 Monitoreo del Sistema</h1>
+        <p class="subtitle">Estado de salud, logs y métricas de rendimiento en tiempo real</p>
+      </div>
+      <div class="header-actions">
+        <span class="status-indicator online">
+          <span class="dot"></span> Sistema Operativo
+        </span>
+        <app-button variant="secondary" icon="🔄">Actualizar</app-button>
+      </div>
+    </div>
+
+    <!-- System Health Cards -->
+    <div class="health-grid">
+      <app-card class="health-card">
+        <div class="health-header">
+          <span class="health-label">CPU Usage</span>
+          <span class="health-value">24%</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" style="width: 24%"></div>
+        </div>
+        <div class="health-footer">
+          <span>4 Cores Active</span>
+          <span class="trend stable">Stable</span>
+        </div>
+      </app-card>
+
+      <app-card class="health-card">
+        <div class="health-header">
+          <span class="health-label">Memory</span>
+          <span class="health-value">6.2 GB</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill warning" style="width: 78%"></div>
+        </div>
+        <div class="health-footer">
+          <span>of 8 GB Total</span>
+          <span class="trend up">↗ Increasing</span>
+        </div>
+      </app-card>
+
+      <app-card class="health-card">
+        <div class="health-header">
+          <span class="health-label">Disk Space</span>
+          <span class="health-value">45%</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" style="width: 45%"></div>
+        </div>
+        <div class="health-footer">
+          <span>240GB Free</span>
+          <span class="trend stable">Stable</span>
+        </div>
+      </app-card>
+
+      <app-card class="health-card">
+        <div class="health-header">
+          <span class="health-label">Response Time</span>
+          <span class="health-value">124ms</span>
+        </div>
+        <div class="chart-preview">
+          <!-- Placeholder for mini chart -->
+          <svg viewBox="0 0 100 30" class="sparkline">
+            <polyline points="0,15 10,12 20,18 30,10 40,14 50,12 60,8 70,16 80,12 90,14 100,10" fill="none" stroke="#10b981" stroke-width="2"/>
+          </svg>
+        </div>
+        <div class="health-footer">
+          <span>Avg last 1h</span>
+          <span class="trend down">↘ Improving</span>
+        </div>
+      </app-card>
+    </div>
+
+    <div class="monitoring-layout">
+      <!-- Error Logs -->
+      <div class="logs-section">
+        <app-card>
+          <div class="card-header">
+            <h3>Logs de Errores Recientes</h3>
+            <button class="text-btn">Ver todos</button>
+          </div>
+          <div class="logs-list">
+            <div class="log-item error">
+              <span class="log-time">10:42:15</span>
+              <span class="log-level">ERROR</span>
+              <span class="log-message">Database connection timeout on replica-02</span>
+            </div>
+            <div class="log-item warning">
+              <span class="log-time">10:38:22</span>
+              <span class="log-level">WARN</span>
+              <span class="log-message">High memory usage detected in worker-04</span>
+            </div>
+            <div class="log-item info">
+              <span class="log-time">10:30:00</span>
+              <span class="log-level">INFO</span>
+              <span class="log-message">Scheduled backup completed successfully</span>
+            </div>
+            <div class="log-item error">
+              <span class="log-time">09:15:44</span>
+              <span class="log-level">ERROR</span>
+              <span class="log-message">Payment gateway timeout: Stripe API</span>
+            </div>
+          </div>
+        </app-card>
+      </div>
+
+      <!-- Active Sessions -->
+      <div class="sessions-section">
+        <app-card>
+          <div class="card-header">
+            <h3>Sesiones Activas</h3>
+            <span class="live-badge">● LIVE</span>
+          </div>
+          <div class="sessions-map-placeholder">
+            <!-- Placeholder for map -->
+            <div class="map-bg">
+              <span>🌍 Mapa de Usuarios en Tiempo Real</span>
+            </div>
+          </div>
+          <div class="active-stats">
+            <div class="stat">
+              <span class="val">342</span>
+              <span class="lbl">Usuarios Online</span>
+            </div>
+            <div class="stat">
+              <span class="val">12</span>
+              <span class="lbl">Países</span>
+            </div>
+            <div class="stat">
+              <span class="val">85%</span>
+              <span class="lbl">Móvil</span>
+            </div>
+          </div>
+        </app-card>
+      </div>
+    </div>
+  </div>
+</div>

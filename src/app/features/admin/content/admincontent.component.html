@@ -1,0 +1,125 @@
+<div class="admin-content-page">
+  <app-navbar 
+    [userRole]="'ADMIN'" 
+    [userName]="'Admin User'"
+    [notificationCount]="5"
+  ></app-navbar>
+  
+  <div class="container">
+    <div class="page-header">
+      <div>
+        <h1>📄 Gestión de Contenido</h1>
+        <p class="subtitle">Administra los recursos, artículos y guías de la plataforma</p>
+      </div>
+      <app-button variant="primary" icon="➕">Nuevo Contenido</app-button>
+    </div>
+
+    <!-- Stats Row -->
+    <div class="stats-row">
+      <app-card class="stat-card">
+        <div class="stat-icon articles">📝</div>
+        <div class="stat-info">
+          <span class="stat-value">124</span>
+          <span class="stat-label">Artículos Publicados</span>
+        </div>
+      </app-card>
+      <app-card class="stat-card">
+        <div class="stat-icon pending">⏳</div>
+        <div class="stat-info">
+          <span class="stat-value">8</span>
+          <span class="stat-label">Pendientes de Revisión</span>
+        </div>
+      </app-card>
+      <app-card class="stat-card">
+        <div class="stat-icon views">👁️</div>
+        <div class="stat-info">
+          <span class="stat-value">45.2k</span>
+          <span class="stat-label">Vistas Totales</span>
+        </div>
+      </app-card>
+    </div>
+
+    <!-- Content Table -->
+    <app-card class="content-table-card">
+      <div class="table-header">
+        <div class="search-filters">
+          <div class="search-box">
+            <span class="search-icon">🔍</span>
+            <input type="text" placeholder="Buscar contenido..." class="search-input">
+          </div>
+          <select class="filter-select">
+            <option value="all">Todos los tipos</option>
+            <option value="article">Artículos</option>
+            <option value="guide">Guías</option>
+            <option value="video">Videos</option>
+          </select>
+          <select class="filter-select">
+            <option value="all">Todos los estados</option>
+            <option value="published">Publicado</option>
+            <option value="draft">Borrador</option>
+            <option value="review">En Revisión</option>
+          </select>
+        </div>
+      </div>
+
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Título</th>
+            <th>Tipo</th>
+            <th>Autor</th>
+            <th>Fecha</th>
+            <th>Estado</th>
+            <th>Vistas</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of contentItems">
+            <td>
+              <div class="content-title-cell">
+                <span class="content-title">{{item.title}}</span>
+                <span class="content-slug">{{item.slug}}</span>
+              </div>
+            </td>
+            <td>
+              <span class="type-badge" [class]="item.type">
+                {{item.type === 'article' ? '📝 Artículo' : item.type === 'guide' ? '📚 Guía' : '🎥 Video'}}
+              </span>
+            </td>
+            <td>
+              <div class="author-info">
+                <div class="author-avatar">{{item.author.avatar}}</div>
+                <span>{{item.author.name}}</span>
+              </div>
+            </td>
+            <td>{{item.date}}</td>
+            <td>
+              <span class="status-badge" [class]="item.status">
+                {{item.status === 'published' ? 'Publicado' : item.status === 'draft' ? 'Borrador' : 'Revisión'}}
+              </span>
+            </td>
+            <td>{{item.views | number}}</td>
+            <td>
+              <div class="actions">
+                <button class="icon-btn edit" title="Editar">✏️</button>
+                <button class="icon-btn delete" title="Eliminar">🗑️</button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      
+      <div class="pagination">
+        <span class="page-info">Mostrando 1-10 de 124 resultados</span>
+        <div class="page-controls">
+          <button class="page-btn" disabled>Anterior</button>
+          <button class="page-btn active">1</button>
+          <button class="page-btn">2</button>
+          <button class="page-btn">3</button>
+          <button class="page-btn">Siguiente</button>
+        </div>
+      </div>
+    </app-card>
+  </div>
+</div>

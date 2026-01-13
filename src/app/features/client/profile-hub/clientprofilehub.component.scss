@@ -1,0 +1,63 @@
+@import '../../../../styles/variables';
+
+.profile-hub-page {
+  min-height: 100vh;
+  background: $bg-dark;
+  color: $text-primary;
+  padding-top: 80px;
+}
+
+.hub-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: $spacing-8;
+}
+
+.hub-header {
+  margin-bottom: $spacing-8;
+
+  h1 {
+    font-size: $font-size-3xl;
+    font-weight: $font-weight-bold;
+    margin-bottom: $spacing-6;
+  }
+
+  .tabs-container {
+    display: flex;
+    gap: $spacing-4;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    
+    .tab-btn {
+      background: transparent;
+      border: none;
+      padding: $spacing-4 $spacing-6;
+      color: $text-secondary;
+      font-size: $font-size-lg;
+      font-weight: $font-weight-medium;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: $spacing-2;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s;
+
+      &:hover {
+        color: $text-primary;
+        background: rgba(255, 255, 255, 0.02);
+      }
+
+      &.active {
+        color: $primary-blue;
+        border-bottom-color: $primary-blue;
+      }
+
+      .icon {
+        font-size: $font-size-xl;
+      }
+    }
+  }
+}
+
+.hub-content {
+  // Ajustes para los componentes hijos si es necesario
+}

@@ -1,0 +1,71 @@
+<div class="provider-payments-page">
+  <app-navbar 
+    [userRole]="'PROVIDER'" 
+    [userName]="'TechSolutions AI'"
+    [notificationCount]="5"
+    [messageCount]="3"
+    [projectCount]="8"
+  ></app-navbar>
+  
+  <div class="container">
+    <div class="page-header">
+      <div>
+        <h1>💳 Pagos y Facturación</h1>
+        <p class="subtitle">Gestiona tus ingresos, retiros y facturas</p>
+      </div>
+      <app-button variant="primary" icon="💸">Solicitar Retiro</app-button>
+    </div>
+
+    <div class="payments-layout">
+      <!-- Balance Card -->
+      <app-card class="balance-card">
+        <div class="balance-info">
+          <span class="label">Saldo Disponible</span>
+          <span class="amount">€12,450.00</span>
+          <span class="pending">Pendiente: €3,200.00</span>
+        </div>
+        <div class="balance-actions">
+          <button class="action-btn">Configurar Cuenta Bancaria</button>
+          <button class="action-btn primary">Ver Historial</button>
+        </div>
+      </app-card>
+
+      <!-- Recent Transactions -->
+      <section class="transactions-section">
+        <h2>Transacciones Recientes</h2>
+        <app-card class="transactions-card">
+          <table class="transactions-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Fecha</th>
+                <th>Descripción</th>
+                <th>Cliente</th>
+                <th>Monto</th>
+                <th>Estado</th>
+                <th>Factura</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let tx of transactions">
+                <td><span class="tx-id">{{tx.id}}</span></td>
+                <td>{{tx.date}}</td>
+                <td>{{tx.description}}</td>
+                <td>{{tx.client}}</td>
+                <td class="amount positive">+{{tx.amount}}</td>
+                <td>
+                  <span class="status-badge" [class]="tx.status">
+                    {{tx.status === 'completed' ? 'Completado' : 'Pendiente'}}
+                  </span>
+                </td>
+                <td>
+                  <button class="download-btn" title="Descargar Factura">📥</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </app-card>
+      </section>
+    </div>
+  </div>
+</div>

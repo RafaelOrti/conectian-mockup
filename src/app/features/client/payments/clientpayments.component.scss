@@ -1,0 +1,242 @@
+@import '../../../../styles/variables';
+
+.client-payments-page {
+  min-height: 100vh;
+  background: $bg-dark;
+  color: $text-primary;
+  padding-top: 80px; // Fix for navbar overlap
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: $spacing-8;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: $spacing-8;
+
+  h1 {
+    font-size: $font-size-3xl;
+    font-weight: $font-weight-bold;
+    margin-bottom: $spacing-2;
+  }
+
+  .subtitle {
+    color: $text-secondary;
+    font-size: $font-size-lg;
+  }
+}
+
+.payments-layout {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-10;
+}
+
+section {
+  h2 {
+    font-size: $font-size-xl;
+    margin-bottom: $spacing-6;
+    color: $text-primary;
+  }
+}
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: $spacing-6;
+
+  .payment-method-card {
+    position: relative;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: $spacing-6;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 180px;
+
+    &.active {
+      border-color: $primary-blue;
+      background: linear-gradient(135deg, rgba(13, 134, 255, 0.1) 0%, rgba(13, 134, 255, 0.05) 100%);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+
+      .card-brand {
+        font-size: $font-size-xl;
+        font-weight: bold;
+        font-style: italic;
+      }
+
+      .default-badge {
+        font-size: $font-size-xs;
+        padding: 2px 8px;
+        background: $primary-blue;
+        border-radius: $border-radius-full;
+        color: white;
+      }
+    }
+
+    .card-number {
+      font-family: monospace;
+      font-size: $font-size-xl;
+      letter-spacing: 2px;
+      margin: $spacing-4 0;
+    }
+
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .expiry {
+        color: $text-secondary;
+        font-size: $font-size-sm;
+      }
+
+      .edit-btn {
+        background: none;
+        border: none;
+        color: $primary-blue;
+        cursor: pointer;
+        font-size: $font-size-sm;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+
+  .add-card-btn {
+    min-height: 180px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 2px dashed rgba(255, 255, 255, 0.1);
+    border-radius: $border-radius-lg;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: $spacing-3;
+    color: $text-secondary;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &:hover {
+      border-color: $primary-blue;
+      color: $primary-blue;
+      background: rgba(13, 134, 255, 0.05);
+    }
+
+    .plus-icon {
+      font-size: 32px;
+    }
+  }
+}
+
+.history-card {
+  .table-filters {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: $spacing-6;
+
+    .search-box {
+      position: relative;
+      width: 300px;
+
+      .search-icon {
+        position: absolute;
+        left: $spacing-3;
+        top: 50%;
+        transform: translateY(-50%);
+        color: $text-muted;
+      }
+
+      .search-input {
+        width: 100%;
+        padding: $spacing-2 $spacing-3 $spacing-2 $spacing-10;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: $border-radius-base;
+        color: $text-primary;
+
+        &:focus {
+          outline: none;
+          border-color: $primary-blue;
+        }
+      }
+    }
+
+    .filter-select {
+      padding: $spacing-2 $spacing-4;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: $border-radius-base;
+      color: $text-primary;
+      cursor: pointer;
+
+      option {
+        background: $bg-dark;
+      }
+    }
+  }
+
+  .billing-table {
+    width: 100%;
+    border-collapse: collapse;
+
+    th {
+      text-align: left;
+      padding: $spacing-4;
+      color: $text-secondary;
+      font-weight: $font-weight-medium;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    td {
+      padding: $spacing-4;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      color: $text-primary;
+    }
+
+    .invoice-id {
+      font-family: monospace;
+      color: $primary-blue;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: $border-radius-base;
+      font-size: $font-size-xs;
+      
+      &.paid { background: rgba(24, 185, 129, 0.1); color: $success-green; }
+      &.pending { background: rgba(249, 105, 8, 0.1); color: $warning-orange; }
+    }
+
+    .download-btn {
+      background: none;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 4px 8px;
+      border-radius: $border-radius-base;
+      color: $text-secondary;
+      cursor: pointer;
+      font-size: $font-size-xs;
+      transition: all 0.2s;
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.05);
+        color: $text-primary;
+        border-color: rgba(255, 255, 255, 0.2);
+      }
+    }
+  }
+}

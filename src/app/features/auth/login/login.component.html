@@ -1,0 +1,136 @@
+<div class="login-container">
+  <div class="login-wrapper">
+    <!-- Left Side - Branding with Image -->
+    <div class="login-branding">
+      <!-- Hero Image -->
+      <div class="brand-image">
+        <img src="assets/images/login-hero.png" alt="Professional team collaboration" />
+        <div class="image-overlay"></div>
+      </div>
+      
+      <div class="brand-content">
+        <div class="brand-logo">
+          <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="48" height="48" rx="8" fill="url(#logo-gradient)"/>
+            <path d="M24 12L32 20L24 28L16 20L24 12Z" fill="white" opacity="0.9"/>
+            <path d="M24 20L32 28L24 36L16 28L24 20Z" fill="white" opacity="0.6"/>
+            <defs>
+              <linearGradient id="logo-gradient" x1="0" y1="0" x2="48" y2="48">
+                <stop offset="0%" stop-color="#0d86ff"/>
+                <stop offset="100%" stop-color="#6b5cf0"/>
+              </linearGradient>
+            </defs>
+          </svg>
+          <span class="brand-name">Conectian</span>
+        </div>
+        <h1 class="brand-title">Conecta tu empresa con las mejores soluciones de IA</h1>
+        <p class="brand-description">
+          Plataforma B2B líder que une a empresas innovadoras con proveedores especializados en Inteligencia Artificial
+        </p>
+      </div>
+    </div>
+
+    <!-- Right Side - Login Form -->
+    <div class="login-form-section">
+      <div class="form-container">
+        <div class="form-header">
+          <h2>Iniciar sesión</h2>
+          <p>Accede a tu cuenta de Conectian</p>
+        </div>
+
+        <form (ngSubmit)="onSubmit()" class="login-form">
+          <!-- Role Selection Tabs -->
+          <div class="role-selector">
+            <button 
+              type="button"
+              class="role-tab"
+              [class.active]="activeTab === 'client'"
+              (click)="setActiveTab('client')"
+            >
+              Soy Cliente
+            </button>
+            <button 
+              type="button"
+              class="role-tab"
+              [class.active]="activeTab === 'provider'"
+              (click)="setActiveTab('provider')"
+            >
+              Soy Proveedor
+            </button>
+          </div>
+
+          <!-- Email Input -->
+          <div class="input-group">
+            <label for="email">Correo electrónico</label>
+            <input 
+              type="email" 
+              id="email"
+              name="email"
+              class="form-input" 
+              placeholder="nombre@empresa.com"
+              [(ngModel)]="email"
+              required
+              autocomplete="email"
+            />
+          </div>
+          
+          <!-- Password Input -->
+          <div class="input-group">
+            <div class="label-row">
+              <label for="password">Contraseña</label>
+              <a href="#" class="forgot-link">¿Olvidaste tu contraseña?</a>
+            </div>
+            <input 
+              type="password" 
+              id="password"
+              name="password"
+              class="form-input" 
+              placeholder="Ingresa tu contraseña"
+              [(ngModel)]="password"
+              required
+              autocomplete="current-password"
+            />
+          </div>
+          
+          <!-- Error Message -->
+          <div *ngIf="errorMessage" class="error-alert">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+            </svg>
+            <span>{{ errorMessage }}</span>
+          </div>
+          
+          <!-- Submit Button -->
+          <button 
+            type="submit" 
+            class="submit-button"
+            [disabled]="loading"
+          >
+            <span *ngIf="!loading">Iniciar sesión</span>
+            <span *ngIf="loading" class="loading-state">
+              <svg class="spinner" viewBox="0 0 24 24">
+                <circle class="spinner-track" cx="12" cy="12" r="10"></circle>
+                <circle class="spinner-circle" cx="12" cy="12" r="10"></circle>
+              </svg>
+              Iniciando sesión...
+            </span>
+          </button>
+        </form>
+
+        <!-- Divider -->
+        <div class="divider">
+          <span>¿Nuevo en Conectian?</span>
+        </div>
+
+        <!-- Register Link -->
+        <button 
+          type="button"
+          class="register-button"
+          (click)="navigateToRegister()"
+        >
+          Crear una cuenta
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

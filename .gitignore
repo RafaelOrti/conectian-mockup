@@ -1,0 +1,32 @@
+# Angular default
+/dist
+/tmp
+/out-tsc
+/bazel-out
+
+# Node
+/node_modules
+npm-debug.log
+yarn-error.log
+testem.log
+
+# IDEs
+.idea/
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Angular cache
+.angular/
+
+# Env
+.env
+.env.*

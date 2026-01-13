@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Diagnóstico Frontend</title>
+</head>
+<body>
+    <h1>Diagnóstico del Frontend</h1>
+    <div id="status"></div>
+    <script>
+        const status = document.getElementById('status');
+        
+        // Verificar que Angular se carga
+        setTimeout(() => {
+            const appRoot = document.querySelector('app-root');
+            if (appRoot) {
+                status.innerHTML += '<p style="color: green;">✓ app-root encontrado</p>';
+            } else {
+                status.innerHTML += '<p style="color: red;">✗ app-root NO encontrado</p>';
+            }
+            
+            // Verificar scripts
+            const scripts = document.querySelectorAll('script');
+            status.innerHTML += `<p>Scripts encontrados: ${scripts.length}</p>`;
+            
+            // Verificar errores de consola
+            const originalError = console.error;
+            const errors = [];
+            console.error = function(...args) {
+                errors.push(args.join(' '));
+                originalError.apply(console, args);
+            };
+            
+            setTimeout(() => {
+                if (errors.length > 0) {
+                    status.innerHTML += '<p style="color: red;">Errores encontrados:</p><ul>';
+                    errors.forEach(err => {
+                        status.innerHTML += `<li>${err}</li>`;
+                    });
+                    status.innerHTML += '</ul>';
+                } else {
+                    status.innerHTML += '<p style="color: green;">✓ No hay errores en consola</p>';
+                }
+            }, 2000);
+        }, 1000);
+    </script>
+</body>
+</html>
+

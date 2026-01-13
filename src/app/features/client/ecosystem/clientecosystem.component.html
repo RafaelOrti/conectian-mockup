@@ -1,0 +1,44 @@
+<div class="ecosystem-page">
+  <app-navbar 
+    [userRole]="'CLIENT'" 
+    [userName]="'Carlos Martínez'"
+    [notificationCount]="3"
+    [messageCount]="2"
+    [projectCount]="4"
+  ></app-navbar>
+
+  <div class="hub-container">
+    <div class="hub-header">
+      <h1>Ecosistema Conectian</h1>
+      <div class="tabs-container">
+        <button 
+          class="tab-btn" 
+          [class.active]="activeTab === 'innovation'"
+          (click)="setActiveTab('innovation')"
+        >
+          <span class="icon">💡</span> Centro de Innovación
+        </button>
+        <button 
+          class="tab-btn" 
+          [class.active]="activeTab === 'growth'"
+          (click)="setActiveTab('growth')"
+        >
+          <span class="icon">📈</span> Centro de Crecimiento
+        </button>
+        <button 
+          class="tab-btn" 
+          [class.active]="activeTab === 'market'"
+          (click)="setActiveTab('market')"
+        >
+          <span class="icon">🔍</span> Análisis de Mercado
+        </button>
+      </div>
+    </div>
+
+    <div class="hub-content">
+      <app-clientinnovationcenter *ngIf="activeTab === 'innovation'" [showNavbar]="false"></app-clientinnovationcenter>
+      <app-clientgrowthcenter *ngIf="activeTab === 'growth'" [showNavbar]="false"></app-clientgrowthcenter>
+      <app-clientmarketanalysis *ngIf="activeTab === 'market'" [showNavbar]="false"></app-clientmarketanalysis>
+    </div>
+  </div>
+</div>

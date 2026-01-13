@@ -1,0 +1,117 @@
+<div class="market-analysis-page" [class.no-navbar]="!showNavbar">
+  <app-navbar 
+    *ngIf="showNavbar"
+    [userRole]="'CLIENT'" 
+    [userName]="'Carlos Martínez'"
+    [notificationCount]="3"
+    [messageCount]="2"
+    [projectCount]="4"
+  ></app-navbar>
+  
+  <div class="container">
+    <div class="page-header">
+      <div>
+        <h1>📊 Análisis de Mercado</h1>
+        <p class="subtitle">Insights y tendencias del sector en tiempo real</p>
+      </div>
+      <div class="header-actions">
+        <select class="period-select">
+          <option>Últimos 30 días</option>
+          <option>Este Trimestre</option>
+          <option>Este Año</option>
+        </select>
+        <app-button variant="secondary" icon="📥">Exportar Informe</app-button>
+      </div>
+    </div>
+
+    <!-- Market Overview -->
+    <div class="market-grid">
+      <!-- Trends Chart -->
+      <app-card class="chart-card main">
+        <div class="card-header">
+          <h3>Tendencias de Adopción de IA</h3>
+          <div class="legend">
+            <span class="item"><span class="dot blue"></span> Sector Retail</span>
+            <span class="item"><span class="dot purple"></span> Promedio Mercado</span>
+          </div>
+        </div>
+        <div class="chart-placeholder">
+          <!-- Placeholder for Line Chart -->
+          <div class="chart-bg">
+            <svg viewBox="0 0 800 300" class="line-chart">
+              <path d="M0,250 C100,240 200,180 300,150 S500,100 800,50" fill="none" stroke="#0d86ff" stroke-width="3"/>
+              <path d="M0,280 C100,270 200,220 300,200 S500,180 800,150" fill="none" stroke="#6b5cf0" stroke-width="3" stroke-dasharray="5,5"/>
+            </svg>
+          </div>
+        </div>
+      </app-card>
+
+      <!-- Competitor Analysis -->
+      <app-card class="competitors-card side">
+        <h3>Análisis Competitivo</h3>
+        <div class="competitors-list">
+          <div class="competitor-item">
+            <div class="comp-info">
+              <span class="comp-name">Competidor A</span>
+              <span class="comp-share">32% Share</span>
+            </div>
+            <div class="progress-bar">
+              <div class="fill" style="width: 32%"></div>
+            </div>
+          </div>
+          <div class="competitor-item">
+            <div class="comp-info">
+              <span class="comp-name">Tu Empresa</span>
+              <span class="comp-share highlight">24% Share</span>
+            </div>
+            <div class="progress-bar">
+              <div class="fill highlight" style="width: 24%"></div>
+            </div>
+          </div>
+          <div class="competitor-item">
+            <div class="comp-info">
+              <span class="comp-name">Competidor B</span>
+              <span class="comp-share">18% Share</span>
+            </div>
+            <div class="progress-bar">
+              <div class="fill" style="width: 18%"></div>
+            </div>
+          </div>
+        </div>
+      </app-card>
+    </div>
+
+    <!-- Insights Grid -->
+    <div class="insights-grid">
+      <app-card class="insight-card">
+        <div class="insight-header">
+          <span class="tag trend">Tendencia</span>
+          <span class="date">Hace 2 días</span>
+        </div>
+        <h3>Aumento en Chatbots</h3>
+        <p>El uso de asistentes virtuales en retail ha crecido un 45% este trimestre.</p>
+        <a href="#" class="read-more">Leer reporte completo →</a>
+      </app-card>
+
+      <app-card class="insight-card">
+        <div class="insight-header">
+          <span class="tag alert">Alerta</span>
+          <span class="date">Hoy</span>
+        </div>
+        <h3>Nueva Regulación IA</h3>
+        <p>La UE ha aprobado nuevas normativas sobre el uso de datos biométricos.</p>
+        <a href="#" class="read-more">Leer reporte completo →</a>
+      </app-card>
+
+      <app-card class="insight-card">
+        <div class="insight-header">
+          <span class="tag opportunity">Oportunidad</span>
+          <span class="date">Hace 1 semana</span>
+        </div>
+        <h3>Optimización Logística</h3>
+        <p>Nuevos modelos de ML reducen costes de última milla en un 20%.</p>
+        <a href="#" class="read-more">Leer reporte completo →</a>
+      </app-card>
+    </div>
+  </div>
+</div>

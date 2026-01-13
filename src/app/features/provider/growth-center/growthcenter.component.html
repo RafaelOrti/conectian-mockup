@@ -1,0 +1,227 @@
+<div class="growth-center-page" [class.no-navbar]="!showNavbar">
+  <app-navbar 
+    *ngIf="showNavbar"
+    [userRole]="'PROVIDER'"
+    [userName]="'María González'"
+    [notificationCount]="5"
+  ></app-navbar>
+  
+  <div class="container">
+    <!-- Header -->
+    <div class="page-header">
+      <h1>📈 Centro de Crecimiento</h1>
+      <p class="page-subtitle">Gestiona tu equipo, créditos, portfolio y referidos para maximizar tu crecimiento</p>
+    </div>
+
+    <div class="growth-grid">
+      <!-- Block 1: Team Management and Trust Seals -->
+      <app-card class="team-seals-section" variant="elevated">
+        <div class="section-header">
+          <h2>👥 Gestión de Equipo y Sellos de Confianza</h2>
+          <app-button 
+            variant="primary" 
+            size="small"
+            icon="➕"
+            (clickEvent)="inviteTeamMember()"
+          >
+            Invitar Empleado
+          </app-button>
+        </div>
+
+        <!-- Team Members List -->
+        <div class="team-verification">
+          <h3>El Verificador: Empleados Invitados</h3>
+          <div class="team-members-list">
+            <div 
+              *ngFor="let member of teamMembers"
+              class="team-member-row"
+            >
+              <div class="member-info">
+                <div class="member-avatar-small">
+                  <span>{{ member.name.charAt(0) }}</span>
+                </div>
+                <div class="member-details">
+                  <div class="member-name">{{ member.name }}</div>
+                  <div class="member-email">{{ member.email }}</div>
+                </div>
+              </div>
+              <div class="member-status">
+                <span 
+                  class="status-badge"
+                  [style.background-color]="getValidationStatusColor(member.validationStatus)"
+                >
+                  {{ getValidationStatusLabel(member.validationStatus) }}
+                </span>
+                <span 
+                  class="linkedin-badge"
+                  [class.connected]="member.linkedInConnected"
+                >
+                  {{ member.linkedInConnected ? '✓ LinkedIn' : '✗ LinkedIn' }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Gamification Card -->
+        <div class="gamification-card">
+          <div class="seal-display">
+            <div class="seal-icon-large">{{ getSealIcon(trustSeal.level) }}</div>
+            <div class="seal-info">
+              <h3>Sello {{ trustSeal.level }}</h3>
+              <p class="seal-description">{{ trustSeal.description }}</p>
+              <div class="progress-container">
+                <div class="progress-bar">
+                  <div 
+                    class="progress-fill" 
+                    [style.width.%]="getProgressPercentage()"
+                  ></div>
+                </div>
+                <div class="progress-text">
+                  {{ trustSeal.currentProgress }}/{{ trustSeal.nextLevelProgress }} miembros validados
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </app-card>
+
+      <!-- Block 2: Credit Wallet and Referrals -->
+      <app-card class="credits-referrals-section" variant="gradient">
+        <h2>💰 Billetera de Créditos y Referidos</h2>
+        
+        <!-- Credit Balance -->
+        <div class="credit-wallet">
+          <div class="credit-display">
+            <div class="credit-icon">💳</div>
+            <div class="credit-info">
+              <div class="credit-label">Saldo de Créditos</div>
+              <div class="credit-amount">${{ creditBalance }}</div>
+              <div class="credit-description">
+                Disponibles para gastar en el Market Privado o RFP
+              </div>
+            </div>
+          </div>
+          <app-button variant="primary" size="small">
+            Comprar Créditos
+          </app-button>
+        </div>
+
+        <!-- Referral Link -->
+        <div class="referral-link-section">
+          <h3>🔗 Bucle Viral - Link de Referido</h3>
+          <div class="referral-link-container">
+            <input 
+              type="text" 
+              [value]="referralLink" 
+              readonly
+              class="referral-input"
+            />
+            <app-button 
+              variant="secondary" 
+              size="small"
+              icon="📋"
+              (clickEvent)="copyReferralLink()"
+            >
+              Copiar
+            </app-button>
+          </div>
+          <div class="referral-stats">
+            <div class="stat-item">
+              <span class="stat-value">{{ referralsCount }}</span>
+              <span class="stat-label">Clientes traídos</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-value">${{ creditsEarned }}</span>
+              <span class="stat-label">Créditos ganados</span>
+            </div>
+          </div>
+        </div>
+      </app-card>
+
+      <!-- Block 3: Portfolio and Success Cases -->
+      <app-card class="portfolio-section">
+        <div class="section-header">
+          <h2>📊 Portfolio y Casos de Éxito</h2>
+        </div>
+
+        <!-- Impact Metrics -->
+        <div class="impact-metrics">
+          <div class="metric-card">
+            <div class="metric-icon">👁️</div>
+            <div class="metric-info">
+              <div class="metric-value">{{ totalViews }}</div>
+              <div class="metric-label">Vistas totales</div>
+            </div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-icon">🚪</div>
+            <div class="metric-info">
+              <div class="metric-value">{{ totalDealRoomRequests }}</div>
+              <div class="metric-label">Solicitudes Deal Room</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Use Cases Grid -->
+        <div class="use-cases-grid">
+          <div 
+            *ngFor="let useCase of useCases"
+            class="use-case-card"
+          >
+            <div class="use-case-header">
+              <h4>{{ useCase.title }}</h4>
+              <span class="sector-badge">{{ useCase.sector }}</span>
+            </div>
+            <div class="use-case-stats">
+              <div class="stat">
+                <span class="stat-icon">👁️</span>
+                <span>{{ useCase.views }} vistas</span>
+              </div>
+              <div class="stat">
+                <span class="stat-icon">🚪</span>
+                <span>{{ useCase.dealRoomRequests }} solicitudes</span>
+              </div>
+            </div>
+            <app-button 
+              variant="ghost" 
+              size="small"
+              [routerLink]="['/provider/cases', useCase.id]"
+            >
+              Ver Detalles →
+            </app-button>
+          </div>
+        </div>
+      </app-card>
+
+      <!-- Block 4: Referrals History -->
+      <app-card class="referrals-history-section">
+        <h2>📋 Historial de Referidos</h2>
+        <div class="referrals-list">
+          <div 
+            *ngFor="let referral of referrals"
+            class="referral-history-item"
+          >
+            <div class="referral-client-info">
+              <div class="client-avatar">
+                <span>{{ referral.clientName.charAt(0) }}</span>
+              </div>
+              <div class="client-details">
+                <div class="client-name">{{ referral.clientName }}</div>
+                <div class="referral-date">{{ referral.date }}</div>
+              </div>
+            </div>
+            <div class="referral-credits">
+              <span class="credits-amount">${{ referral.creditsEarned }}</span>
+              <span class="credits-label">Créditos</span>
+            </div>
+          </div>
+        </div>
+        <app-button variant="secondary" size="small" block="true">
+          Ver Todo el Historial →
+        </app-button>
+      </app-card>
+    </div>
+  </div>
+</div>
+

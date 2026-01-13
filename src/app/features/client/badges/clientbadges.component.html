@@ -1,0 +1,94 @@
+<div class="client-badges-page" [class.no-navbar]="!showNavbar">
+  <app-navbar 
+    *ngIf="showNavbar"
+    [userRole]="'CLIENT'" 
+    [userName]="'Carlos Martínez'"
+    [notificationCount]="3"
+    [messageCount]="2"
+    [projectCount]="4"
+  ></app-navbar>
+  
+  <div class="container">
+    <div class="page-header">
+      <div>
+        <h1>🏆 Badges y Recompensas</h1>
+        <p class="subtitle">Tus logros y nivel de innovación en la plataforma</p>
+      </div>
+      <div class="level-info">
+        <span class="level-label">Nivel Actual:</span>
+        <span class="level-badge">Innovador Gold</span>
+      </div>
+    </div>
+
+    <!-- Progress Section -->
+    <app-card class="progress-card">
+      <div class="progress-header">
+        <div class="next-level">
+          <h3>Siguiente Nivel: Innovador Platinum</h3>
+          <p>Completa 2 proyectos más para subir de nivel</p>
+        </div>
+        <div class="points">
+          <span class="points-val">2,450</span>
+          <span class="points-lbl">Puntos XP</span>
+        </div>
+      </div>
+      <div class="progress-bar-container">
+        <div class="progress-bar">
+          <div class="fill" style="width: 75%"></div>
+        </div>
+        <span class="progress-text">75% Completado</span>
+      </div>
+    </app-card>
+
+    <!-- Badges Grid -->
+    <div class="badges-grid">
+      <app-card class="badge-card unlocked">
+        <div class="badge-icon">🚀</div>
+        <h3>Pionero Digital</h3>
+        <p>Primer proyecto de IA lanzado con éxito</p>
+        <span class="date">Conseguido: 12 Ene 2025</span>
+      </app-card>
+
+      <app-card class="badge-card unlocked">
+        <div class="badge-icon">🤝</div>
+        <h3>Networker Pro</h3>
+        <p>Conectaste con 5 proveedores verificados</p>
+        <span class="date">Conseguido: 05 Feb 2025</span>
+      </app-card>
+
+      <app-card class="badge-card unlocked">
+        <div class="badge-icon">💡</div>
+        <h3>Visionario</h3>
+        <p>Publicaste 3 casos de uso innovadores</p>
+        <span class="date">Conseguido: 20 Feb 2025</span>
+      </app-card>
+
+      <app-card class="badge-card locked">
+        <div class="badge-icon">🌍</div>
+        <h3>Expansión Global</h3>
+        <p>Implementa soluciones en 3 países diferentes</p>
+        <div class="lock-overlay">
+          <span class="lock-icon">🔒</span>
+        </div>
+      </app-card>
+
+      <app-card class="badge-card locked">
+        <div class="badge-icon">🦄</div>
+        <h3>Unicorn Hunter</h3>
+        <p>Colabora con una startup unicornio</p>
+        <div class="lock-overlay">
+          <span class="lock-icon">🔒</span>
+        </div>
+      </app-card>
+
+      <app-card class="badge-card locked">
+        <div class="badge-icon">🎓</div>
+        <h3>AI Master</h3>
+        <p>Completa todos los cursos de formación básica</p>
+        <div class="lock-overlay">
+          <span class="lock-icon">🔒</span>
+        </div>
+      </app-card>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,269 @@
+@import '../../../../styles/variables';
+
+.admin-content-page {
+  min-height: 100vh;
+  background: $bg-dark;
+  color: $text-primary;
+  padding-top: 80px;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: $spacing-8;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: $spacing-8;
+
+  h1 {
+    font-size: $font-size-3xl;
+    font-weight: $font-weight-bold;
+    margin-bottom: $spacing-2;
+  }
+
+  .subtitle {
+    color: $text-secondary;
+    font-size: $font-size-lg;
+  }
+}
+
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: $spacing-6;
+  margin-bottom: $spacing-8;
+
+  .stat-card {
+    display: flex;
+    align-items: center;
+    gap: $spacing-4;
+    padding: $spacing-6;
+
+    .stat-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: $border-radius-lg;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: $font-size-xl;
+
+      &.articles { background: rgba(13, 134, 255, 0.1); color: $primary-blue; }
+      &.pending { background: rgba(249, 105, 8, 0.1); color: $warning-orange; }
+      &.views { background: rgba(107, 92, 240, 0.1); color: $ai-purple; }
+    }
+
+    .stat-info {
+      display: flex;
+      flex-direction: column;
+
+      .stat-value {
+        font-size: $font-size-2xl;
+        font-weight: $font-weight-bold;
+        color: $text-primary;
+      }
+
+      .stat-label {
+        font-size: $font-size-sm;
+        color: $text-secondary;
+      }
+    }
+  }
+}
+
+.content-table-card {
+  .table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: $spacing-6;
+
+    .search-filters {
+      display: flex;
+      gap: $spacing-4;
+      flex: 1;
+
+      .search-box {
+        position: relative;
+        flex: 1;
+        max-width: 400px;
+
+        .search-icon {
+          position: absolute;
+          left: $spacing-3;
+          top: 50%;
+          transform: translateY(-50%);
+          color: $text-muted;
+        }
+
+        .search-input {
+          width: 100%;
+          padding: $spacing-2 $spacing-3 $spacing-2 $spacing-10;
+          background: rgba(255, 255, 255, 0.05);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: $border-radius-base;
+          color: $text-primary;
+
+          &:focus {
+            outline: none;
+            border-color: $primary-blue;
+          }
+        }
+      }
+
+      .filter-select {
+        padding: $spacing-2 $spacing-4;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: $border-radius-base;
+        color: $text-primary;
+        cursor: pointer;
+
+        option {
+          background: $bg-dark;
+        }
+      }
+    }
+  }
+
+  .admin-table {
+    width: 100%;
+    border-collapse: collapse;
+
+    th {
+      text-align: left;
+      padding: $spacing-4;
+      color: $text-secondary;
+      font-weight: $font-weight-medium;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    td {
+      padding: $spacing-4;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      color: $text-primary;
+    }
+
+    .content-title-cell {
+      display: flex;
+      flex-direction: column;
+      
+      .content-title {
+        font-weight: $font-weight-medium;
+      }
+      
+      .content-slug {
+        font-size: $font-size-xs;
+        color: $text-muted;
+      }
+    }
+
+    .type-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 8px;
+      border-radius: $border-radius-full;
+      font-size: $font-size-xs;
+      font-weight: $font-weight-medium;
+
+      &.article { background: rgba(13, 134, 255, 0.1); color: $primary-blue; }
+      &.guide { background: rgba(107, 92, 240, 0.1); color: $ai-purple; }
+      &.video { background: rgba(244, 68, 74, 0.1); color: $danger-red; }
+    }
+
+    .author-info {
+      display: flex;
+      align-items: center;
+      gap: $spacing-2;
+
+      .author-avatar {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: $font-size-xs;
+      }
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: $border-radius-base;
+      font-size: $font-size-xs;
+      
+      &.published { background: rgba(24, 185, 129, 0.1); color: $success-green; }
+      &.draft { background: rgba(255, 255, 255, 0.1); color: $text-secondary; }
+      &.review { background: rgba(249, 105, 8, 0.1); color: $warning-orange; }
+    }
+
+    .actions {
+      display: flex;
+      gap: $spacing-2;
+
+      .icon-btn {
+        background: none;
+        border: none;
+        cursor: pointer;
+        opacity: 0.7;
+        transition: opacity 0.2s;
+
+        &:hover {
+          opacity: 1;
+        }
+
+        &.delete:hover {
+          transform: scale(1.1);
+        }
+      }
+    }
+  }
+
+  .pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: $spacing-6;
+    padding-top: $spacing-4;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+
+    .page-info {
+      color: $text-secondary;
+      font-size: $font-size-sm;
+    }
+
+    .page-controls {
+      display: flex;
+      gap: $spacing-2;
+
+      .page-btn {
+        padding: $spacing-2 $spacing-3;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: $border-radius-base;
+        color: $text-primary;
+        cursor: pointer;
+        
+        &:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+        }
+
+        &.active {
+          background: $primary-blue;
+          border-color: $primary-blue;
+        }
+
+        &:hover:not(:disabled):not(.active) {
+          background: rgba(255, 255, 255, 0.1);
+        }
+      }
+    }
+  }
+}

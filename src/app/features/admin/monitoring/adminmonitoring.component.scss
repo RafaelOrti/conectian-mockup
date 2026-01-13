@@ -1,0 +1,70 @@
+@import '../../../../styles/variables';
+
+.admin-monitoring-page {
+  min-height: 100vh;
+  background: $bg-dark;
+  color: $text-primary;
+  padding-top: 80px;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: $spacing-8;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: $spacing-8;
+
+  h1 {
+    font-size: $font-size-3xl;
+    font-weight: $font-weight-bold;
+    margin-bottom: $spacing-2;
+    display: flex;
+    align-items: center;
+    gap: $spacing-3;
+  }
+
+  .subtitle {
+    color: $text-secondary;
+    font-size: $font-size-lg;
+  }
+}
+
+// ... Resto de estilos (si los hubiera, pero el archivo estaba casi vacío)
+// Voy a agregar estilos básicos para que se vea bien
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: $spacing-6;
+  margin-bottom: $spacing-8;
+}
+
+.chart-container {
+  height: 300px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding-top: $spacing-8;
+  
+  .chart-line {
+    flex: 1;
+    height: 4px;
+    background: $primary-blue;
+    position: relative;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      top: -4px;
+      right: 0;
+      width: 8px;
+      height: 8px;
+      background: $primary-blue;
+      border-radius: 50%;
+    }
+  }
+}
