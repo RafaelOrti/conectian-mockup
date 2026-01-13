@@ -38,6 +38,7 @@ interface CompetitorGap {
   styleUrls: ['./marketanalysis.component.scss']
 })
 export class MarketAnalysisComponent {
+  @Input() showNavbar: boolean = true;
   // A. Market Radar - Demand Analysis
   sectorTrends: SectorTrend[] = [
     {

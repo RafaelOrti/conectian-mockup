@@ -15,6 +15,7 @@ $primary-dark: #004785;           /* Elementos oscuros, links */
 /* Secondary Colors */
 $ai-purple: #6b5cf0;              /* IA/Tech, Features avanzados */
 $ai-purple-hover: #5847d9;        /* Hover states */
+$secondary-purple: $ai-purple;    /* Alias for compatibility */
 $ai-gradient: linear-gradient(135deg, #0d86ff 0%, #764ba2 100%);
 
 /* Success & Status */

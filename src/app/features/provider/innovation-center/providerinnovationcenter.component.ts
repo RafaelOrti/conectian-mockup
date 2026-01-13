@@ -48,6 +48,7 @@ interface UseCase {
   styleUrls: ['./providerinnovationcenter.component.scss']
 })
 export class ProviderInnovationCenterComponent {
+  @Input() showNavbar: boolean = true;
   teamMembers: TeamMember[] = [
     { id: '1', name: 'María García', role: 'Directora de Proyectos', email: 'maria@empresa.com', linkedInConnected: true },
     { id: '2', name: 'Carlos Ruiz', role: 'Especialista en IA', email: 'carlos@empresa.com', linkedInConnected: false },

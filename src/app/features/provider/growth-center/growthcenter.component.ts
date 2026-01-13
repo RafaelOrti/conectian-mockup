@@ -46,6 +46,7 @@ interface Referral {
   styleUrls: ['./growthcenter.component.scss']
 })
 export class GrowthCenterComponent {
+  @Input() showNavbar: boolean = true;
   // Block 1: Team Management and Trust Seals
   teamMembers: TeamMember[] = [
     { id: '1', name: 'María García', email: 'maria@empresa.com', linkedInConnected: true, validationStatus: 'validated' },

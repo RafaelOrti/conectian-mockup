@@ -36,6 +36,7 @@ interface Achievement {
   styleUrls: ['./providerbadges.component.scss']
 })
 export class ProviderBadgesComponent {
+  @Input() showNavbar: boolean = true;
   reputationScore: number = 3200;
   reputationLevel: string = 'Maestro';
   reputationProgress: number = 85;
