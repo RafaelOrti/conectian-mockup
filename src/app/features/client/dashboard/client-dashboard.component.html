@@ -365,89 +365,12 @@
     
     <!-- Main Content -->
     <main class="main-content">
-      <!-- Search Hero -->
-      <section class="search-hero">
-        <div class="search-container">
-          <h1>Encuentra la solución de IA perfecta</h1>
-          <p class="search-subtitle">Explora casos de uso reales o publica tu necesidad</p>
-          
-          <div class="hero-actions">
-            <button class="hero-btn primary" (click)="publishRFP()">
-              <span>📢</span> Publicar Necesidad (RFP)
-            </button>
-            <button class="hero-btn secondary" (click)="scrollToCases()">
-              <span>🔍</span> Consultar Casos
-            </button>
-          </div>
-        </div>
-      </section>
-      
-      <!-- Featured Cases Section -->
-      <section class="cases-section featured-section" *ngIf="featuredCases.length > 0">
-        <div class="section-header">
-          <h2>🌟 Casos Destacados</h2>
-        </div>
-        
-        <div class="cases-grid">
-          <article 
-            *ngFor="let case of featuredCases"
-            class="case-card featured"
-            (click)="onCaseClick(case)"
-          >
-            <!-- Relevance Score -->
-            <div class="case-header">
-              <span class="relevance-badge featured-badge">
-                <span class="premium-icon">⭐</span>
-                {{ case.relevanceScore }}% coincidencia
-              </span>
-            </div>
-            
-            <!-- Title -->
-            <h3 class="case-title">{{ case.title }}</h3>
-            
-            <!-- Provider Info -->
-            <div class="case-provider">
-              <span class="provider-avatar-sm">{{ case.provider.logo }}</span>
-              <span class="provider-name">{{ case.provider.name }}</span>
-              <span *ngIf="case.provider.verified" class="verified-icon">
-                <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
-                  <path fill-rule="evenodd" d="M10.067.87a2.89 2.89 0 0 0-4.134 0l-.622.638-.89-.011a2.89 2.89 0 0 0-2.924 2.924l.01.89-.636.622a2.89 2.89 0 0 0 0 4.134l.637.622-.011.89a2.89 2.89 0 0 0 2.924 2.924l.89-.01.622.636a2.89 2.89 0 0 0 4.134 0l.622-.637.89.011a2.89 2.89 0 0 0 2.924-2.924l-.01-.89.636-.622a2.89 2.89 0 0 0 0-4.134l-.637-.622.011-.89a2.89 2.89 0 0 0-2.924-2.924l-.89.01-.622-.636zm.287 5.984l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7 8.793l2.646-2.647a.5.5 0 0 1 .708.708z"/>
-                </svg>
-              </span>
-            </div>
-            
-            <!-- KPIs -->
-            <div class="case-metrics">
-              <div *ngFor="let kpi of case.kpis" class="metric-item">
-                <span class="metric-label">{{ kpi.label }}</span>
-                <span class="metric-value">{{ kpi.value }}</span>
-              </div>
-            </div>
-            
-            <!-- Tags -->
-            <div class="case-tags">
-              <span *ngFor="let tag of case.tags" class="tag">{{ tag }}</span>
-            </div>
-            
-            <!-- Footer -->
-            <div class="case-footer">
-              <button class="view-case-btn">
-                Ver caso de estudio
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-                  <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
-                </svg>
-              </button>
-            </div>
-          </article>
-        </div>
-      </section>
-      
-      <!-- Regular Case Studies Grid -->
+      <!-- Combined Case Studies Grid -->
       <section class="cases-section">
         <div class="section-header">
           <div>
             <h2>Casos de uso</h2>
-            <p class="results-count">{{ regularCases.length }} resultados encontrados</p>
+            <p class="results-count">{{ caseStudies.length }} resultados encontrados</p>
           </div>
           <select class="sort-select">
             <option>Más relevantes</option>
@@ -458,13 +381,15 @@
         
         <div class="cases-grid">
           <article 
-            *ngFor="let case of regularCases"
+            *ngFor="let case of caseStudies"
             class="case-card"
+            [class.featured]="case.featured"
             (click)="onCaseClick(case)"
           >
             <!-- Relevance Score -->
             <div class="case-header">
-              <span class="relevance-badge">
+              <span class="relevance-badge" [class.featured-badge]="case.featured">
+                <span *ngIf="case.featured" class="premium-icon">⭐</span>
                 {{ case.relevanceScore }}% coincidencia
               </span>
             </div>
