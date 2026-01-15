@@ -1,248 +1,633 @@
 @import '../../../../styles/variables';
 
-.badges-page {
+.provider-badges-page {
   min-height: 100vh;
   background: $bg-dark;
   color: $text-primary;
   padding-top: 80px;
+  padding-bottom: 4rem;
+
   &.no-navbar {
     padding-top: 0;
     min-height: auto;
   }
-  padding-bottom: $spacing-8;
 }
 
 .container {
-  max-width: 1400px;
+  max-width: 1600px;
   margin: 0 auto;
-  padding: $spacing-8;
+  padding: 2rem 3rem 3rem;
 }
 
+// Page Header
 .page-header {
-  margin-bottom: $spacing-8;
   text-align: center;
-  
+  margin-bottom: 3.5rem;
+
+  .header-icon {
+    width: 100px;
+    height: 100px;
+    margin: 0 auto 1.5rem;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.2) 0%, rgba(255, 215, 0, 0.05) 100%);
+    border: 2px solid rgba(255, 215, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: pulse 2s ease-in-out infinite;
+    box-shadow: 0 8px 32px rgba(255, 215, 0, 0.2);
+
+    i {
+      font-size: 3.5rem;
+      color: #ffd700;
+    }
+  }
+
   h1 {
-    font-size: $font-size-4xl;
-    font-weight: $font-weight-bold;
-    color: $text-primary;
-    margin-bottom: $spacing-4;
-    background: linear-gradient(135deg, #ffffff 0%, #a0aec0 100%);
+    font-size: 3.25rem;
+    font-weight: 800;
+    margin: 0 0 1rem 0;
+    background: linear-gradient(135deg, #ffd700 0%, #ff8c00 100%);
     -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
     background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -0.02em;
   }
-  
+
   .page-subtitle {
-    font-size: $font-size-lg;
+    font-size: 1.25rem;
     color: $text-secondary;
-    max-width: 600px;
+    max-width: 700px;
     margin: 0 auto;
+    line-height: 1.6;
   }
 }
 
-// Reputation Card
-.reputation-card {
-  margin-bottom: $spacing-8;
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.4);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 20px rgba(255, 215, 0, 0);
+  }
 }
 
-.reputation-content {
-  display: flex;
-  align-items: center;
-  gap: $spacing-6;
-  padding: $spacing-4;
-  
-  .reputation-icon {
-    font-size: 64px;
-    flex-shrink: 0;
+// Reputation Score Card
+::ng-deep .reputation-score-card {
+  margin-bottom: 3.5rem;
+
+  .p-card {
+    background: rgba(30, 39, 54, 0.85);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 1.5rem;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+    overflow: hidden;
+    position: relative;
+    transition: all 0.3s ease;
+
+    &:hover {
+      border-color: rgba(255, 255, 255, 0.18);
+      box-shadow: 0 24px 72px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.08) inset;
+    }
   }
-  
-  .reputation-info {
-    flex: 1;
-    
-    .reputation-score {
-      font-size: $font-size-4xl;
-      font-weight: $font-weight-bold;
-      color: $text-primary;
-      margin-bottom: $spacing-2;
-    }
-    
-    .reputation-level {
-      font-size: $font-size-lg;
-      color: $text-secondary;
-      margin-bottom: $spacing-4;
-    }
-    
-    .reputation-progress {
-      .progress-bar {
-        width: 100%;
-        height: 12px;
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: $border-radius-full;
-        overflow: hidden;
-        margin-bottom: $spacing-2;
-        
-        .progress-fill {
-          height: 100%;
-          background: linear-gradient(90deg, #0d86ff 0%, #6b5cf0 100%);
-          border-radius: $border-radius-full;
-          transition: width 0.3s ease;
+
+  .p-card-body {
+    padding: 3rem;
+  }
+
+  .reputation-content {
+    display: flex;
+    gap: 3rem;
+    align-items: center;
+    flex-wrap: wrap;
+
+    .reputation-visual {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      min-width: 280px;
+
+      .star-icon {
+        font-size: 5rem;
+        line-height: 1;
+        filter: drop-shadow(0 4px 16px rgba(255, 215, 0, 0.4));
+        animation: starPulse 2s ease-in-out infinite;
+      }
+
+      .score-display {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+
+        .score-value {
+          font-size: 3.5rem;
+          font-weight: 800;
+          color: $text-primary;
+          line-height: 1;
+          background: linear-gradient(135deg, #ffd700 0%, #ffa500 100%);
+          -webkit-background-clip: text;
+          background-clip: text;
+          -webkit-text-fill-color: transparent;
+        }
+
+        .level-info {
+          display: flex;
+          align-items: baseline;
+          gap: 0.5rem;
+
+          .level-label {
+            font-size: 1rem;
+            color: $text-secondary;
+            font-weight: 500;
+          }
+
+          .level-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: $text-primary;
+          }
         }
       }
-      
-      .progress-text {
-        font-size: $font-size-sm;
-        color: $text-secondary;
+    }
+
+    .reputation-info {
+      flex: 1;
+      min-width: 300px;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+
+      .next-level-progress {
+        .progress-header {
+          margin-bottom: 0.75rem;
+
+          .progress-text {
+            font-size: 0.9375rem;
+            color: $text-secondary;
+            font-weight: 500;
+          }
+        }
+
+        .custom-progressbar {
+          .p-progressbar {
+            height: 12px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 1rem;
+            overflow: hidden;
+
+            .p-progressbar-value {
+              background: linear-gradient(90deg, #6b5cf0 0%, #0d86ff 50%, #00d4ff 100%);
+              border-radius: 1rem;
+              box-shadow: 0 2px 8px rgba(107, 92, 240, 0.4);
+              transition: width 0.6s ease;
+            }
+          }
+        }
+      }
+
+      .info-stats {
+        display: flex;
+        gap: 1.5rem;
+        padding: 1.5rem;
+        background: rgba(255, 255, 255, 0.03);
+        border-radius: 1rem;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+
+        .stat-item {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+          flex: 1;
+
+          i {
+            font-size: 1.5rem;
+            color: $primary-blue;
+          }
+
+          .stat-content {
+            display: flex;
+            flex-direction: column;
+
+            .stat-value {
+              font-size: 1.5rem;
+              font-weight: 700;
+              color: $text-primary;
+              line-height: 1;
+            }
+
+            .stat-label {
+              font-size: 0.75rem;
+              color: $text-secondary;
+              margin-top: 0.25rem;
+            }
+          }
+        }
+
+        .stat-divider {
+          width: 1px;
+          background: rgba(255, 255, 255, 0.1);
+        }
       }
     }
   }
 }
 
-// Badges Sections
-.badges-grid {
-  display: flex;
-  flex-direction: column;
-  gap: $spacing-8;
-  margin-bottom: $spacing-8;
+@keyframes starPulse {
+  0%, 100% {
+    transform: scale(1);
+    filter: drop-shadow(0 4px 16px rgba(255, 215, 0, 0.4));
+  }
+  50% {
+    transform: scale(1.05);
+    filter: drop-shadow(0 4px 20px rgba(255, 215, 0, 0.6));
+  }
 }
 
+// Badges Section
 .badges-section {
-  h2 {
-    font-size: $font-size-2xl;
-    font-weight: $font-weight-bold;
-    color: $text-primary;
-    margin-bottom: $spacing-6;
+  margin-bottom: 4rem;
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.08);
+
+    .header-content {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+
+      .header-icon {
+        font-size: 2rem;
+
+        &.earned {
+          color: #22c55e;
+        }
+
+        &.in-progress {
+          color: $primary-blue;
+        }
+
+        &.locked {
+          color: rgba(255, 255, 255, 0.3);
+        }
+      }
+
+      h3 {
+        font-size: 2rem;
+        font-weight: 700;
+        color: $text-primary;
+        margin: 0;
+      }
+    }
+
+    ::ng-deep .section-count-chip {
+      .p-chip {
+        font-size: 0.9375rem;
+        font-weight: 600;
+        padding: 0.5rem 1.25rem;
+        border-radius: 2rem;
+
+        &.earned .p-chip-text {
+          background: linear-gradient(135deg, rgba(34, 197, 94, 0.25) 0%, rgba(34, 197, 94, 0.15) 100%);
+          color: #22c55e;
+          border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+
+        &.in-progress .p-chip-text {
+          background: linear-gradient(135deg, rgba(13, 134, 255, 0.25) 0%, rgba(13, 134, 255, 0.15) 100%);
+          color: $primary-blue;
+          border: 1px solid rgba(13, 134, 255, 0.3);
+        }
+
+        &.locked .p-chip-text {
+          background: rgba(255, 255, 255, 0.05);
+          color: $text-secondary;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+      }
+    }
+  }
+
+  .badges-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    gap: 2rem;
+
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
   }
 }
 
-.badges-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: $spacing-6;
-}
+// Badge Cards
+::ng-deep .badge-card {
+  position: relative;
 
-.badge-card {
-  text-align: center;
-  padding: $spacing-6 !important;
-  transition: all 0.3s ease;
-  
-  &.earned {
-    border: 2px solid rgba(24, 185, 129, 0.3);
-    background: rgba(24, 185, 129, 0.05);
-    
-    &:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 8px 24px rgba(24, 185, 129, 0.2);
+  .p-card {
+    background: rgba(30, 39, 54, 0.6);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 1.5rem;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: visible;
+    height: 100%;
+  }
+
+  .p-card-body {
+    padding: 2rem;
+    position: relative;
+  }
+
+  &.earned-badge {
+    .p-card {
+      border-color: rgba(34, 197, 94, 0.4);
+      background: linear-gradient(135deg, rgba(34, 197, 94, 0.15) 0%, rgba(30, 39, 54, 0.8) 100%);
+      position: relative;
+      overflow: visible;
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        right: -2px;
+        bottom: -2px;
+        background: linear-gradient(135deg, rgba(34, 197, 94, 0.3), rgba(13, 134, 255, 0.3));
+        border-radius: 1.5rem;
+        z-index: -1;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      &:hover {
+        transform: translateY(-8px) scale(1.01);
+        border-color: rgba(34, 197, 94, 0.6);
+        box-shadow: 0 20px 60px rgba(34, 197, 94, 0.4);
+
+        &::before {
+          opacity: 1;
+        }
+      }
+    }
+
+    .badge-glow {
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(34, 197, 94, 0.15) 0%, transparent 70%);
+      pointer-events: none;
+      animation: glow 3s ease-in-out infinite;
+      z-index: 0;
     }
   }
-  
-  &.in-progress {
-    border: 2px solid rgba(13, 134, 255, 0.3);
-    
-    &:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 8px 24px rgba(13, 134, 255, 0.2);
+
+  &.progress-badge {
+    .p-card {
+      border-color: rgba(13, 134, 255, 0.3);
+
+      &:hover {
+        transform: translateY(-12px);
+        border-color: rgba(13, 134, 255, 0.5);
+        box-shadow: 0 30px 80px rgba(13, 134, 255, 0.3);
+      }
     }
   }
-  
-  &.locked {
-    opacity: 0.6;
-    filter: grayscale(50%);
-  }
-  
-  .badge-icon-large {
-    font-size: 64px;
-    margin-bottom: $spacing-4;
-    display: block;
-    
-    &.locked-icon {
-      filter: grayscale(100%);
-      opacity: 0.5;
+
+  &.locked-badge {
+    .p-card {
+      opacity: 0.7;
+
+      &:hover {
+        transform: translateY(-4px);
+      }
+    }
+
+    .locked-overlay {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba(30, 39, 54, 0.9);
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+
+      i {
+        font-size: 1.25rem;
+        color: rgba(255, 255, 255, 0.5);
+      }
     }
   }
-  
-  .badge-info {
-    h3 {
-      font-size: $font-size-xl;
-      font-weight: $font-weight-bold;
-      color: $text-primary;
-      margin-bottom: $spacing-2;
+
+  .badge-icon-container {
+    position: relative;
+    text-align: center;
+    margin-bottom: 1.5rem;
+
+    .badge-icon-circle {
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 1rem;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+
+      &::before {
+        content: '';
+        position: absolute;
+        inset: -2px;
+        border-radius: 50%;
+        padding: 2px;
+        background: linear-gradient(135deg, rgba(34, 197, 94, 0.3), rgba(13, 134, 255, 0.3));
+        -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+      }
     }
-    
-    .badge-level {
-      font-size: $font-size-base;
-      font-weight: $font-weight-semibold;
-      margin-bottom: $spacing-3;
+
+    .badge-icon {
+      font-size: 4rem;
+      display: block;
+      filter: drop-shadow(0 4px 16px rgba(0, 0, 0, 0.3));
+      position: relative;
+      z-index: 1;
+
+      &.grayscale {
+        filter: grayscale(100%) opacity(0.5);
+      }
+    }
+
+    .badge-level-tag {
+      display: inline-block;
+      padding: 0.5rem 1.25rem;
+      border-radius: 2rem;
+      font-size: 0.875rem;
+      font-weight: 700;
       text-transform: uppercase;
+      letter-spacing: 1px;
+      color: white;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+
+      &.grayscale {
+        filter: grayscale(100%) opacity(0.5);
+      }
     }
-    
+  }
+
+  .badge-content {
+    position: relative;
+    z-index: 1;
+
+    .badge-name {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: $text-primary;
+      margin: 0 0 0.75rem 0;
+      text-align: center;
+    }
+
     .badge-description {
-      font-size: $font-size-sm;
+      font-size: 1rem;
       color: $text-secondary;
-      margin-bottom: $spacing-4;
+      margin: 0 0 1.5rem 0;
+      text-align: center;
       line-height: 1.6;
     }
-    
-    .badge-date {
-      font-size: $font-size-xs;
-      color: $text-muted;
-      margin-bottom: $spacing-3;
+
+    .badge-meta {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      font-size: 0.875rem;
+      color: $text-secondary;
+      margin-bottom: 1.5rem;
+      padding: 0.75rem;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 0.75rem;
+
+      i {
+        color: $primary-blue;
+      }
     }
-    
-    .badge-progress {
-      margin: $spacing-4 0;
-      
-      .progress-bar {
-        width: 100%;
-        height: 8px;
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: $border-radius-full;
-        overflow: hidden;
-        margin-bottom: $spacing-2;
-        
-        .progress-fill {
-          height: 100%;
-          border-radius: $border-radius-full;
-          transition: width 0.3s ease;
+
+    .badge-progress-section {
+      margin: 1.5rem 0;
+      padding: 1.5rem;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 1rem;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+
+      .progress-info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.75rem;
+
+        .progress-label {
+          font-size: 0.875rem;
+          color: $text-secondary;
+          font-weight: 600;
+        }
+
+        .progress-value {
+          font-size: 1.125rem;
+          color: $primary-blue;
+          font-weight: 700;
         }
       }
-      
-      .progress-text {
-        font-size: $font-size-sm;
+
+      .progress-encouragement {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-top: 0.75rem;
+        font-size: 0.875rem;
         color: $text-secondary;
+
+        i {
+          color: #ffd700;
+        }
       }
     }
-    
-    .badge-rewards {
-      margin-top: $spacing-4;
-      padding-top: $spacing-4;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
-      text-align: left;
-      
-      strong {
-        font-size: $font-size-sm;
-        color: $text-primary;
-        display: block;
-        margin-bottom: $spacing-2;
+
+    .badge-unlock-info {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 1rem;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 0.75rem;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      margin: 1.5rem 0;
+      font-size: 0.9375rem;
+      color: $text-secondary;
+
+      i {
+        font-size: 1.25rem;
+        color: $primary-blue;
       }
-      
-      ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-        
-        li {
-          font-size: $font-size-xs;
-          color: $text-secondary;
-          padding: $spacing-1 0;
-          padding-left: $spacing-4;
-          position: relative;
-          
-          &::before {
-            content: '✓';
-            position: absolute;
-            left: 0;
-            color: #18b981;
+    }
+
+    .badge-rewards {
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+
+      .rewards-header {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+        font-size: 0.9375rem;
+        font-weight: 600;
+        color: $text-primary;
+
+        i {
+          color: #ffd700;
+          font-size: 1.125rem;
+        }
+      }
+
+      .rewards-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+
+        .reward-item {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+          padding: 0.5rem 0;
+          font-size: 0.9375rem;
+          color: $text-primary;
+
+          i {
+            color: #22c55e;
+            font-size: 1rem;
+          }
+
+          span {
+            color: $text-secondary;
           }
         }
       }
@@ -250,114 +635,273 @@
   }
 }
 
-// Achievements
+@keyframes glow {
+  0%, 100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+// Achievements Section
 .achievements-section {
-  h2 {
-    font-size: $font-size-2xl;
-    font-weight: $font-weight-bold;
-    color: $text-primary;
-    margin-bottom: $spacing-6;
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.08);
+
+    .header-content {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+
+      .header-icon {
+        font-size: 2rem;
+        color: #ffd700;
+      }
+
+      h3 {
+        font-size: 2rem;
+        font-weight: 700;
+        color: $text-primary;
+        margin: 0;
+      }
+    }
+  }
+
+  .achievements-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
   }
 }
 
-.achievements-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: $spacing-4;
-}
+::ng-deep .achievement-card {
+  .p-card {
+    background: rgba(30, 39, 54, 0.6);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 1.25rem;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    height: 100%;
+  }
 
-.achievement-card {
-  padding: $spacing-5 !important;
-  display: flex;
-  flex-direction: column;
-  gap: $spacing-4;
-  
+  .p-card-body {
+    padding: 1.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
   &.completed {
-    border-color: rgba(24, 185, 129, 0.3);
-    background: rgba(24, 185, 129, 0.05);
+    .p-card {
+      border-color: rgba(34, 197, 94, 0.3);
+      background: linear-gradient(135deg, rgba(34, 197, 94, 0.08) 0%, rgba(30, 39, 54, 0.6) 100%);
+    }
   }
-  
+
   &.in-progress {
-    border-color: rgba(13, 134, 255, 0.3);
+    .p-card {
+      border-color: rgba(13, 134, 255, 0.3);
+    }
   }
-  
+
   &.locked {
-    opacity: 0.6;
-    filter: grayscale(50%);
+    .p-card {
+      opacity: 0.7;
+      filter: grayscale(50%);
+    }
   }
-  
+
+  .p-card:hover {
+    transform: translateY(-8px);
+    border-color: rgba(13, 134, 255, 0.4);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  }
+
   .achievement-icon {
-    font-size: 48px;
+    font-size: 4rem;
     text-align: center;
   }
-  
+
   .achievement-info {
     flex: 1;
-    
+
     h4 {
-      font-size: $font-size-base;
-      font-weight: $font-weight-semibold;
+      font-size: 1.125rem;
+      font-weight: 700;
       color: $text-primary;
-      margin-bottom: $spacing-2;
+      margin: 0 0 0.5rem 0;
     }
-    
+
     p {
-      font-size: $font-size-sm;
+      font-size: 0.9375rem;
       color: $text-secondary;
-      margin-bottom: $spacing-3;
-      line-height: 1.5;
-    }
-    
-    .achievement-meta {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: $font-size-xs;
-      
-      .achievement-category {
-        color: $text-secondary;
-      }
-      
-      .achievement-points {
-        color: $primary-blue;
-        font-weight: $font-weight-semibold;
-      }
+      margin: 0;
+      line-height: 1.6;
     }
   }
-  
-  .achievement-status {
-    .status-badge {
-      padding: $spacing-1 $spacing-3;
-      border-radius: $border-radius-full;
-      font-size: $font-size-xs;
-      font-weight: $font-weight-medium;
-      
-      &.completed {
-        background: rgba(24, 185, 129, 0.2);
-        color: #18b981;
-      }
-      
-      &.in-progress {
-        background: rgba(13, 134, 255, 0.2);
-        color: $primary-blue;
-      }
-      
-      &.locked {
-        background: rgba(255, 255, 255, 0.1);
+
+  .achievement-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+
+    .achievement-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+
+      .category {
+        font-size: 0.8125rem;
         color: $text-secondary;
+        text-transform: capitalize;
+      }
+
+      ::ng-deep .points-chip .p-chip {
+        background: linear-gradient(135deg, rgba(13, 134, 255, 0.2) 0%, rgba(13, 134, 255, 0.1) 100%);
+        color: $primary-blue;
+        border: 1px solid rgba(13, 134, 255, 0.3);
+        font-weight: 700;
+        font-size: 0.875rem;
       }
     }
   }
 }
 
-@media (max-width: $breakpoint-md) {
-  .badges-list,
+// Responsive
+@media (max-width: 1024px) {
+  .container {
+    padding: 2rem 1.5rem;
+  }
+
+  .badges-grid,
+  .achievements-grid {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+
+  ::ng-deep .reputation-score-card {
+    .p-card-body {
+      padding: 2rem;
+    }
+
+    .reputation-content {
+      flex-direction: column;
+      text-align: center;
+      gap: 2rem;
+
+      .reputation-visual {
+        justify-content: center;
+        width: 100%;
+      }
+
+      .reputation-info {
+        width: 100%;
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 1.5rem 1rem;
+  }
+
+  .page-header {
+    margin-bottom: 2.5rem;
+
+    .header-icon {
+      width: 80px;
+      height: 80px;
+
+      i {
+        font-size: 2.5rem;
+      }
+    }
+
+    h1 {
+      font-size: 2.25rem;
+    }
+
+    .page-subtitle {
+      font-size: 1.125rem;
+    }
+  }
+
+  .badges-section {
+    margin-bottom: 3rem;
+
+    .section-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+  }
+
+  .badges-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
   .achievements-grid {
     grid-template-columns: 1fr;
   }
-  
-  .reputation-content {
-    flex-direction: column;
-    text-align: center;
+
+  ::ng-deep .reputation-score-card {
+    .p-card-body {
+      padding: 1.5rem;
+    }
+
+    .reputation-content {
+      .reputation-visual {
+        flex-direction: column;
+        gap: 1rem;
+
+        .star-icon {
+          font-size: 4rem;
+        }
+
+        .score-display {
+          .score-value {
+            font-size: 2.5rem;
+          }
+
+          .level-info {
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+
+            .level-name {
+              font-size: 1.25rem;
+            }
+          }
+        }
+      }
+
+      .reputation-info {
+        .info-stats {
+          flex-direction: column;
+          gap: 1rem;
+          padding: 1.25rem;
+
+          .stat-item {
+            width: 100%;
+            justify-content: center;
+          }
+
+          .stat-divider {
+            display: none;
+          }
+        }
+      }
+    }
   }
 }

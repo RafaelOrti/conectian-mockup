@@ -1,9 +1,15 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { NavbarComponent } from '../../../shared/components/navbar/navbar.component';
-import { CardComponent } from '../../../shared/components/card/card.component';
-import { ButtonComponent } from '../../../shared/components/button/button.component';
+import { CardModule } from 'primeng/card';
+import { ButtonModule } from 'primeng/button';
+import { ProgressBarModule } from 'primeng/progressbar';
+import { ChipModule } from 'primeng/chip';
+import { TagModule } from 'primeng/tag';
+import { TooltipModule } from 'primeng/tooltip';
+import { KnobModule } from 'primeng/knob';
 
 interface Badge {
   id: string;
@@ -31,7 +37,19 @@ interface Achievement {
 @Component({
   selector: 'app-providerbadges',
   standalone: true,
-  imports: [CommonModule, RouterModule, NavbarComponent, CardComponent, ButtonComponent],
+  imports: [
+    CommonModule, 
+    RouterModule,
+    FormsModule, 
+    NavbarComponent,
+    CardModule,
+    ButtonModule,
+    ProgressBarModule,
+    ChipModule,
+    TagModule,
+    TooltipModule,
+    KnobModule
+  ],
   templateUrl: './providerbadges.component.html',
   styleUrls: ['./providerbadges.component.scss']
 })

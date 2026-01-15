@@ -4,180 +4,311 @@
     [userRole]="'PROVIDER'"
     [userName]="'Innovación Tech S.L.'"
     [notificationCount]="5"
-    [messageCount]="3"
   ></app-navbar>
   
   <div class="container">
-    <!-- Header -->
+    <!-- Page Header -->
     <div class="page-header">
-      <h1>🏆 Badges y Recompensas</h1>
+      <div class="header-icon">
+        <i class="pi pi-trophy"></i>
+      </div>
+      <h1>Badges y Recompensas</h1>
       <p class="page-subtitle">Construye tu reputación, desbloquea badges y accede a recompensas exclusivas</p>
     </div>
 
-    <!-- Reputation Score -->
-    <app-card class="reputation-card" variant="gradient">
+    <!-- Reputation Score Card -->
+    <p-card styleClass="reputation-score-card">
       <div class="reputation-content">
-        <div class="reputation-icon">⭐</div>
-        <div class="reputation-info">
-          <div class="reputation-score">{{ reputationScore }}</div>
-          <div class="reputation-level">Nivel: {{ reputationLevel }}</div>
-          <div class="reputation-progress">
-            <div class="progress-bar">
-              <div class="progress-fill" [style.width.%]="reputationProgress"></div>
+        <div class="reputation-visual">
+          <div class="star-icon">⭐</div>
+          <div class="score-display">
+            <div class="score-value">{{ reputationScore }}</div>
+            <div class="level-info">
+              <span class="level-label">Nivel:</span>
+              <span class="level-name">{{ reputationLevel }}</span>
             </div>
-            <span class="progress-text">{{ reputationProgress }}% hacia el siguiente nivel</span>
+          </div>
+        </div>
+
+        <div class="reputation-info">
+          <div class="next-level-progress">
+            <div class="progress-header">
+              <span class="progress-text">{{ reputationProgress }}% hacia el siguiente nivel</span>
+            </div>
+            <p-progressBar 
+              [value]="reputationProgress" 
+              [showValue]="false"
+              styleClass="custom-progressbar"
+            ></p-progressBar>
+          </div>
+
+          <div class="info-stats">
+            <div class="stat-item">
+              <i class="pi pi-check-circle"></i>
+              <div class="stat-content">
+                <span class="stat-value">{{ getEarnedBadges().length }}</span>
+                <span class="stat-label">Badges Obtenidos</span>
+              </div>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+              <i class="pi pi-clock"></i>
+              <div class="stat-content">
+                <span class="stat-value">{{ getInProgressBadges().length }}</span>
+                <span class="stat-label">En Progreso</span>
+              </div>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+              <i class="pi pi-lock"></i>
+              <div class="stat-content">
+                <span class="stat-value">{{ getLockedBadges().length }}</span>
+                <span class="stat-label">Por Desbloquear</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </app-card>
+    </p-card>
 
-    <div class="badges-grid">
-      <!-- Earned Badges -->
-      <div class="badges-section">
-        <h2>✅ Badges Obtenidos</h2>
-        <div class="badges-list">
-          <app-card 
-            *ngFor="let badge of getEarnedBadges()"
-            class="badge-card earned"
-            variant="elevated"
-            hover="true"
-          >
-            <div class="badge-icon-large" [style.color]="getLevelColor(badge.level)">
-              {{ badge.icon }}
-            </div>
-            <div class="badge-info">
-              <h3>{{ badge.name }}</h3>
-              <div class="badge-level" [style.color]="getLevelColor(badge.level)">
-                {{ badge.level }}
-              </div>
-              <p class="badge-description">{{ badge.description }}</p>
-              <div *ngIf="badge.earnedDate" class="badge-date">
-                Obtenido: {{ badge.earnedDate }}
-              </div>
-              <div *ngIf="badge.rewards && badge.rewards.length > 0" class="badge-rewards">
-                <strong>Recompensas:</strong>
-                <ul>
-                  <li *ngFor="let reward of badge.rewards">{{ reward }}</li>
-                </ul>
-              </div>
-            </div>
-          </app-card>
+    <!-- Earned Badges Section -->
+    <div class="badges-section" *ngIf="getEarnedBadges().length > 0">
+      <div class="section-header">
+        <div class="header-content">
+          <i class="pi pi-check-circle header-icon earned"></i>
+          <h3>Badges Obtenidos</h3>
         </div>
+        <p-chip 
+          [label]="getEarnedBadges().length + ' completados'" 
+          styleClass="section-count-chip earned"
+        ></p-chip>
       </div>
 
-      <!-- In Progress Badges -->
-      <div class="badges-section">
-        <h2>🔄 Badges en Progreso</h2>
-        <div class="badges-list">
-          <app-card 
-            *ngFor="let badge of getInProgressBadges()"
-            class="badge-card in-progress"
-            variant="bordered"
-            hover="true"
-          >
-            <div class="badge-icon-large" [style.color]="getLevelColor(badge.level)">
-              {{ badge.icon }}
-            </div>
-            <div class="badge-info">
-              <h3>{{ badge.name }}</h3>
-              <div class="badge-level" [style.color]="getLevelColor(badge.level)">
-                {{ badge.level }}
-              </div>
-              <p class="badge-description">{{ badge.description }}</p>
-              <div class="badge-progress">
-                <div class="progress-bar">
-                  <div 
-                    class="progress-fill" 
-                    [style.width.%]="getProgressPercentage(badge)"
-                    [style.background-color]="getLevelColor(badge.level)"
-                  ></div>
-                </div>
-                <div class="progress-text">
-                  {{ badge.progress }}/{{ badge.maxProgress }}
-                </div>
-              </div>
-              <div *ngIf="badge.rewards && badge.rewards.length > 0" class="badge-rewards">
-                <strong>Recompensas al completar:</strong>
-                <ul>
-                  <li *ngFor="let reward of badge.rewards">{{ reward }}</li>
-                </ul>
+      <div class="badges-grid">
+        <p-card 
+          *ngFor="let badge of getEarnedBadges()" 
+          styleClass="badge-card earned-badge"
+        >
+          <div class="badge-glow"></div>
+          <div class="badge-icon-container">
+            <div class="badge-icon-circle">
+              <div class="badge-icon" [style.color]="getLevelColor(badge.level)">
+                {{ badge.icon }}
               </div>
             </div>
-          </app-card>
-        </div>
-      </div>
+            <div class="badge-level-tag" [style.background-color]="getLevelColor(badge.level)">
+              {{ badge.level }}
+            </div>
+          </div>
 
-      <!-- Locked Badges -->
-      <div class="badges-section">
-        <h2>🔒 Badges Bloqueados</h2>
-        <div class="badges-list">
-          <app-card 
-            *ngFor="let badge of getLockedBadges()"
-            class="badge-card locked"
-            variant="bordered"
-          >
-            <div class="badge-icon-large locked-icon">
-              {{ badge.icon }}
+          <div class="badge-content">
+            <h4 class="badge-name">{{ badge.name }}</h4>
+            <p class="badge-description">{{ badge.description }}</p>
+
+            <div class="badge-meta" *ngIf="badge.earnedDate">
+              <i class="pi pi-calendar"></i>
+              <span>Obtenido: {{ badge.earnedDate }}</span>
             </div>
-            <div class="badge-info">
-              <h3>{{ badge.name }}</h3>
-              <div class="badge-level" [style.color]="getLevelColor(badge.level)">
-                {{ badge.level }}
+
+            <div class="badge-rewards" *ngIf="badge.rewards && badge.rewards.length > 0">
+              <div class="rewards-header">
+                <i class="pi pi-gift"></i>
+                <span>Recompensas</span>
               </div>
-              <p class="badge-description">{{ badge.description }}</p>
-              <div class="badge-progress">
-                <div class="progress-bar">
-                  <div 
-                    class="progress-fill" 
-                    [style.width.%]="getProgressPercentage(badge)"
-                    [style.background-color]="getLevelColor(badge.level)"
-                  ></div>
-                </div>
-                <div class="progress-text">
-                  {{ badge.progress }}/{{ badge.maxProgress }}
+              <div class="rewards-list">
+                <div 
+                  *ngFor="let reward of badge.rewards" 
+                  class="reward-item"
+                >
+                  <i class="pi pi-check-circle"></i>
+                  <span>{{ reward }}</span>
                 </div>
               </div>
-              <div *ngIf="badge.rewards && badge.rewards.length > 0" class="badge-rewards">
-                <strong>Recompensas al desbloquear:</strong>
-                <ul>
-                  <li *ngFor="let reward of badge.rewards">{{ reward }}</li>
-                </ul>
-              </div>
             </div>
-          </app-card>
-        </div>
+          </div>
+        </p-card>
       </div>
     </div>
 
-    <!-- Achievements -->
+    <!-- In Progress Badges Section -->
+    <div class="badges-section" *ngIf="getInProgressBadges().length > 0">
+      <div class="section-header">
+        <div class="header-content">
+          <i class="pi pi-spin pi-spinner header-icon in-progress"></i>
+          <h3>Badges en Progreso</h3>
+        </div>
+        <p-chip 
+          [label]="getInProgressBadges().length + ' activos'" 
+          styleClass="section-count-chip in-progress"
+        ></p-chip>
+      </div>
+
+      <div class="badges-grid">
+        <p-card 
+          *ngFor="let badge of getInProgressBadges()" 
+          styleClass="badge-card progress-badge"
+        >
+          <div class="badge-icon-container">
+            <div class="badge-icon" [style.color]="getLevelColor(badge.level)">
+              {{ badge.icon }}
+            </div>
+            <div class="badge-level-tag" [style.background-color]="getLevelColor(badge.level)">
+              {{ badge.level }}
+            </div>
+          </div>
+
+          <div class="badge-content">
+            <h4 class="badge-name">{{ badge.name }}</h4>
+            <p class="badge-description">{{ badge.description }}</p>
+
+            <div class="badge-progress-section">
+              <div class="progress-info">
+                <span class="progress-label">Tu progreso</span>
+                <span class="progress-value">{{ badge.progress }}/{{ badge.maxProgress }}</span>
+              </div>
+              <p-progressBar 
+                [value]="getProgressPercentage(badge)" 
+                [showValue]="false"
+                [style]="{'height': '10px', 'border-radius': '10px'}"
+              ></p-progressBar>
+              <div class="progress-encouragement">
+                <i class="pi pi-bolt"></i>
+                <span>¡Sigue así! Te faltan {{ badge.maxProgress! - badge.progress! }} para completar</span>
+              </div>
+            </div>
+
+            <div class="badge-rewards" *ngIf="badge.rewards && badge.rewards.length > 0">
+              <div class="rewards-header">
+                <i class="pi pi-gift"></i>
+                <span>Recompensas al completar</span>
+              </div>
+              <div class="rewards-list">
+                <p-chip 
+                  *ngFor="let reward of badge.rewards" 
+                  [label]="reward"
+                  styleClass="reward-chip"
+                ></p-chip>
+              </div>
+            </div>
+          </div>
+        </p-card>
+      </div>
+    </div>
+
+    <!-- Locked Badges Section -->
+    <div class="badges-section" *ngIf="getLockedBadges().length > 0">
+      <div class="section-header">
+        <div class="header-content">
+          <i class="pi pi-lock header-icon locked"></i>
+          <h3>Badges Bloqueados</h3>
+        </div>
+        <p-chip 
+          [label]="getLockedBadges().length + ' por desbloquear'" 
+          styleClass="section-count-chip locked"
+        ></p-chip>
+      </div>
+
+      <div class="badges-grid">
+        <p-card 
+          *ngFor="let badge of getLockedBadges()" 
+          styleClass="badge-card locked-badge"
+        >
+          <div class="locked-overlay">
+            <i class="pi pi-lock"></i>
+          </div>
+
+          <div class="badge-icon-container">
+            <div class="badge-icon grayscale" [style.color]="getLevelColor(badge.level)">
+              {{ badge.icon }}
+            </div>
+            <div class="badge-level-tag grayscale" [style.background-color]="getLevelColor(badge.level)">
+              {{ badge.level }}
+            </div>
+          </div>
+
+          <div class="badge-content">
+            <h4 class="badge-name">{{ badge.name }}</h4>
+            <p class="badge-description">{{ badge.description }}</p>
+
+            <div class="badge-unlock-info">
+              <i class="pi pi-info-circle"></i>
+              <span>Completa los requisitos para desbloquear este badge</span>
+            </div>
+
+            <div class="badge-rewards" *ngIf="badge.rewards && badge.rewards.length > 0">
+              <div class="rewards-header">
+                <i class="pi pi-gift"></i>
+                <span>Recompensas al desbloquear</span>
+              </div>
+              <div class="rewards-list">
+                <p-chip 
+                  *ngFor="let reward of badge.rewards" 
+                  [label]="reward"
+                  styleClass="reward-chip grayscale"
+                ></p-chip>
+              </div>
+            </div>
+          </div>
+        </p-card>
+      </div>
+    </div>
+
+    <!-- Achievements Section -->
     <div class="achievements-section">
-      <h2>🎯 Logros y Puntos</h2>
+      <div class="section-header">
+        <div class="header-content">
+          <i class="pi pi-star-fill header-icon"></i>
+          <h3>Logros y Puntos</h3>
+        </div>
+      </div>
+
       <div class="achievements-grid">
-        <app-card 
-          *ngFor="let achievement of achievements"
-          class="achievement-card"
-          variant="bordered"
+        <p-card 
+          *ngFor="let achievement of achievements" 
+          styleClass="achievement-card"
           [class.completed]="achievement.status === 'completed'"
           [class.in-progress]="achievement.status === 'in-progress'"
           [class.locked]="achievement.status === 'locked'"
         >
           <div class="achievement-icon">{{ achievement.icon }}</div>
+          
           <div class="achievement-info">
             <h4>{{ achievement.title }}</h4>
             <p>{{ achievement.description }}</p>
+          </div>
+
+          <div class="achievement-footer">
             <div class="achievement-meta">
-              <span class="achievement-category">
-                {{ getCategoryIcon(achievement.category) }} {{ achievement.category }}
+              <span class="category">
+                {{ getCategoryIcon(achievement.category) }} 
+                {{ achievement.category }}
               </span>
-              <span class="achievement-points">+{{ achievement.points }} pts</span>
+              <p-chip 
+                [label]="'+' + achievement.points + ' pts'" 
+                styleClass="points-chip"
+              ></p-chip>
             </div>
+            
+            <p-tag 
+              *ngIf="achievement.status === 'completed'"
+              value="Completado" 
+              severity="success"
+              icon="pi pi-check"
+            ></p-tag>
+            <p-tag 
+              *ngIf="achievement.status === 'in-progress'"
+              value="En Progreso" 
+              severity="info"
+              icon="pi pi-clock"
+            ></p-tag>
+            <p-tag 
+              *ngIf="achievement.status === 'locked'"
+              value="Bloqueado" 
+              severity="warning"
+              icon="pi pi-lock"
+            ></p-tag>
           </div>
-          <div class="achievement-status">
-            <span *ngIf="achievement.status === 'completed'" class="status-badge completed">✓ Completado</span>
-            <span *ngIf="achievement.status === 'in-progress'" class="status-badge in-progress">En progreso</span>
-            <span *ngIf="achievement.status === 'locked'" class="status-badge locked">🔒 Bloqueado</span>
-          </div>
-        </app-card>
+        </p-card>
       </div>
     </div>
   </div>
