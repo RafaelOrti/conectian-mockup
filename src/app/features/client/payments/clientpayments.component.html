@@ -8,44 +8,46 @@
   ></app-navbar>
   
   <div class="container">
-    <div class="page-header">
+    <div class="page-header d-flex justify-between align-start mb-8">
       <div>
-        <h1>💳 Pagos y Facturación</h1>
-        <p class="subtitle">Gestiona tus métodos de pago y descarga facturas</p>
+        <h1 class="mb-2">💳 Pagos y Facturación</h1>
+        <p class="text-secondary">Gestiona tus métodos de pago y descarga facturas</p>
       </div>
-      <app-button variant="primary" icon="➕">Añadir Método de Pago</app-button>
+      <button class="btn btn-primary">
+        <span class="icon">➕</span> Añadir Método de Pago
+      </button>
     </div>
 
-    <div class="payments-layout">
+    <div class="payments-layout d-flex flex-column gap-10">
       <!-- Payment Methods -->
       <section class="payment-methods-section">
-        <h2>Métodos de Pago</h2>
-        <div class="cards-grid">
-          <app-card class="payment-method-card active">
-            <div class="card-header">
-              <span class="card-brand">VISA</span>
-              <span class="default-badge">Predeterminado</span>
+        <h2 class="text-xl mb-6">Métodos de Pago</h2>
+        <div class="cards-grid d-grid gap-6" style="grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));">
+          <div class="card payment-method-card active d-flex flex-column justify-between p-6 min-h-48 relative" style="border: 1px solid #3b82f6; background: linear-gradient(135deg, rgba(13, 134, 255, 0.1) 0%, rgba(13, 134, 255, 0.05) 100%);">
+            <div class="card-header d-flex justify-between align-start">
+              <span class="card-brand text-xl font-bold italic">VISA</span>
+              <span class="badge badge-primary">Predeterminado</span>
             </div>
-            <div class="card-number">**** **** **** 4242</div>
-            <div class="card-footer">
-              <span class="expiry">Expira 12/28</span>
-              <button class="edit-btn">Editar</button>
+            <div class="card-number text-xl font-mono tracking-wider my-4">**** **** **** 4242</div>
+            <div class="card-footer d-flex justify-between align-center">
+              <span class="text-sm text-secondary">Expira 12/28</span>
+              <button class="btn btn-link p-0 text-blue">Editar</button>
             </div>
-          </app-card>
+          </div>
           
-          <app-card class="payment-method-card">
+          <div class="card payment-method-card d-flex flex-column justify-between p-6 min-h-48" style="background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);">
             <div class="card-header">
-              <span class="card-brand">Mastercard</span>
+              <span class="card-brand text-xl font-bold italic">Mastercard</span>
             </div>
-            <div class="card-number">**** **** **** 8899</div>
-            <div class="card-footer">
-              <span class="expiry">Expira 09/27</span>
-              <button class="edit-btn">Editar</button>
+            <div class="card-number text-xl font-mono tracking-wider my-4">**** **** **** 8899</div>
+            <div class="card-footer d-flex justify-between align-center">
+              <span class="text-sm text-secondary">Expira 09/27</span>
+              <button class="btn btn-link p-0 text-blue">Editar</button>
             </div>
-          </app-card>
+          </div>
 
-          <button class="add-card-btn">
-            <span class="plus-icon">+</span>
+          <button class="add-card-btn d-flex flex-column align-center justify-center gap-3 p-6 rounded-lg cursor-pointer transition-all hover:bg-surface-hover hover:text-blue hover:border-blue" style="min-height: 180px; background: rgba(255,255,255,0.02); border: 2px dashed rgba(255,255,255,0.1); color: #94a3b8;">
+            <span class="plus-icon text-3xl">+</span>
             <span>Añadir nueva tarjeta</span>
           </button>
         </div>
@@ -53,52 +55,52 @@
 
       <!-- Billing History -->
       <section class="billing-history-section">
-        <h2>Historial de Facturación</h2>
-        <app-card class="history-card">
-          <div class="table-filters">
-            <div class="search-box">
-              <span class="search-icon">🔍</span>
-              <input type="text" placeholder="Buscar factura..." class="search-input">
+        <h2 class="text-xl mb-6">Historial de Facturación</h2>
+        <div class="card history-card">
+          <div class="table-filters d-flex justify-between mb-6">
+            <div class="search-box relative" style="width: 300px;">
+              <span class="search-icon absolute left-3 top-50 translate-y-50 text-muted">🔍</span>
+              <input type="text" placeholder="Buscar factura..." class="input p-inputtext pl-10">
             </div>
-            <select class="filter-select">
+            <select class="input p-inputtext w-auto">
               <option value="2025">2025</option>
               <option value="2024">2024</option>
             </select>
           </div>
 
-          <table class="billing-table">
-            <thead>
+          <table class="p-datatable w-full">
+            <thead class="p-datatable-thead">
               <tr>
-                <th>Factura</th>
-                <th>Fecha</th>
-                <th>Concepto</th>
-                <th>Monto</th>
-                <th>Estado</th>
-                <th>Acciones</th>
+                <th class="text-left p-4 text-secondary font-medium border-bottom border-surface-border" style="border-bottom: 1px solid rgba(255,255,255,0.1);">Factura</th>
+                <th class="text-left p-4 text-secondary font-medium border-bottom border-surface-border" style="border-bottom: 1px solid rgba(255,255,255,0.1);">Fecha</th>
+                <th class="text-left p-4 text-secondary font-medium border-bottom border-surface-border" style="border-bottom: 1px solid rgba(255,255,255,0.1);">Concepto</th>
+                <th class="text-left p-4 text-secondary font-medium border-bottom border-surface-border" style="border-bottom: 1px solid rgba(255,255,255,0.1);">Monto</th>
+                <th class="text-left p-4 text-secondary font-medium border-bottom border-surface-border" style="border-bottom: 1px solid rgba(255,255,255,0.1);">Estado</th>
+                <th class="text-left p-4 text-secondary font-medium border-bottom border-surface-border" style="border-bottom: 1px solid rgba(255,255,255,0.1);">Acciones</th>
               </tr>
             </thead>
-            <tbody>
-              <tr *ngFor="let invoice of invoices">
-                <td>
-                  <span class="invoice-id">{{invoice.id}}</span>
+            <tbody class="p-datatable-tbody">
+              <tr *ngFor="let invoice of invoices" class="hover:bg-surface-hover transition-colors">
+                <td class="p-4 border-bottom border-surface-border" style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                  <span class="font-mono text-blue">{{invoice.id}}</span>
                 </td>
-                <td>{{invoice.date}}</td>
-                <td>{{invoice.concept}}</td>
-                <td>{{invoice.amount}}</td>
-                <td>
-                  <span class="status-badge" [class]="invoice.status">
+                <td class="p-4 border-bottom border-surface-border" style="border-bottom: 1px solid rgba(255,255,255,0.05);">{{invoice.date}}</td>
+                <td class="p-4 border-bottom border-surface-border" style="border-bottom: 1px solid rgba(255,255,255,0.05);">{{invoice.concept}}</td>
+                <td class="p-4 border-bottom border-surface-border" style="border-bottom: 1px solid rgba(255,255,255,0.05);">{{invoice.amount}}</td>
+                <td class="p-4 border-bottom border-surface-border" style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                  <span class="badge" [ngClass]="{'badge-success': invoice.status === 'paid', 'badge-warning': invoice.status !== 'paid'}">
                     {{invoice.status === 'paid' ? 'Pagado' : 'Pendiente'}}
                   </span>
                 </td>
-                <td>
-                  <button class="download-btn" title="Descargar PDF">
+                <td class="p-4 border-bottom border-surface-border" style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                  <button class="btn btn-sm btn-secondary d-flex align-center gap-2" title="Descargar PDF">
                     📥 PDF
                   </button>
                 </td>
               </tr>
             </tbody>
           </table>
-        </app-card>
+        </div>
       </section>
     </div>
   </div>

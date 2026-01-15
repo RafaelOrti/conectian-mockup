@@ -28,7 +28,7 @@ export class ProviderNotificationsComponent implements OnInit {
   notifications: Notification[] = [];
   unreadCount: number = 0;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router) { }
 
   ngOnInit(): void {
     this.loadNotifications();
@@ -54,7 +54,7 @@ export class ProviderNotificationsComponent implements OnInit {
         message: 'Carlos Martínez (Repsol) ha respondido en el proyecto "Chatbot para E-commerce"',
         timestamp: 'Hace 30 minutos',
         read: false,
-        actionUrl: '/deal-room/deal-1',
+        actionUrl: '/provider/deal-room/deal-1',
         icon: '💬'
       },
       {
@@ -64,7 +64,7 @@ export class ProviderNotificationsComponent implements OnInit {
         message: 'BBVA ha aceptado tu caso de uso "Sistema de Detección de Fraude". Se ha creado un Deal Room.',
         timestamp: 'Hace 2 horas',
         read: false,
-        actionUrl: '/deal-room/deal-2',
+        actionUrl: '/provider/deal-room/deal-2',
         icon: '✅'
       },
       {
@@ -84,7 +84,7 @@ export class ProviderNotificationsComponent implements OnInit {
         message: 'Repsol ha revisado el documento "Propuesta_Chatbot_E-commerce_v1.pdf"',
         timestamp: 'Ayer',
         read: true,
-        actionUrl: '/deal-room/deal-1',
+        actionUrl: '/provider/deal-room/deal-1',
         icon: '👁️'
       },
       {

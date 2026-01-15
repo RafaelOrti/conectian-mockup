@@ -1,0 +1,203 @@
+<div class="responses-page">
+  <app-navbar 
+    [userRole]="'CLIENT'"
+    [userName]="'Carlos Martínez'"
+    [notificationCount]="3"
+    [messageCount]="2"
+  ></app-navbar>
+
+  <div class="page-container">
+    <!-- Header -->
+    <header class="page-header">
+      <button pButton class="p-button-text back-btn" (click)="goBack()">
+        <i class="pi pi-arrow-left mr-2"></i> Volver a Mis Solicitudes
+      </button>
+    </header>
+
+    <!-- Request Summary -->
+    <section class="request-summary-card">
+      <div class="summary-content">
+        <div class="summary-main">
+          <div class="header-row">
+            <p-tag [value]="request.status" [severity]="request.status === 'Active' ? 'success' : 'danger'" styleClass="text-sm"></p-tag>
+            <span class="text-gray-400 text-sm"><i class="pi pi-clock mr-1"></i> Publicado: {{ request.date }}</span>
+          </div>
+          
+          <h1>{{ request.title }}</h1>
+          <p class="description">{{ request.description }}</p>
+          
+          <div class="meta-grid">
+            <div class="meta-item">
+              <i class="pi pi-wallet"></i>
+              <div class="meta-info">
+                <span class="label">Presupuesto</span>
+                <span class="value">{{ request.budget }}</span>
+              </div>
+            </div>
+            <div class="meta-item">
+              <i class="pi pi-briefcase"></i>
+              <div class="meta-info">
+                <span class="label">Sector</span>
+                <span class="value">{{ request.sector }}</span>
+              </div>
+            </div>
+            <div class="meta-item">
+              <i class="pi pi-code"></i>
+              <div class="meta-info">
+                <span class="label">Requisitos</span>
+                <span class="value">{{ request.requirements.length }} tecnologías</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="summary-stats">
+          <div class="stat-box">
+            <span class="stat-value">{{ request.responses.length }}</span>
+            <span class="stat-label">Respuestas Totales</span>
+          </div>
+          <div class="stat-box highlight">
+            <span class="stat-value">{{ shortlistedCount }}</span>
+            <span class="stat-label">Preseleccionados</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Filters & Controls -->
+    <section class="filters-section">
+      <div class="filter-tabs">
+        <button 
+          class="filter-tab" 
+          [class.active]="statusFilter === 'all'"
+          (click)="statusFilter = 'all'"
+        >
+          Todas
+        </button>
+        <button 
+          class="filter-tab" 
+          [class.active]="statusFilter === 'pending'"
+          (click)="statusFilter = 'pending'"
+        >
+          Pendientes
+        </button>
+        <button 
+          class="filter-tab" 
+          [class.active]="statusFilter === 'shortlisted'"
+          (click)="statusFilter = 'shortlisted'"
+        >
+          Preseleccionados <p-badge [value]="shortlistedCount.toString()" severity="success" styleClass="ml-2"></p-badge>
+        </button>
+      </div>
+
+      <p-dropdown 
+        [options]="sortOptions" 
+        [(ngModel)]="selectedSort" 
+        placeholder="Ordenar por"
+        styleClass="w-full md:w-15rem glass-dropdown"
+      ></p-dropdown>
+    </section>
+
+    <!-- Responses Grid -->
+    <section class="responses-grid" *ngIf="filteredResponses.length > 0; else emptyState">
+      <article 
+        *ngFor="let response of filteredResponses" 
+        class="response-card"
+        [class.shortlisted]="response.status === 'shortlisted'"
+      >
+        <!-- Card Header: Match Score & Status -->
+        <div class="card-header">
+          <div class="match-score">
+            <div class="score-circle" [ngClass]="getScoreClass(response.matchScore)">
+              {{ response.matchScore }}%
+            </div>
+            <span class="score-label">Coincidencia</span>
+          </div>
+          <p-tag [value]="getStatusLabel(response.status)" [severity]="getStatusSeverity(response.status)"></p-tag>
+        </div>
+
+        <!-- Card Body -->
+        <div class="card-body">
+          <!-- Provider Info -->
+          <div class="provider-section">
+            <img [src]="response.provider.logo" [alt]="response.provider.name" class="provider-logo" />
+            <div class="provider-info">
+              <h3>
+                {{ response.provider.name }}
+                <i *ngIf="response.provider.verified" class="pi pi-verified" pTooltip="Verificado" tooltipPosition="top"></i>
+              </h3>
+              <div class="rating">
+                <p-rating [ngModel]="response.provider.rating" [readonly]="true" [cancel]="false" styleClass="text-yellow-400 text-sm"></p-rating>
+              </div>
+              <div class="expertise-tags">
+                <p-tag *ngFor="let skill of response.provider.expertise.slice(0, 2)" [value]="skill" severity="info" styleClass="text-xs"></p-tag>
+                <p-tag *ngIf="response.provider.expertise.length > 2" [value]="'+' + (response.provider.expertise.length - 2)" severity="secondary" styleClass="text-xs"></p-tag>
+              </div>
+            </div>
+          </div>
+
+          <!-- Proposal Preview -->
+          <div class="proposal-section">
+            <h4>{{ response.proposal.title }}</h4>
+            <p>{{ response.proposal.description }}</p>
+            
+            <div class="kpi-grid">
+              <div *ngFor="let kpi of response.kpis" class="kpi">
+                <div class="kpi-icon">{{ kpi.icon }}</div>
+                <div class="kpi-data">
+                  <span class="val">{{ kpi.value }}</span>
+                  <span class="lbl">{{ kpi.label }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Meta Footer -->
+          <div class="meta-footer">
+            <div class="meta-box">
+              <span class="label">Tiempo estimado</span>
+              <span class="value">{{ response.proposal.timeline }}</span>
+            </div>
+            <div class="meta-box budget">
+              <span class="label">Presupuesto</span>
+              <span class="value">{{ response.proposal.budget }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="card-actions">
+          <button pButton label="Ver Propuesta" icon="pi pi-file" class="p-button-outlined p-button-secondary" (click)="viewFullProposal(response)"></button>
+          
+          <button 
+            *ngIf="response.status !== 'shortlisted'" 
+            pButton 
+            label="Preseleccionar" 
+            icon="pi pi-star" 
+            class="p-button-success"
+            (click)="shortlistProvider(response)"
+          ></button>
+          
+          <button 
+            *ngIf="response.status === 'shortlisted'" 
+            pButton 
+            label="Deal Room" 
+            icon="pi pi-comments" 
+            class="p-button-help"
+            (click)="startDealRoom(response)"
+          ></button>
+        </div>
+      </article>
+    </section>
+
+    <!-- Empty State -->
+    <ng-template #emptyState>
+      <div class="empty-state">
+        <i class="pi pi-inbox"></i>
+        <h3>No hay respuestas {{ statusFilter !== 'all' ? 'con este filtro' : 'todavía' }}</h3>
+        <p>Las propuestas de los proveedores aparecerán aquí cuando respondan a tu solicitud.</p>
+        <button pButton label="Limpiar filtros" class="p-button-text mt-3" (click)="statusFilter = 'all'" *ngIf="statusFilter !== 'all'"></button>
+      </div>
+    </ng-template>
+  </div>
+</div>

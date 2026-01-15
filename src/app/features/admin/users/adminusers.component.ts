@@ -3,9 +3,20 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NavbarComponent } from '../../../shared/components/navbar/navbar.component';
-import { CardComponent } from '../../../shared/components/card/card.component';
-import { ButtonComponent } from '../../../shared/components/button/button.component';
-import { BadgeComponent } from '../../../shared/components/badge/badge.component';
+
+// PrimeNG imports
+import { CardModule } from 'primeng/card';
+import { ButtonModule } from 'primeng/button';
+import { TagModule } from 'primeng/tag';
+import { TableModule } from 'primeng/table';
+import { InputTextModule } from 'primeng/inputtext';
+import { DropdownModule } from 'primeng/dropdown';
+import { TabViewModule } from 'primeng/tabview';
+import { BadgeModule } from 'primeng/badge';
+import { TooltipModule } from 'primeng/tooltip';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ToastModule } from 'primeng/toast';
+import { MessageService, ConfirmationService } from 'primeng/api';
 
 interface User {
   id: string;
@@ -27,14 +38,37 @@ interface User {
 @Component({
   selector: 'app-adminusers',
   standalone: true,
-  imports: [CommonModule, FormsModule, NavbarComponent, CardComponent, ButtonComponent, BadgeComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    NavbarComponent,
+    CardModule,
+    ButtonModule,
+    TagModule,
+    TableModule,
+    InputTextModule,
+    DropdownModule,
+    TabViewModule,
+    BadgeModule,
+    TooltipModule,
+    ConfirmDialogModule,
+    ToastModule
+  ],
+  providers: [MessageService, ConfirmationService],
   templateUrl: './adminusers.component.html',
   styleUrls: ['./adminusers.component.scss']
 })
 export class AdminUsersComponent implements OnInit {
-  activeTab: 'ceos' | 'providers' | 'pending' = 'ceos';
+  activeTab: number = 0;
   searchQuery: string = '';
-  selectedStatus: 'all' | 'active' | 'inactive' | 'pending' = 'all';
+  selectedStatus: any = { label: 'Todos', value: 'all' };
+  
+  statusOptions = [
+    { label: 'Todos', value: 'all' },
+    { label: 'Activos', value: 'active' },
+    { label: 'Inactivos', value: 'inactive' },
+    { label: 'Pendientes', value: 'pending' }
+  ];
 
   // CEOs Data
   ceos: User[] = [];
@@ -57,19 +91,26 @@ export class AdminUsersComponent implements OnInit {
     mrr: 9950
   };
 
+  // Pending approvals
+  pendingApprovals: User[] = [];
+
   // Selected user for detail view
   selectedUser: User | null = null;
-  selectedUsers: string[] = [];
+  selectedUsers: User[] = [];
 
-  constructor(private router: Router) { }
+  constructor(
+    private router: Router,
+    private messageService: MessageService,
+    private confirmationService: ConfirmationService
+  ) { }
 
   ngOnInit(): void {
     this.loadCEOs();
     this.loadProviders();
+    this.loadPendingApprovals();
   }
 
   loadCEOs(): void {
-    // TODO: Load from API
     this.ceos = [
       {
         id: '1',
@@ -109,7 +150,6 @@ export class AdminUsersComponent implements OnInit {
   }
 
   loadProviders(): void {
-    // TODO: Load from API
     this.providers = [
       {
         id: '1',
@@ -155,97 +195,111 @@ export class AdminUsersComponent implements OnInit {
     this.filteredProviders = [...this.providers];
   }
 
-  filterUsers(): void {
-    if (this.activeTab === 'ceos') {
-      this.filteredCEOs = this.ceos.filter(user => {
-        const matchesSearch = !this.searchQuery ||
-          user.email.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-          (user.company && user.company.toLowerCase().includes(this.searchQuery.toLowerCase()));
-        const matchesStatus = this.selectedStatus === 'all' ||
-          (this.selectedStatus === 'active' && user.active) ||
-          (this.selectedStatus === 'inactive' && !user.active);
-        return matchesSearch && matchesStatus;
-      });
-    } else {
-      this.filteredProviders = this.providers.filter(user => {
-        const matchesSearch = !this.searchQuery ||
-          user.email.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-          (user.company && user.company.toLowerCase().includes(this.searchQuery.toLowerCase()));
-        const matchesStatus = this.selectedStatus === 'all' ||
-          (this.selectedStatus === 'active' && user.active) ||
-          (this.selectedStatus === 'pending' && user.status === 'pending') ||
-          (this.selectedStatus === 'inactive' && user.status === 'paused');
-        return matchesSearch && matchesStatus;
-      });
-    }
+  loadPendingApprovals(): void {
+    this.pendingApprovals = this.providers.filter(p => p.status === 'pending');
   }
 
-  selectUser(user: User): void {
-    this.selectedUser = user;
-  }
-
-  toggleUserSelection(userId: string): void {
-    const index = this.selectedUsers.indexOf(userId);
-    if (index > -1) {
-      this.selectedUsers.splice(index, 1);
-    } else {
-      this.selectedUsers.push(userId);
-    }
-  }
-
-  bulkAction(action: string): void {
-    console.log('Bulk action:', action, 'on users:', this.selectedUsers);
-    // TODO: Implement bulk actions
+  onGlobalFilter(table: any, event: Event): void {
+    table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
   }
 
   editUser(user: User): void {
-    console.log('Edit user:', user);
-    // TODO: Open edit modal
+    this.messageService.add({ 
+      severity: 'info', 
+      summary: 'Editar Usuario', 
+      detail: `Abriendo editor para ${user.email}` 
+    });
   }
 
   suspendUser(user: User): void {
-    console.log('Suspend user:', user);
-    // TODO: Implement suspend
+    this.confirmationService.confirm({
+      message: `¿Estás seguro de suspender a ${user.email}?`,
+      header: 'Confirmar Suspensión',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.messageService.add({ 
+          severity: 'success', 
+          summary: 'Usuario Suspendido', 
+          detail: `${user.email} ha sido suspendido` 
+        });
+      }
+    });
   }
 
   deleteUser(user: User): void {
-    if (confirm(`¿Estás seguro de eliminar a ${user.email}?`)) {
-      console.log('Delete user:', user);
-      // TODO: Implement delete
-    }
+    this.confirmationService.confirm({
+      message: `¿Estás seguro de eliminar a ${user.email}? Esta acción no se puede deshacer.`,
+      header: 'Confirmar Eliminación',
+      icon: 'pi pi-exclamation-triangle',
+      acceptButtonStyleClass: 'p-button-danger',
+      accept: () => {
+        this.messageService.add({ 
+          severity: 'success', 
+          summary: 'Usuario Eliminado', 
+          detail: `${user.email} ha sido eliminado` 
+        });
+      }
+    });
   }
 
   approveProvider(user: User): void {
-    console.log('Approve provider:', user);
     user.status = 'active';
     user.active = true;
-    // TODO: Call API
+    this.loadPendingApprovals();
+    this.messageService.add({ 
+      severity: 'success', 
+      summary: 'Proveedor Aprobado', 
+      detail: `${user.email} ha sido aprobado` 
+    });
   }
 
   rejectProvider(user: User): void {
-    console.log('Reject provider:', user);
-    // TODO: Implement reject
+    this.confirmationService.confirm({
+      message: `¿Estás seguro de rechazar a ${user.email}?`,
+      header: 'Confirmar Rechazo',
+      icon: 'pi pi-exclamation-triangle',
+      acceptButtonStyleClass: 'p-button-danger',
+      accept: () => {
+        // Remove from pending
+        this.pendingApprovals = this.pendingApprovals.filter(p => p.id !== user.id);
+        this.messageService.add({ 
+          severity: 'info', 
+          summary: 'Proveedor Rechazado', 
+          detail: `${user.email} ha sido rechazado` 
+        });
+      }
+    });
   }
 
   inviteUser(type: 'ceo' | 'provider'): void {
-    console.log('Invite', type);
-    // TODO: Open invite modal
+    this.messageService.add({ 
+      severity: 'info', 
+      summary: 'Invitar Usuario', 
+      detail: `Abriendo formulario para invitar ${type === 'ceo' ? 'CEO' : 'Proveedor'}` 
+    });
   }
 
   exportCSV(): void {
-    console.log('Export CSV');
-    // TODO: Implement CSV export
+    this.messageService.add({ 
+      severity: 'success', 
+      summary: 'Exportar CSV', 
+      detail: 'Generando archivo CSV...' 
+    });
   }
 
-  toggleSelectAll(): void {
-    if (this.areAllSelected()) {
-      this.selectedUsers = [];
-    } else {
-      this.selectedUsers = this.filteredCEOs.map(u => u.id);
-    }
+  getStatusSeverity(status: string): 'success' | 'info' | 'warning' | 'danger' {
+    const map: { [key: string]: 'success' | 'info' | 'warning' | 'danger' } = {
+      'active': 'success',
+      'pending': 'warning',
+      'paused': 'secondary' as 'info',
+      'inactive': 'danger'
+    };
+    return map[status] || 'info';
   }
 
-  areAllSelected(): boolean {
-    return this.selectedUsers.length === this.filteredCEOs.length && this.filteredCEOs.length > 0;
+  getPlanSeverity(plan: string): 'success' | 'info' | 'warning' | 'danger' {
+    if (plan.includes('PRO')) return 'success';
+    if (plan.includes('Base')) return 'info';
+    return 'secondary' as 'info';
   }
 }

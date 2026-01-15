@@ -9,57 +9,57 @@
     <!-- Left Sidebar - Filters -->
     <aside class="filters-sidebar">
       <div class="filters-header">
-        <h3>FILTROS</h3>
+        <div class="filter-icon">
+          <i class="pi pi-filter" style="font-size: 1.2rem; color: white;"></i>
+        </div>
+        <h3>Filtros</h3>
       </div>
       
       <div class="filter-section">
         <label class="filter-label">Sector</label>
         <div class="checkbox-group">
-          <label 
-            *ngFor="let sector of sectors"
-            class="checkbox-option"
-          >
-            <input 
-              type="checkbox"
-              [checked]="selectedSectors.includes(sector)"
-              (change)="toggleFilter(selectedSectors, sector)"
-            />
-            <span>{{ sector }}</span>
-          </label>
+          <div *ngFor="let sector of sectors" class="checkbox-option">
+            <p-checkbox 
+              name="sector" 
+              [value]="sector" 
+              [(ngModel)]="selectedSectors" 
+              (onChange)="filterCompanies()"
+              [label]="sector"
+              styleClass="custom-checkbox"
+            ></p-checkbox>
+          </div>
         </div>
       </div>
 
       <div class="filter-section">
         <label class="filter-label">Tamaño de Empresa</label>
         <div class="checkbox-group">
-          <label 
-            *ngFor="let size of companySizes"
-            class="checkbox-option"
-          >
-            <input 
-              type="checkbox"
-              [checked]="selectedCompanySizes.includes(size.value)"
-              (change)="toggleFilter(selectedCompanySizes, size.value)"
-            />
-            <span>{{ size.label }}</span>
-          </label>
+          <div *ngFor="let size of companySizes" class="checkbox-option">
+            <p-checkbox 
+              name="size" 
+              [value]="size.value" 
+              [(ngModel)]="selectedCompanySizes" 
+              (onChange)="filterCompanies()"
+              [label]="size.label"
+              styleClass="custom-checkbox"
+            ></p-checkbox>
+          </div>
         </div>
       </div>
 
       <div class="filter-section">
         <label class="filter-label">Tecnología Base</label>
         <div class="checkbox-group">
-          <label 
-            *ngFor="let tech of technologies"
-            class="checkbox-option"
-          >
-            <input 
-              type="checkbox"
-              [checked]="selectedTechnologies.includes(tech)"
-              (change)="toggleFilter(selectedTechnologies, tech)"
-            />
-            <span>{{ tech }}</span>
-          </label>
+          <div *ngFor="let tech of technologies" class="checkbox-option">
+            <p-checkbox 
+              name="tech" 
+              [value]="tech" 
+              [(ngModel)]="selectedTechnologies" 
+              (onChange)="filterCompanies()"
+              [label]="tech"
+              styleClass="custom-checkbox"
+            ></p-checkbox>
+          </div>
         </div>
       </div>
 
@@ -67,13 +67,15 @@
         <label class="filter-label">Facturación Anual</label>
         <div class="revenue-range">
           <input 
+            pInputText
             type="number" 
             [(ngModel)]="minRevenue"
             placeholder="Mín"
             class="revenue-input"
           />
-          <span>-</span>
+          <span class="range-separator">—</span>
           <input 
+            pInputText
             type="number" 
             [(ngModel)]="maxRevenue"
             placeholder="Máx"
@@ -129,14 +131,17 @@
             </div>
           </div>
           <div class="search-box">
-            <input 
-              type="text" 
-              [(ngModel)]="searchQuery"
-              (input)="filterCompanies()"
-              placeholder="Buscar empresas..."
-              class="search-input"
-            />
-            <span class="search-icon">🔍</span>
+            <span class="p-input-icon-left w-full">
+              <i class="pi pi-search"></i>
+              <input 
+                pInputText
+                type="text" 
+                [(ngModel)]="searchQuery"
+                (input)="filterCompanies()"
+                placeholder="Buscar empresas..."
+                class="w-full"
+              />
+            </span>
           </div>
         </div>
 
@@ -144,10 +149,16 @@
         <div class="companies-grid">
           <div 
             *ngFor="let company of filteredCompanies"
-            class="company-card"
+            class="company-card h-full"
             (click)="viewCompany(company)"
           >
-            <app-card>
+            <app-card class="h-full flex flex-column">
+              <!-- Company Image -->
+              <div class="company-image">
+                <img [src]="company.image" [alt]="company.name" />
+                <div class="image-overlay"></div>
+              </div>
+              
               <div class="company-header">
                 <div class="company-logo">{{ company.logo }}</div>
                 <div class="company-info">
@@ -163,7 +174,7 @@
                 </div>
               </div>
 
-              <div class="company-details">
+              <div class="company-details flex-grow-1">
                 <div class="detail-row">
                   <span class="detail-label">Innovación:</span>
                   <span 
@@ -210,7 +221,7 @@
                 </div>
               </div>
 
-              <div class="company-footer">
+              <div class="company-footer mt-auto">
                 <app-button 
                   variant="secondary" 
                   (clickEvent)="viewRFPs(company); $event.stopPropagation()"
@@ -294,13 +305,6 @@
             <p class="results-count">{{ useCases.length }} resultados encontrados</p>
           </div>
           <div class="header-actions">
-            <app-button 
-              variant="primary" 
-              (clickEvent)="createNewUseCase()"
-              class="create-case-btn"
-            >
-              ➕ Crear Nuevo Caso
-            </app-button>
             <div class="sort-controls">
               <span>Ordenar por:</span>
               <select class="sort-select">
@@ -309,44 +313,62 @@
                 <option>Mejor valorados</option>
               </select>
             </div>
+            <app-button 
+              variant="primary" 
+              (clickEvent)="createNewUseCase()"
+              class="create-case-btn"
+            >
+              ➕ Crear Nuevo Caso
+            </app-button>
           </div>
         </div>
         
         <div class="companies-grid">
           <div 
             *ngFor="let case of useCases"
-            class="company-card"
+            class="company-card use-case-card-wrapper"
+            (click)="editUseCase(case)"
           >
-            <app-card>
-              <div class="company-header">
-                <div class="company-logo">{{ case.provider.logo }}</div>
-                <div class="company-info">
-                  <h3 class="company-name">{{ case.title }}</h3>
-                  <div class="company-tags">
-                    <span class="company-tag">{{ case.provider.name }}</span>
-                  </div>
+            <app-card class="use-case-card">
+              <!-- Case Image -->
+              <div class="company-image use-case-image">
+                <img [src]="case.image" [alt]="case.title" />
+                <div class="image-overlay"></div>
+                <div class="relevance-badge-container">
+                   <span class="innovation-badge high">Relevancia {{ case.relevanceScore }}%</span>
                 </div>
               </div>
 
-              <div class="company-details">
-                <div class="detail-row">
-                  <span class="detail-label">Relevancia:</span>
-                  <span class="innovation-badge high">{{ case.relevanceScore }}%</span>
-                </div>
-                <div class="detail-row" *ngFor="let kpi of case.kpis">
-                  <span class="detail-label">{{ kpi.label }}:</span>
-                  <span class="detail-value">{{ kpi.value }}</span>
-                </div>
-                <div class="detail-row">
-                  <span class="detail-label">Tags:</span>
-                  <div class="tech-tags">
-                    <span *ngFor="let tag of case.tags" class="tech-tag">{{ tag }}</span>
+              <div class="company-header use-case-header">
+                <div class="provider-info">
+                  <!-- Handle Logo: Check if it's a path or emoji/text -->
+                  <div class="company-logo-sm" *ngIf="isImageLogo(case.provider.logo)">
+                    <img [src]="case.provider.logo" [alt]="case.provider.name" />
                   </div>
+                  <div class="company-logo-text" *ngIf="!isImageLogo(case.provider.logo)">
+                    {{ case.provider.logo }}
+                  </div>
+                  <div class="provider-name">{{ case.provider.name }}</div>
+                  <i class="pi pi-check-circle verified-icon" *ngIf="case.provider.verified" pTooltip="Verificado"></i>
+                </div>
+                <h3 class="use-case-title">{{ case.title }}</h3>
+              </div>
+
+              <div class="company-details use-case-details">
+                <div class="kpis-container">
+                  <div *ngFor="let kpi of case.kpis" class="kpi-item">
+                    <span class="kpi-label">{{ kpi.label }}</span>
+                    <span class="kpi-value">{{ kpi.value }}</span>
+                  </div>
+                </div>
+                
+                <div class="tech-tags">
+                  <span *ngFor="let tag of case.tags" class="tech-tag">{{ tag }}</span>
                 </div>
               </div>
 
-              <div class="company-footer">
-                <app-button variant="primary" style="width: 100%">Ver Detalle</app-button>
+              <div class="company-footer use-case-footer">
+                <app-button variant="primary" style="width: 100%">Editar Caso</app-button>
               </div>
             </app-card>
           </div>

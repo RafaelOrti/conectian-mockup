@@ -2,102 +2,424 @@
   <app-navbar 
     *ngIf="showNavbar"
     [userRole]="'CLIENT'" 
-    [userName]="'Carlos Martínez'"
+    [userName]="profile.fullName"
     [notificationCount]="3"
-    [messageCount]="2"
-    [projectCount]="4"
   ></app-navbar>
   
+  <p-toast></p-toast>
+
   <div class="container">
+    <!-- Page Header -->
     <div class="page-header">
-      <div>
-        <h1>👤 Mi Perfil</h1>
-        <p class="subtitle">Gestiona tu información personal y preferencias</p>
+      <div class="header-left">
+        <div class="header-icon">
+          <i class="pi pi-user"></i>
+        </div>
+        <div class="header-text">
+          <h1>Mi Perfil</h1>
+          <p class="subtitle">Gestiona tu información personal y preferencias</p>
+        </div>
       </div>
-      <app-button variant="primary" icon="💾">Guardar Cambios</app-button>
     </div>
 
     <div class="profile-layout">
-      <!-- Sidebar -->
+      <!-- User Info Card -->
       <aside class="profile-sidebar">
-        <app-card class="user-card">
-          <div class="avatar-section">
-            <div class="avatar-large">CM</div>
-            <button class="change-avatar-btn">📷</button>
-          </div>
-          <h2>Carlos Martínez</h2>
-          <p class="role">Director de Innovación</p>
-          <p class="company">TechSolutions SL</p>
-          
-          <div class="stats-row">
-            <div class="stat">
-              <span class="val">12</span>
-              <span class="lbl">Proyectos</span>
+        <p-card styleClass="user-profile-card">
+          <div class="user-header">
+            <div class="avatar-container">
+              <p-avatar 
+                [label]="profile.avatar" 
+                size="xlarge"
+                shape="circle"
+                styleClass="user-avatar"
+              ></p-avatar>
+              <p-fileUpload
+                mode="basic"
+                accept="image/*"
+                [maxFileSize]="1000000"
+                (onUpload)="onAvatarUpload($event)"
+                [auto]="true"
+                chooseLabel=""
+                [chooseIcon]="'pi pi-camera'"
+                styleClass="avatar-upload-btn"
+              ></p-fileUpload>
             </div>
-            <div class="stat">
-              <span class="val">5</span>
-              <span class="lbl">Reseñas</span>
-            </div>
-          </div>
-        </app-card>
 
-        <nav class="profile-nav">
-          <button class="nav-item active">Información Personal</button>
-          <button class="nav-item">Seguridad</button>
-          <button class="nav-item">Notificaciones</button>
-          <button class="nav-item danger">Cerrar Sesión</button>
-        </nav>
+            <div class="user-info">
+              <h2 class="user-name">{{ profile.fullName }}</h2>
+              <p class="user-role">{{ profile.role }}</p>
+              <p class="user-company">{{ profile.company }}</p>
+            </div>
+
+            <div class="user-stats">
+              <div class="stat-item">
+                <i class="pi pi-briefcase"></i>
+                <div class="stat-content">
+                  <span class="stat-value">{{ profile.projectsCount }}</span>
+                  <span class="stat-label">Proyectos</span>
+                </div>
+              </div>
+              <div class="stat-divider"></div>
+              <div class="stat-item">
+                <i class="pi pi-star-fill"></i>
+                <div class="stat-content">
+                  <span class="stat-value">{{ profile.reviewsCount }}</span>
+                  <span class="stat-label">Reseñas</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </p-card>
+
+        <!-- Quick Actions Card -->
+        <p-card styleClass="quick-actions-card">
+          <div class="card-title">
+            <i class="pi pi-bolt"></i>
+            <h3>Acciones Rápidas</h3>
+          </div>
+          <div class="actions-list">
+            <p-button 
+              label="Ver Proyectos" 
+              icon="pi pi-folder" 
+              styleClass="p-button-outlined w-full action-btn"
+            ></p-button>
+            <p-button 
+              label="Nuevo Proyecto" 
+              icon="pi pi-plus-circle" 
+              styleClass="p-button-outlined w-full action-btn"
+            ></p-button>
+            <p-button 
+              label="Mensajes" 
+              icon="pi pi-comments" 
+              styleClass="p-button-outlined w-full action-btn"
+              badge="3"
+              badgeClass="p-badge-danger"
+            ></p-button>
+          </div>
+        </p-card>
       </aside>
 
       <!-- Main Content -->
       <main class="profile-content">
-        <app-card class="content-card">
-          <h3>Información Personal</h3>
-          <div class="form-grid">
-            <div class="form-group">
-              <label>Nombre Completo</label>
-              <input type="text" value="Carlos Martínez" class="form-input">
-            </div>
-            <div class="form-group">
-              <label>Cargo</label>
-              <input type="text" value="Director de Innovación" class="form-input">
-            </div>
-            <div class="form-group">
-              <label>Email</label>
-              <input type="email" value="carlos.martinez@techsolutions.com" class="form-input">
-            </div>
-            <div class="form-group">
-              <label>Teléfono</label>
-              <input type="tel" value="+34 600 123 456" class="form-input">
-            </div>
-            <div class="form-group full-width">
-              <label>Bio</label>
-              <textarea class="form-textarea" rows="4">Apasionado por la tecnología y la innovación. Buscando soluciones de IA para optimizar procesos empresariales.</textarea>
-            </div>
-          </div>
-        </app-card>
+        <p-card styleClass="content-main-card">
+          <p-tabView [(activeIndex)]="activeTabIndex" styleClass="profile-tabs">
+            <!-- Tab 1: Información Personal -->
+            <p-tabPanel>
+              <ng-template pTemplate="header">
+                <div class="tab-header">
+                  <i class="pi pi-user"></i>
+                  <span>Información Personal</span>
+                </div>
+              </ng-template>
 
-        <app-card class="content-card">
-          <h3>Empresa</h3>
-          <div class="form-grid">
-            <div class="form-group">
-              <label>Nombre de la Empresa</label>
-              <input type="text" value="TechSolutions SL" class="form-input" disabled>
-            </div>
-            <div class="form-group">
-              <label>Sector</label>
-              <input type="text" value="Tecnología" class="form-input" disabled>
-            </div>
-            <div class="form-group">
-              <label>Sitio Web</label>
-              <input type="url" value="https://techsolutions.com" class="form-input">
-            </div>
-            <div class="form-group">
-              <label>Ubicación</label>
-              <input type="text" value="Madrid, España" class="form-input">
-            </div>
-          </div>
-        </app-card>
+              <div class="tab-content">
+                <div class="section-header">
+                  <h3>Datos Personales</h3>
+                  <p>Actualiza tu información de contacto y detalles personales</p>
+                </div>
+
+                <div class="form-grid">
+                  <div class="form-field">
+                    <label for="firstName">Nombre</label>
+                    <input 
+                      id="firstName" 
+                      type="text" 
+                      pInputText 
+                      [(ngModel)]="profile.firstName"
+                      placeholder="Ingresa tu nombre"
+                    />
+                  </div>
+
+                  <div class="form-field">
+                    <label for="lastName">Apellidos</label>
+                    <input 
+                      id="lastName" 
+                      type="text" 
+                      pInputText 
+                      [(ngModel)]="profile.lastName"
+                      placeholder="Ingresa tus apellidos"
+                    />
+                  </div>
+
+                  <div class="form-field">
+                    <label for="role">Cargo</label>
+                    <input 
+                      id="role" 
+                      type="text" 
+                      pInputText 
+                      [(ngModel)]="profile.role"
+                      placeholder="Tu cargo o posición"
+                    />
+                  </div>
+
+                  <div class="form-field">
+                    <label for="email">Email</label>
+                    <div class="p-inputgroup">
+                      <span class="p-inputgroup-addon">
+                        <i class="pi pi-envelope"></i>
+                      </span>
+                      <input 
+                        id="email" 
+                        type="email" 
+                        pInputText 
+                        [(ngModel)]="profile.email"
+                        placeholder="tu@email.com"
+                      />
+                    </div>
+                  </div>
+
+                  <div class="form-field">
+                    <label for="phone">Teléfono</label>
+                    <div class="p-inputgroup">
+                      <span class="p-inputgroup-addon">
+                        <i class="pi pi-phone"></i>
+                      </span>
+                      <input 
+                        id="phone" 
+                        type="tel" 
+                        pInputText 
+                        [(ngModel)]="profile.phone"
+                        placeholder="+34 600 000 000"
+                      />
+                    </div>
+                  </div>
+
+                  <div class="form-field">
+                    <label for="location">Ubicación</label>
+                    <div class="p-inputgroup">
+                      <span class="p-inputgroup-addon">
+                        <i class="pi pi-map-marker"></i>
+                      </span>
+                      <input 
+                        id="location" 
+                        type="text" 
+                        pInputText 
+                        [(ngModel)]="profile.location"
+                        placeholder="Ciudad, País"
+                      />
+                    </div>
+                  </div>
+
+                  <div class="form-field full-width">
+                    <label for="bio">Biografía</label>
+                    <textarea 
+                      id="bio" 
+                      pInputTextarea 
+                      [(ngModel)]="profile.bio"
+                      rows="4"
+                      placeholder="Cuéntanos sobre ti..."
+                    ></textarea>
+                  </div>
+                </div>
+
+                <div class="section-header">
+                  <h3>Información de Empresa</h3>
+                  <p>Datos relacionados con tu organización</p>
+                </div>
+
+                <div class="form-grid">
+                  <div class="form-field">
+                    <label for="company">Nombre de la Empresa</label>
+                    <input 
+                      id="company" 
+                      type="text" 
+                      pInputText 
+                      [(ngModel)]="profile.company"
+                      placeholder="Empresa S.L."
+                    />
+                  </div>
+
+                  <div class="form-field">
+                    <label for="sector">Sector</label>
+                    <input 
+                      id="sector" 
+                      type="text" 
+                      pInputText 
+                      [(ngModel)]="profile.sector"
+                      placeholder="Tecnología, Finanzas..."
+                    />
+                  </div>
+
+                  <div class="form-field full-width">
+                    <label for="website">Sitio Web</label>
+                    <div class="p-inputgroup">
+                      <span class="p-inputgroup-addon">
+                        <i class="pi pi-globe"></i>
+                      </span>
+                      <input 
+                        id="website" 
+                        type="url" 
+                        pInputText 
+                        [(ngModel)]="profile.website"
+                        placeholder="https://tuempresa.com"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-actions">
+                  <p-button 
+                    label="Cancelar" 
+                    icon="pi pi-times" 
+                    styleClass="p-button-outlined p-button-secondary"
+                  ></p-button>
+                  <p-button 
+                    label="Guardar Cambios" 
+                    icon="pi pi-check" 
+                    (onClick)="saveProfile()"
+                  ></p-button>
+                </div>
+              </div>
+            </p-tabPanel>
+
+            <!-- Tab 2: Seguridad -->
+            <p-tabPanel>
+              <ng-template pTemplate="header">
+                <div class="tab-header">
+                  <i class="pi pi-shield"></i>
+                  <span>Seguridad</span>
+                </div>
+              </ng-template>
+
+              <div class="tab-content">
+                <div class="section-header">
+                  <h3>Cambiar Contraseña</h3>
+                  <p>Actualiza tu contraseña para mantener tu cuenta segura</p>
+                </div>
+
+                <div class="security-card">
+                  <div class="form-field">
+                    <label for="currentPassword">Contraseña Actual</label>
+                    <p-password 
+                      id="currentPassword"
+                      [(ngModel)]="currentPassword"
+                      [toggleMask]="true"
+                      [feedback]="false"
+                      placeholder="Ingresa tu contraseña actual"
+                      styleClass="w-full"
+                    ></p-password>
+                  </div>
+
+                  <div class="form-field">
+                    <label for="newPassword">Nueva Contraseña</label>
+                    <p-password 
+                      id="newPassword"
+                      [(ngModel)]="newPassword"
+                      [toggleMask]="true"
+                      placeholder="Ingresa tu nueva contraseña"
+                      styleClass="w-full"
+                    ></p-password>
+                  </div>
+
+                  <div class="form-field">
+                    <label for="confirmPassword">Confirmar Contraseña</label>
+                    <p-password 
+                      id="confirmPassword"
+                      [(ngModel)]="confirmPassword"
+                      [toggleMask]="true"
+                      [feedback]="false"
+                      placeholder="Confirma tu nueva contraseña"
+                      styleClass="w-full"
+                    ></p-password>
+                  </div>
+
+                  <div class="security-tip">
+                    <i class="pi pi-info-circle"></i>
+                    <div class="tip-content">
+                      <strong>Consejo de seguridad</strong>
+                      <p>Usa una contraseña de al menos 8 caracteres con mayúsculas, minúsculas y números.</p>
+                    </div>
+                  </div>
+
+                  <div class="form-actions">
+                    <p-button 
+                      label="Cancelar" 
+                      icon="pi pi-times" 
+                      styleClass="p-button-outlined p-button-secondary"
+                    ></p-button>
+                    <p-button 
+                      label="Actualizar Contraseña" 
+                      icon="pi pi-lock" 
+                      (onClick)="changePassword()"
+                    ></p-button>
+                  </div>
+                </div>
+              </div>
+            </p-tabPanel>
+
+            <!-- Tab 3: Notificaciones -->
+            <p-tabPanel>
+              <ng-template pTemplate="header">
+                <div class="tab-header">
+                  <i class="pi pi-bell"></i>
+                  <span>Notificaciones</span>
+                </div>
+              </ng-template>
+
+              <div class="tab-content">
+                <div class="section-header">
+                  <h3>Preferencias de Notificaciones</h3>
+                  <p>Elige cómo y cuándo quieres recibir notificaciones</p>
+                </div>
+
+                <div class="notifications-list">
+                  <div class="notification-item">
+                    <div class="notification-info">
+                      <i class="pi pi-envelope"></i>
+                      <div class="notification-details">
+                        <h4>Notificaciones por Email</h4>
+                        <p>Recibe actualizaciones importantes en tu correo electrónico</p>
+                      </div>
+                    </div>
+                    <p-inputSwitch [(ngModel)]="emailNotifications"></p-inputSwitch>
+                  </div>
+
+                  <div class="notification-item">
+                    <div class="notification-info">
+                      <i class="pi pi-mobile"></i>
+                      <div class="notification-details">
+                        <h4>Notificaciones Push</h4>
+                        <p>Alertas instantáneas en tiempo real</p>
+                      </div>
+                    </div>
+                    <p-inputSwitch [(ngModel)]="pushNotifications"></p-inputSwitch>
+                  </div>
+
+                  <div class="notification-item">
+                    <div class="notification-info">
+                      <i class="pi pi-chart-bar"></i>
+                      <div class="notification-details">
+                        <h4>Reporte Semanal</h4>
+                        <p>Resumen de tu actividad cada semana</p>
+                      </div>
+                    </div>
+                    <p-inputSwitch [(ngModel)]="weeklyReport"></p-inputSwitch>
+                  </div>
+
+                  <div class="notification-item">
+                    <div class="notification-info">
+                      <i class="pi pi-megaphone"></i>
+                      <div class="notification-details">
+                        <h4>Emails de Marketing</h4>
+                        <p>Novedades, promociones y consejos</p>
+                      </div>
+                    </div>
+                    <p-inputSwitch [(ngModel)]="marketingEmails"></p-inputSwitch>
+                  </div>
+                </div>
+
+                <div class="form-actions">
+                  <p-button 
+                    label="Guardar Preferencias" 
+                    icon="pi pi-check" 
+                    (onClick)="saveNotificationSettings()"
+                  ></p-button>
+                </div>
+              </div>
+            </p-tabPanel>
+          </p-tabView>
+        </p-card>
       </main>
     </div>
   </div>

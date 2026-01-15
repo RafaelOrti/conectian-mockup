@@ -1,9 +1,17 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { CardComponent } from '../../../shared/components/card/card.component';
-import { ButtonComponent } from '../../../shared/components/button/button.component';
+import { StepsModule } from 'primeng/steps';
+import { CardModule } from 'primeng/card';
+import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
+import { PasswordModule } from 'primeng/password';
+import { DividerModule } from 'primeng/divider';
+import { CheckboxModule } from 'primeng/checkbox';
+import { MenuItem } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
 
 interface RegistrationData {
   accountType: 'client' | 'provider' | null;
@@ -26,13 +34,25 @@ interface RegistrationData {
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [CommonModule, FormsModule, CardComponent, ButtonComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    StepsModule,
+    CardModule,
+    ButtonModule,
+    InputTextModule,
+    PasswordModule,
+    DividerModule,
+    CheckboxModule,
+    ToastModule
+  ],
+  providers: [MessageService],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss']
 })
-export class RegisterComponent {
-  currentStep: number = 1;
-  totalSteps: number = 5;
+export class RegisterComponent implements OnInit {
+  items: MenuItem[] = [];
+  activeIndex: number = 0;
   loading: boolean = false;
 
   registrationData: RegistrationData = {
@@ -83,21 +103,48 @@ export class RegisterComponent {
 
   constructor(private router: Router) { }
 
+  ngOnInit() {
+    this.items = [
+      { label: 'Tipo de Cuenta', icon: 'pi pi-user' },
+      { label: 'Datos Básicos', icon: 'pi pi-id-card' },
+      { label: 'Empresa', icon: 'pi pi-building' },
+      { label: 'Confirmación', icon: 'pi pi-check' },
+      { label: 'Preferencias', icon: 'pi pi-cog' }
+    ];
+  }
+
   selectAccountType(type: 'client' | 'provider'): void {
     this.registrationData.accountType = type;
     this.nextStep();
   }
 
   nextStep(): void {
-    if (this.currentStep < this.totalSteps) {
-      this.currentStep++;
+    // Validar Step 1 antes de avanzar
+    if (this.activeIndex === 1 && !this.isStep1Valid()) {
+      return;
+    }
+    
+    if (this.activeIndex < this.items.length - 1) {
+      this.activeIndex++;
     }
   }
 
   previousStep(): void {
-    if (this.currentStep > 1) {
-      this.currentStep--;
+    if (this.activeIndex > 0) {
+      this.activeIndex--;
     }
+  }
+
+  isStep1Valid(): boolean {
+    const email = this.registrationData.email?.trim() || '';
+    const password = this.registrationData.password?.trim() || '';
+    
+    // Validar formato de email básico
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const isValidEmail = emailRegex.test(email);
+    const isValidPassword = password.length >= 6; // Mínimo 6 caracteres
+    
+    return isValidEmail && isValidPassword;
   }
 
   // Step 3: Autocomplete company data (mock)
@@ -150,6 +197,6 @@ export class RegisterComponent {
   }
 
   get progressPercentage(): number {
-    return (this.currentStep / this.totalSteps) * 100;
+    return ((this.activeIndex + 1) / this.items.length) * 100;
   }
 }

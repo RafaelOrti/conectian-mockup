@@ -1,367 +1,275 @@
 @import '../../../../styles/variables';
 
 .register-page {
-  position: relative;
   min-height: 100vh;
-  background: $bg-dark;
-  overflow: hidden;
-}
-
-.register-background {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #0f172a;
   background-image: 
-    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-  background-size: 40px 40px;
-  pointer-events: none;
+    radial-gradient(at 0% 0%, rgba(56, 189, 248, 0.1) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(124, 58, 237, 0.1) 0px, transparent 50%);
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+
+  .register-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+      linear-gradient(rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.9)),
+      url('/assets/images/login-hero.png'); // Fallback or use a nice pattern
+    background-size: cover;
+    background-position: center;
+    z-index: 0;
+  }
 }
 
 .register-container {
   position: relative;
-  display: flex;
-  min-height: 100vh;
+  z-index: 1;
+  width: 100%;
+  max-width: 1000px;
 }
 
-/* Steps Sidebar */
-.steps-sidebar {
-  width: 320px;
-  background: $bg-dark-lighter;
-  border-right: 1px solid rgba(255, 255, 255, 0.1);
-  padding: $spacing-8;
+.glass-card {
+  background: rgba(30, 41, 59, 0.7);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1.5rem;
+  padding: 3rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
   
-  .logo-section {
-    text-align: center;
-    margin-bottom: $spacing-12;
-    
-    .logo-icon {
-      font-size: 3rem;
-      display: block;
-      margin-bottom: $spacing-4;
-    }
-    
-    h2 {
-      font-size: $font-size-2xl;
-      font-weight: $font-weight-extrabold;
-      background: $ai-gradient;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      margin: 0;
-    }
-  }
-  
-  .steps-list {
-    .step-item {
-      display: flex;
-      align-items: flex-start;
-      gap: $spacing-4;
-      padding: $spacing-4;
-      margin-bottom: $spacing-4;
-      border-radius: $border-radius-base;
-      transition: all $transition-base;
-      
-      .step-number {
-        width: 40px;
-        height: 40px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: $border-radius-full;
-        background: rgba(255, 255, 255, 0.05);
-        color: $text-muted;
-        font-weight: $font-weight-bold;
-        flex-shrink: 0;
-        transition: all $transition-base;
-      }
-      
-      .step-info {
-        flex: 1;
-        
-        .step-title {
-          display: block;
-          font-size: $font-size-base;
-          font-weight: $font-weight-medium;
-          color: $text-secondary;
-          margin-bottom: $spacing-1;
-        }
-        
-        .step-badge {
-          display: inline-block;
-          font-size: $font-size-xs;
-          color: $ai-purple;
-          background: rgba(107, 92, 240, 0.1);
-          padding: $spacing-1 $spacing-2;
-          border-radius: $border-radius-sm;
-        }
-      }
-      
-      &.active {
-        background: rgba(13, 134, 255, 0.1);
-        
-        .step-number {
-          background: $ai-gradient;
-          color: white;
-          box-shadow: $shadow-glow-blue;
-        }
-        
-        .step-title {
-          color: $primary-blue;
-          font-weight: $font-weight-semibold;
-        }
-      }
-      
-      &.completed {
-        .step-number {
-          background: rgba(24, 185, 129, 0.2);
-          color: $success-green;
-          &::after {
-            content: '✓';
-          }
-        }
-      }
-    }
+  @media (max-width: 768px) {
+    padding: 1.5rem;
   }
 }
 
-/* Main Content */
-.register-main {
-  flex: 1;
-  padding: $spacing-8;
+// PrimeNG Steps Customization
+::ng-deep {
+  .custom-steps {
+    .p-steps-item {
+      .p-menuitem-link {
+        background: transparent !important;
+        
+        .p-steps-number {
+          background: rgba(255, 255, 255, 0.1);
+          color: $text-muted;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          font-size: 1rem;
+          width: 2.5rem;
+          height: 2.5rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 50%;
+        }
+
+        .p-menuitem-icon {
+            font-size: 1.5rem;
+            color: $text-muted;
+            margin-bottom: 0.5rem;
+        }
+        
+        .p-steps-title {
+          color: $text-muted;
+          margin-top: 0.5rem;
+        }
+      }
+      
+      &.p-highlight .p-steps-number {
+        background: $primary-blue;
+        color: white;
+        border-color: $primary-blue;
+        box-shadow: 0 0 15px rgba($primary-blue, 0.4);
+      }
+
+      &.p-highlight .p-menuitem-icon {
+        color: $primary-blue;
+        text-shadow: 0 0 10px rgba($primary-blue, 0.5);
+      }
+      
+      &.p-highlight .p-steps-title {
+        color: white;
+        font-weight: 600;
+      }
+    }
+    
+    // Line between steps
+    &:before {
+      border-top-color: rgba(255, 255, 255, 0.1);
+    }
+  }
+  
+  .p-inputtext, .p-password-input {
+    background: rgba(0, 0, 0, 0.2) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: white !important;
+    border-radius: 0.5rem;
+    padding: 0.75rem 1rem;
+    
+    &:focus {
+      border-color: $primary-blue !important;
+      box-shadow: 0 0 0 2px rgba($primary-blue, 0.2) !important;
+    }
+  }
+  
+  .p-button {
+    border-radius: 0.5rem;
+  }
+}
+
+// Account Selection Cards
+.account-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.account-selection-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 1rem;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
   
-  .progress-bar-container {
-    width: 100%;
-    max-width: 700px;
-    height: 6px;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: $border-radius-full;
-    margin-bottom: $spacing-8;
-    overflow: hidden;
+  &:hover {
+    transform: translateY(-5px);
+    border-color: $primary-blue;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
     
-    .progress-bar {
-      height: 100%;
-      background: $ai-gradient;
-      transition: width $transition-slow;
-      box-shadow: $shadow-glow-blue;
+    .card-image .overlay {
+      background: rgba(30, 41, 59, 0.3);
+    }
+    
+    .icon-wrapper {
+      transform: scale(1.1) rotate(5deg);
+      background: $primary-blue;
+      color: white;
     }
   }
   
-  app-card {
-    width: 100%;
-    max-width: 700px;
-  }
-}
-
-/* Step Content */
-.step-content {
-  min-height: 400px;
-  
-  h1 {
-    font-size: $font-size-3xl;
-    font-weight: $font-weight-bold;
-    color: $text-primary;
-    margin-bottom: $spacing-2;
-  }
-  
-  .text-secondary {
-    font-size: $font-size-lg;
-    margin-bottom: $spacing-8;
-  }
-}
-
-/* Account Types */
-.account-types {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: $spacing-6;
-  
-  .account-card {
-    @include glassmorphism;
-    padding: $spacing-8;
-    border-radius: $border-radius-lg;
-    text-align: center;
-    cursor: pointer;
-    transition: all $transition-base;
-    
-    .account-icon {
-      font-size: 4rem;
-      margin-bottom: $spacing-4;
-    }
-    
-    h3 {
-      font-size: $font-size-xl;
-      margin-bottom: $spacing-3;
-    }
-    
-    p {
-      font-size: $font-size-sm;
-      color: $text-secondary;
-      margin-bottom: $spacing-6;
-    }
-    
-    &:hover {
-      border-color: $primary-blue;
-      transform: translateY(-4px);
-      box-shadow: $shadow-lg;
-    }
-  }
-}
-
-/* Register Form */
-.register-form {
-  .form-group {
-    margin-bottom: $spacing-6;
-    
-    label {
-      display: block;
-      font-size: $font-size-sm;
-      font-weight: $font-weight-medium;
-      color: $text-secondary;
-      margin-bottom: $spacing-2;
-    }
-  }
-  
-  .form-actions {
-    display: flex;
-    justify-content: space-between;
-    gap: $spacing-4;
-    margin-top: $spacing-8;
-  }
-}
-
-/* Company Preview */
-.company-preview {
-  margin-top: $spacing-6;
-  padding: $spacing-6;
-  background: rgba(24, 185, 129, 0.05);
-  border: 1px solid $success-green;
-  border-radius: $border-radius-base;
-  
-  h3 {
-    font-size: $font-size-lg;
-    color: $success-green;
-    margin-bottom: $spacing-4;
-  }
-  
-  .company-info {
+  .card-image {
+    height: 200px;
+    background-size: cover;
+    background-position: center;
+    position: relative;
     display: flex;
     align-items: center;
-    gap: $spacing-4;
+    justify-content: center;
     
-    .company-logo {
-      font-size: 3rem;
+    .overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(30, 41, 59, 0.6);
+      transition: all 0.3s;
+    }
+    
+    .icon-wrapper {
+      position: relative;
+      z-index: 2;
       width: 60px;
       height: 60px;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(5px);
+      border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: $border-radius-base;
-      flex-shrink: 0;
-    }
-    
-    h4 {
-      font-size: $font-size-xl;
-      margin-bottom: $spacing-2;
+      font-size: 2rem;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: all 0.3s;
     }
   }
-}
-
-/* Confirmation Summary */
-.confirmation-summary {
-  padding: $spacing-6;
-  background: rgba(255, 255, 255, 0.03);
-  border-radius: $border-radius-base;
-  margin-bottom: $spacing-6;
   
-  .summary-item {
+  .card-content {
+    padding: 1.5rem;
+    flex: 1;
     display: flex;
-    justify-content: space-between;
-    padding: $spacing-4 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    
-    &:last-child {
-      border-bottom: none;
-    }
-    
-    .summary-label {
-      font-size: $font-size-base;
-      color: $text-secondary;
-    }
-    
-    .summary-value {
-      font-size: $font-size-base;
-      font-weight: $font-weight-semibold;
-      color: $text-primary;
-    }
-  }
-}
-
-/* Challenge Grid */
-.challenge-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: $spacing-3;
-  margin-bottom: $spacing-8;
-  
-  .challenge-chip {
-    padding: $spacing-4;
-    font-size: $font-size-base;
-    font-weight: $font-weight-medium;
-    color: $text-secondary;
-    background: rgba(255, 255, 255, 0.05);
-    border: 2px solid rgba(255, 255, 255, 0.1);
-    border-radius: $border-radius-base;
-    cursor: pointer;
-    transition: all $transition-base;
-    text-align: center;
-    
-    &:hover {
-      background: rgba(255, 255, 255, 0.08);
-      border-color: $primary-blue;
-    }
-    
-    &.selected {
-      background: rgba(13, 134, 255, 0.15);
-      border-color: $primary-blue;
-      color: $primary-blue;
-      box-shadow: $shadow-glow-blue;
-    }
-  }
-}
-
-/* Responsive */
-@media (max-width: $breakpoint-lg) {
-  .register-container {
     flex-direction: column;
-  }
-  
-  .steps-sidebar {
-    width: 100%;
-    border-right: none;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    padding: $spacing-6;
     
-    .steps-list {
-      display: flex;
-      overflow-x: auto;
-      gap: $spacing-2;
-      
-      .step-item {
-        flex-direction: column;
-        align-items: center;
-        min-width: 120px;
-      }
+    h3 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin: 0 0 0.5rem 0;
+      color: white;
+    }
+    
+    p {
+      color: $text-secondary;
+      font-size: 0.9rem;
+      line-height: 1.5;
+      margin-bottom: 1.5rem;
+      flex: 1;
     }
   }
+}
+
+// Preferences Grid
+.preferences-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.preference-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   
-  .account-types {
-    grid-template-columns: 1fr;
+  &:hover {
+    background: rgba(255, 255, 255, 0.08);
+  }
+  
+  &.selected {
+    background: rgba($primary-blue, 0.2);
+    border-color: $primary-blue;
+    
+    span { color: $primary-blue; }
   }
 }
+
+// Animations
+.fade-in {
+  animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+// Utilities
+.text-center { text-align: center; }
+.mb-2 { margin-bottom: 0.5rem; }
+.mb-4 { margin-bottom: 1rem; }
+.mb-6 { margin-bottom: 1.5rem; }
+.mt-2 { margin-top: 0.5rem; }
+.mt-4 { margin-top: 1rem; }
+.text-3xl { font-size: 1.875rem; }
+.text-2xl { font-size: 1.5rem; }
+.text-4xl { font-size: 2.25rem; }
+.font-bold { font-weight: 700; }
+.text-white { color: white; }
+.text-gray-300 { color: #cbd5e1; }
+.text-gray-400 { color: #94a3b8; }
+.w-full { width: 100%; }
+.block { display: block; }
+.flex { display: flex; }
+.justify-content-between { justify-content: space-between; }
+.items-center { align-items: center; }
+.gap-4 { gap: 1rem; }

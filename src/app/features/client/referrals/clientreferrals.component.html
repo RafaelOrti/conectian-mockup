@@ -1,107 +1,194 @@
-<div class="client-referrals-page">
+<div class="referrals-page">
+  <p-toast></p-toast>
+  
   <app-navbar 
-    [userRole]="'CLIENT'" 
-    [userName]="'Carlos Martínez'"
+    userRole="CLIENT"
+    userName="Carlos Martínez"
     [notificationCount]="3"
     [messageCount]="2"
-    [projectCount]="4"
+    [projectCount]="1"
   ></app-navbar>
-  
+
   <div class="container">
-    <div class="page-header">
+    <!-- Page Header -->
+    <div class="page-header mb-4">
       <div>
-        <h1>🌟 Referidos y Networking</h1>
-        <p class="subtitle">Invita a otros y gana recompensas exclusivas</p>
+        <h1 class="page-title">
+          <i class="pi pi-users mr-2"></i>
+          Referidos y Networking
+        </h1>
+        <p class="page-subtitle">Invita a otros y gana recompensas exclusivas</p>
       </div>
-      <app-button variant="primary" icon="✉️">Invitar Contacto</app-button>
+      <p-button 
+        label="Invitar Contacto" 
+        icon="pi pi-envelope" 
+        (click)="inviteContact()"
+      ></p-button>
     </div>
 
-    <div class="referrals-layout">
-      <!-- Stats Cards -->
-      <div class="stats-grid">
-        <app-card class="stat-card">
-          <div class="stat-icon invites">📨</div>
-          <div class="stat-info">
-            <span class="stat-value">12</span>
-            <span class="stat-label">Invitaciones Enviadas</span>
+    <!-- Stats Cards -->
+    <div class="grid mb-4">
+      <div class="col-12 md:col-4">
+        <p-card styleClass="stat-card">
+          <div class="stat-content">
+            <div class="stat-icon invites">
+              <i class="pi pi-send"></i>
+            </div>
+            <div class="stat-details">
+              <div class="stat-value">{{stats.invitesSent}}</div>
+              <div class="stat-label">Invitaciones Enviadas</div>
+            </div>
           </div>
-        </app-card>
-        <app-card class="stat-card">
-          <div class="stat-icon accepted">✅</div>
-          <div class="stat-info">
-            <span class="stat-value">5</span>
-            <span class="stat-label">Aceptadas</span>
+        </p-card>
+      </div>
+      <div class="col-12 md:col-4">
+        <p-card styleClass="stat-card">
+          <div class="stat-content">
+            <div class="stat-icon accepted">
+              <i class="pi pi-check-circle"></i>
+            </div>
+            <div class="stat-details">
+              <div class="stat-value">{{stats.accepted}}</div>
+              <div class="stat-label">Aceptadas</div>
+            </div>
           </div>
-        </app-card>
-        <app-card class="stat-card">
-          <div class="stat-icon rewards">🎁</div>
-          <div class="stat-info">
-            <span class="stat-value">€250</span>
-            <span class="stat-label">Crédito Ganado</span>
+        </p-card>
+      </div>
+      <div class="col-12 md:col-4">
+        <p-card styleClass="stat-card">
+          <div class="stat-content">
+            <div class="stat-icon credits">
+              <i class="pi pi-gift"></i>
+            </div>
+            <div class="stat-details">
+              <div class="stat-value">€{{stats.creditsEarned}}</div>
+              <div class="stat-label">Crédito Ganado</div>
+            </div>
           </div>
-        </app-card>
+        </p-card>
+      </div>
+    </div>
+
+    <!-- Referral Link Card -->
+    <p-card styleClass="referral-link-card mb-4">
+      <ng-template pTemplate="header">
+        <div class="card-header-custom">
+          <h3>
+            <i class="pi pi-link mr-2"></i>
+            Tu enlace único de referido
+          </h3>
+        </div>
+      </ng-template>
+
+      <div class="referral-link-content">
+        <p class="mb-3">
+          Comparte este enlace con tus contactos. Ganarás €50 por cada empresa que se registre y complete su perfil.
+        </p>
+        
+        <div class="link-box">
+          <input 
+            type="text" 
+            pInputText 
+            [value]="referralLink" 
+            readonly 
+            class="link-input flex-1"
+          />
+          <p-button 
+            label="Copiar" 
+            icon="pi pi-copy" 
+            (click)="copyLink()"
+          ></p-button>
+        </div>
+
+        <div class="handshake-emoji">🤝</div>
       </div>
 
-      <!-- Referral Link Section -->
-      <app-card class="referral-link-card">
-        <div class="link-content">
-          <div class="link-info">
-            <h3>Tu enlace único de referido</h3>
-            <p>Comparte este enlace con tus contactos. Ganarás €50 por cada empresa que se registre y complete su perfil.</p>
-          </div>
-          <div class="link-box">
-            <input type="text" value="https://conectian.com/ref/carlos-m-8291" readonly>
-            <button class="copy-btn">Copiar</button>
-          </div>
-          <div class="social-share">
-            <span>Compartir en:</span>
-            <button class="social-btn linkedin">LinkedIn</button>
-            <button class="social-btn twitter">Twitter</button>
-            <button class="social-btn email">Email</button>
-          </div>
+      <ng-template pTemplate="footer">
+        <div class="share-options">
+          <span class="share-label">Compartir en:</span>
+          <p-button 
+            label="LinkedIn" 
+            icon="pi pi-linkedin" 
+            styleClass="p-button-outlined"
+            (click)="shareOnLinkedIn()"
+          ></p-button>
+          <p-button 
+            label="Twitter" 
+            icon="pi pi-twitter" 
+            styleClass="p-button-outlined"
+            (click)="shareOnTwitter()"
+          ></p-button>
+          <p-button 
+            label="Email" 
+            icon="pi pi-envelope" 
+            styleClass="p-button-outlined"
+            (click)="shareViaEmail()"
+          ></p-button>
         </div>
-        <div class="link-image">
-          <!-- Illustration placeholder -->
-          <div class="illustration">🤝</div>
-        </div>
-      </app-card>
+      </ng-template>
+    </p-card>
 
-      <!-- Referrals List -->
-      <app-card class="referrals-list-card">
-        <h3>Historial de Invitaciones</h3>
-        <table class="referrals-table">
-          <thead>
-            <tr>
-              <th>Contacto</th>
-              <th>Empresa</th>
-              <th>Fecha</th>
-              <th>Estado</th>
-              <th>Recompensa</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let referral of referrals">
-              <td>
-                <div class="user-cell">
-                  <div class="avatar">{{referral.initials}}</div>
-                  <span>{{referral.name}}</span>
-                </div>
-              </td>
-              <td>{{referral.company}}</td>
-              <td>{{referral.date}}</td>
-              <td>
-                <span class="status-badge" [class]="referral.status">
-                  {{referral.status === 'completed' ? 'Completado' : referral.status === 'pending' ? 'Pendiente' : 'Registrado'}}
-                </span>
-              </td>
-              <td>
-                <span class="reward-text" *ngIf="referral.reward">{{referral.reward}}</span>
-                <span class="no-reward" *ngIf="!referral.reward">-</span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </app-card>
-    </div>
+    <!-- Referrals History -->
+    <p-card>
+      <ng-template pTemplate="header">
+        <div class="card-header-custom">
+          <h3>
+            <i class="pi pi-history mr-2"></i>
+            Historial de Invitaciones
+          </h3>
+        </div>
+      </ng-template>
+
+      <p-table [value]="referrals" styleClass="p-datatable-gridlines" [paginator]="true" [rows]="10">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>CONTACTO</th>
+            <th>EMPRESA</th>
+            <th>FECHA</th>
+            <th>ESTADO</th>
+            <th>RECOMPENSA</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-referral>
+          <tr>
+            <td>
+              <div class="flex align-items-center gap-2">
+                <p-avatar 
+                  [label]="referral.initials" 
+                  shape="circle"
+                  [style]="{'background-color': '#0d86ff', 'color': '#ffffff'}"
+                ></p-avatar>
+                <span class="font-bold">{{ referral.name }}</span>
+              </div>
+            </td>
+            <td>{{ referral.company }}</td>
+            <td>{{ referral.date }}</td>
+            <td>
+              <p-tag 
+                [value]="getStatusLabel(referral.status)" 
+                [severity]="getStatusSeverity(referral.status)"
+              ></p-tag>
+            </td>
+            <td>
+              <span *ngIf="referral.reward" class="reward-badge">
+                <i class="pi pi-euro mr-1"></i>
+                {{ referral.reward }}
+              </span>
+              <span *ngIf="!referral.reward" class="text-gray-400">-</span>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="5" class="text-center py-5">
+              <div class="flex flex-column align-items-center gap-3">
+                <i class="pi pi-inbox text-4xl text-gray-400"></i>
+                <span class="text-gray-400">No hay invitaciones todavía</span>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </p-card>
   </div>
 </div>

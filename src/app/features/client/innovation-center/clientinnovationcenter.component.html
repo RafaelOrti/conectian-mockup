@@ -14,50 +14,53 @@
         <h1>💡 Centro de Innovación</h1>
         <p class="subtitle">Gestiona y monitorea tus iniciativas de transformación digital</p>
       </div>
-      <app-button variant="primary" icon="🚀">Nueva Iniciativa</app-button>
+      <p-button label="Nueva Iniciativa" icon="pi pi-rocket" styleClass="p-button-primary"></p-button>
     </div>
 
     <!-- KPI Cards -->
     <div class="kpi-grid">
-      <app-card class="kpi-card">
+      <div class="kpi-card">
         <div class="kpi-icon active">⚡</div>
         <div class="kpi-content">
           <span class="kpi-value">8</span>
           <span class="kpi-label">Pilotos Activos</span>
         </div>
-      </app-card>
-      <app-card class="kpi-card">
+      </div>
+      <div class="kpi-card">
         <div class="kpi-icon success">✅</div>
         <div class="kpi-content">
           <span class="kpi-value">12</span>
           <span class="kpi-label">Implementados</span>
         </div>
-      </app-card>
-      <app-card class="kpi-card">
+      </div>
+      <div class="kpi-card">
         <div class="kpi-icon roi">📈</div>
         <div class="kpi-content">
           <span class="kpi-value">145%</span>
           <span class="kpi-label">ROI Promedio</span>
         </div>
-      </app-card>
-      <app-card class="kpi-card">
+      </div>
+      <div class="kpi-card">
         <div class="kpi-icon investment">💰</div>
         <div class="kpi-content">
           <span class="kpi-value">€450k</span>
           <span class="kpi-label">Inversión Total</span>
         </div>
-      </app-card>
+      </div>
     </div>
 
     <!-- Active Initiatives -->
     <section class="initiatives-section">
       <h2>Iniciativas en Curso</h2>
       <div class="initiatives-grid">
-        <app-card class="initiative-card" *ngFor="let item of initiatives">
-          <div class="card-header">
-            <span class="category-badge">{{item.category}}</span>
-            <span class="status-dot" [class]="item.status"></span>
-          </div>
+        <p-card *ngFor="let item of initiatives" styleClass="initiative-card h-full">
+          <ng-template pTemplate="header">
+            <div class="card-header-content">
+              <p-tag [value]="item.category" severity="info"></p-tag>
+              <span class="status-dot" [class]="item.status"></span>
+            </div>
+          </ng-template>
+          
           <h3>{{item.title}}</h3>
           <p class="description">{{item.description}}</p>
           
@@ -66,25 +69,25 @@
               <span>Progreso</span>
               <span>{{item.progress}}%</span>
             </div>
-            <div class="progress-bar">
-              <div class="fill" [style.width.%]="item.progress"></div>
-            </div>
+            <p-progressBar [value]="item.progress" [showValue]="false" styleClass="h-2"></p-progressBar>
           </div>
 
-          <div class="card-footer">
-            <div class="partners">
-              <span class="label">Partner:</span>
-              <span class="partner-name">{{item.partner}}</span>
+          <ng-template pTemplate="footer">
+            <div class="card-footer-content">
+              <div class="partners">
+                <span class="label">Partner:</span>
+                <span class="partner-name">{{item.partner}}</span>
+              </div>
+              <p-button label="Ver Detalles" icon="pi pi-arrow-right" iconPos="right" styleClass="p-button-text p-button-sm"></p-button>
             </div>
-            <button class="details-btn">Ver Detalles →</button>
-          </div>
-        </app-card>
+          </ng-template>
+        </p-card>
       </div>
     </section>
 
     <!-- Innovation Radar -->
     <section class="radar-section">
-      <app-card>
+      <div class="radar-card">
         <div class="radar-header">
           <h2>Radar de Tecnologías</h2>
           <p>Tecnologías emergentes relevantes para tu sector</p>
@@ -115,7 +118,7 @@
             </div>
           </div>
         </div>
-      </app-card>
+      </div>
     </section>
   </div>
 </div>

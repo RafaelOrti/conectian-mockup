@@ -1,208 +1,270 @@
 <div class="admin-dashboard">
-  <!-- Professional Navbar -->
   <app-navbar 
-    [userRole]="'ADMIN'" 
-    [userName]="'Admin User'"
-    [notificationCount]="5"
+    userRole="ADMIN"
+    userName="Admin User"
+    [notificationCount]="3"
   ></app-navbar>
-  
-  <div class="dashboard-layout">
-    <!-- Main Content -->
-    <main class="main-content">
-      <div class="page-header">
-        <div>
-          <h1>Dashboard</h1>
-          <p class="subtitle">Panel de control administrativo</p>
-        </div>
-        <div class="header-actions">
-          <select class="period-selector">
-            <option>Últimos 30 días</option>
-            <option>Últimos 7 días</option>
-            <option>Este mes</option>
-            <option>Este año</option>
-          </select>
-        </div>
+
+  <div class="container">
+    <!-- Page Header -->
+    <div class="page-header mb-4">
+      <div>
+        <h1 class="page-title">Dashboard</h1>
+        <p class="page-subtitle">Panel de control administrativo</p>
       </div>
-      
-      <!-- KPIs Grid -->
-      <div class="kpis-grid">
-        <div class="kpi-card highlight">
-          <div class="kpi-header">
-            <span class="kpi-label">MRR</span>
-            <span class="kpi-trend positive">↑ +{{kpis.mrrGrowth}}%</span>
-          </div>
-          <div class="kpi-value">€{{kpis.mrr.toLocaleString()}}</div>
-          <div class="kpi-footer">Ingresos recurrentes mensuales</div>
-        </div>
-        
-        <div class="kpi-card">
-          <div class="kpi-header">
-            <span class="kpi-label">Usuarios</span>
-            <span class="kpi-trend positive">↑ +{{kpis.usersGrowth}}%</span>
-          </div>
-          <div class="kpi-value">{{kpis.totalUsers}}</div>
-          <div class="kpi-footer">Total usuarios activos</div>
-        </div>
-        
-        <div class="kpi-card">
-          <div class="kpi-header">
-            <span class="kpi-label">Matches</span>
-            <span class="kpi-trend positive">↑ +{{kpis.matchesGrowth}}%</span>
-          </div>
-          <div class="kpi-value">{{kpis.matches}}</div>
-          <div class="kpi-footer">Matches este mes</div>
-        </div>
-        
-        <div class="kpi-card">
-          <div class="kpi-header">
-            <span class="kpi-label">Churn</span>
-            <span class="kpi-trend negative">↓ {{kpis.churnChange}}%</span>
-          </div>
-          <div class="kpi-value warning">{{kpis.churnRate}}%</div>
-          <div class="kpi-footer">Tasa de cancelación</div>
-        </div>
-        
-        <div class="kpi-card">
-          <div class="kpi-header">
-            <span class="kpi-label">NPS</span>
-            <span class="kpi-trend neutral">→ {{kpis.npsChange}}%</span>
-          </div>
-          <div class="kpi-value">{{kpis.nps}}</div>
-          <div class="kpi-footer">Net Promoter Score</div>
-        </div>
-      </div>
-      
-      <!-- Revenue Chart Section -->
-      <div class="card revenue-section">
-        <div class="card-header">
-          <h3>📈 Revenue (Últimos 30 días)</h3>
-        </div>
-        <div class="chart-placeholder">
-          <p class="chart-note">[Gráfico líneas MRR - Integrar Chart.js o similar]</p>
-          <div class="mock-chart">
-            <div class="chart-bars">
-              <div class="chart-bar" style="height: 40%"></div>
-              <div class="chart-bar" style="height: 55%"></div>
-              <div class="chart-bar" style="height: 70%"></div>
-              <div class="chart-bar" style="height: 85%"></div>
-              <div class="chart-bar" style="height: 100%"></div>
+      <p-dropdown 
+        [options]="periodOptions" 
+        [(ngModel)]="selectedPeriod" 
+        optionLabel="label"
+        placeholder="Selecciona período"
+        styleClass="period-selector"
+      ></p-dropdown>
+    </div>
+
+    <!-- KPIs Grid -->
+    <div class="grid mb-4">
+      <div class="col-12 md:col-6 lg:col-3">
+        <p-card styleClass="kpi-card mrr-card">
+          <div class="kpi-content">
+            <div class="kpi-header">
+              <span class="kpi-label">MRR</span>
+              <p-tag 
+                [value]="'+' + kpis.mrrGrowth + '%'" 
+                severity="success"
+                icon="pi pi-arrow-up"
+              ></p-tag>
             </div>
-            <div class="chart-labels">
-              <span>Sem 1</span>
-              <span>Sem 2</span>
-              <span>Sem 3</span>
-              <span>Sem 4</span>
-              <span>Hoy</span>
+            <div class="kpi-value">€{{kpis.mrr.toLocaleString('es-ES')}}</div>
+            <small class="kpi-description">Ingresos recurrentes mensuales</small>
+          </div>
+        </p-card>
+      </div>
+
+      <div class="col-12 md:col-6 lg:col-3">
+        <p-card styleClass="kpi-card users-card">
+          <div class="kpi-content">
+            <div class="kpi-header">
+              <span class="kpi-label">USUARIOS</span>
+              <p-tag 
+                [value]="'+' + kpis.usersGrowth + '%'" 
+                severity="info"
+                icon="pi pi-arrow-up"
+              ></p-tag>
             </div>
+            <div class="kpi-value">{{kpis.totalUsers}}</div>
+            <small class="kpi-description">Total usuarios activos</small>
           </div>
-        </div>
+        </p-card>
       </div>
-      
-      <!-- Alerts Section -->
-      <div class="card alerts-section" *ngIf="alerts.length > 0">
-        <div class="card-header">
-          <h3>⚠️ Alerts</h3>
-        </div>
-        <div class="alerts-list">
-          <div 
-            *ngFor="let alert of alerts" 
-            class="alert-item"
-            [class.alert-warning]="alert.type === 'warning'"
-            [class.alert-error]="alert.type === 'error'"
-            [class.alert-success]="alert.type === 'success'"
-          >
-            <span class="alert-icon">
-              <span *ngIf="alert.type === 'warning'">⚠️</span>
-              <span *ngIf="alert.type === 'error'">❌</span>
-              <span *ngIf="alert.type === 'success'">✅</span>
-            </span>
-            <span class="alert-message">{{alert.message}}</span>
-            <button *ngIf="alert.action" class="alert-action" (click)="handleAlertAction(alert)">
-              {{alert.action}}
-            </button>
+
+      <div class="col-12 md:col-6 lg:col-3">
+        <p-card styleClass="kpi-card matches-card">
+          <div class="kpi-content">
+            <div class="kpi-header">
+              <span class="kpi-label">MATCHES</span>
+              <p-tag 
+                [value]="'+' + kpis.matchesGrowth + '%'" 
+                severity="success"
+                icon="pi pi-arrow-up"
+              ></p-tag>
+            </div>
+            <div class="kpi-value">{{kpis.matches}}</div>
+            <small class="kpi-description">Matches este mes</small>
           </div>
-        </div>
+        </p-card>
       </div>
-      
-      <!-- Quick Actions -->
-      <div class="quick-actions">
-        <app-button variant="primary" (clickEvent)="navigateToApprovals()">
-          Aprobar Proveedores
-        </app-button>
-        <app-button variant="primary" (clickEvent)="navigateToCases()">
-          Review Casos Uso
-        </app-button>
-        <app-button variant="secondary" (clickEvent)="navigateToChurnReport()">
-          Ver Churn Report
-        </app-button>
-        <app-button variant="secondary" (clickEvent)="navigateToAnalytics()">
-          Analytics Completo
-        </app-button>
-      </div>
-      
-      <!-- Activity & Cases Grid -->
-      <div class="content-grid">
-        <!-- Recent Activity -->
-        <div class="card">
-          <div class="card-header">
-            <h3>🔥 Actividad Reciente (Últimas 24h)</h3>
-            <a href="#" class="view-all">Ver todo</a>
+
+      <div class="col-12 md:col-6 lg:col-3">
+        <p-card styleClass="kpi-card churn-card">
+          <div class="kpi-content">
+            <div class="kpi-header">
+              <span class="kpi-label">CHURN</span>
+              <p-tag 
+                [value]="kpis.churnChange + '%'" 
+                [severity]="kpis.churnChange < 0 ? 'success' : 'warning'"
+                [icon]="kpis.churnChange < 0 ? 'pi pi-arrow-down' : 'pi pi-arrow-up'"
+              ></p-tag>
+            </div>
+            <div class="kpi-value" [style.color]="'#f59e0b'">{{kpis.churnRate}}%</div>
+            <small class="kpi-description">Tasa de cancelación</small>
           </div>
-          <div class="activity-list">
-            <div 
-              *ngFor="let activity of recentActivity" 
-              class="activity-item"
-              (click)="viewActivityDetails(activity)"
-            >
-              <div class="activity-icon" [class.client]="activity.type === 'cliente'">
-                <span *ngIf="activity.type === 'cliente'">👤</span>
-                <span *ngIf="activity.type === 'proveedor'">🏢</span>
+        </p-card>
+      </div>
+
+      <div class="col-12 md:col-6 lg:col-3">
+        <p-card styleClass="kpi-card nps-card">
+          <div class="kpi-content">
+            <div class="kpi-header">
+              <span class="kpi-label">NPS</span>
+              <p-tag 
+                [value]="kpis.npsChange === 0 ? '0%' : '+' + kpis.npsChange + '%'" 
+                severity="secondary"
+                icon="pi pi-minus"
+              ></p-tag>
+            </div>
+            <div class="kpi-value">{{kpis.nps}}</div>
+            <small class="kpi-description">Net Promoter Score</small>
+          </div>
+        </p-card>
+      </div>
+    </div>
+
+    <!-- Revenue Chart -->
+    <div class="grid mb-4">
+      <div class="col-12">
+        <p-card>
+          <ng-template pTemplate="header">
+            <div class="card-header-custom">
+              <div class="flex align-items-center gap-2">
+                <i class="pi pi-chart-line text-primary text-xl"></i>
+                <h3 class="m-0">Revenue (Últimos 30 días)</h3>
               </div>
-              <div class="activity-content">
-                <div class="activity-title">{{activity.name}}</div>
-                <div class="activity-meta">{{activity.action}} • {{activity.timestamp}}</div>
+              <span class="text-sm text-gray-400">(Gráfico linear MRR - Integrar Chart.js o similar)</span>
+            </div>
+          </ng-template>
+          <div class="chart-container">
+            <p-chart type="line" [data]="revenueChartData" [options]="revenueChartOptions" [style]="{'height': '300px'}"></p-chart>
+          </div>
+        </p-card>
+      </div>
+    </div>
+
+    <!-- Alerts Section -->
+    <div class="grid mb-4">
+      <div class="col-12">
+        <p-card>
+          <ng-template pTemplate="header">
+            <div class="card-header-custom">
+              <div class="flex align-items-center gap-2">
+                <i class="pi pi-exclamation-triangle text-warning text-xl"></i>
+                <h3 class="m-0">Alerts</h3>
               </div>
             </div>
-          </div>
-        </div>
-        
-        <!-- Pending Cases -->
-        <div class="card">
-          <div class="card-header">
-            <h3>Casos Pendientes de Aprobación</h3>
-            <span class="badge">{{pendingCases.length}}</span>
-          </div>
-          <div class="cases-list">
-            <div 
-              *ngFor="let case of pendingCases" 
-              class="case-item"
+          </ng-template>
+          <div class="alerts-container">
+            <p-message 
+              *ngFor="let alert of alerts" 
+              [severity]="alert.severity" 
+              [text]="alert.message"
+              styleClass="w-full mb-2"
             >
-              <div class="case-content">
-                <div class="case-title">{{case.title}}</div>
-                <div class="case-meta">
-                  <span>{{case.submittedBy}}</span>
-                  <span>•</span>
-                  <span>{{case.date}}</span>
+              <ng-template pTemplate="message" let-message>
+                <div class="flex justify-content-between align-items-center w-full">
+                  <span>{{ alert.message }}</span>
+                  <p-button 
+                    *ngIf="alert.action" 
+                    [label]="alert.action" 
+                    styleClass="p-button-text p-button-sm" 
+                    (click)="handleAlertAction(alert)"
+                  ></p-button>
                 </div>
-              </div>
-              <div class="case-actions">
-                <button 
-                  class="btn-approve"
-                  (click)="approveCase(case)"
-                >
-                  Aprobar
-                </button>
-                <button 
-                  class="btn-reject"
-                  (click)="rejectCase(case)"
-                >
-                  Rechazar
-                </button>
-              </div>
-            </div>
+              </ng-template>
+            </p-message>
           </div>
-        </div>
+        </p-card>
       </div>
-    </main>
+    </div>
+
+    <!-- Activity and Pending Cases -->
+    <div class="grid">
+      <div class="col-12 lg:col-6">
+        <p-card>
+          <ng-template pTemplate="header">
+            <div class="card-header-custom">
+              <div class="flex align-items-center gap-2">
+                <i class="pi pi-history text-primary text-xl"></i>
+                <h3 class="m-0">Actividad Reciente (Últimas 24h)</h3>
+              </div>
+              <p-button label="Ver todo" icon="pi pi-arrow-right" styleClass="p-button-text p-button-sm" (click)="viewActivityDetails(recentActivity[0])"></p-button>
+            </div>
+          </ng-template>
+          <p-timeline [value]="recentActivity" align="left">
+            <ng-template pTemplate="marker" let-activity>
+              <span class="custom-marker">
+                <i [class]="'pi ' + activity.icon"></i>
+              </span>
+            </ng-template>
+            <ng-template pTemplate="content" let-activity>
+              <div class="timeline-content">
+                <div class="flex justify-content-between align-items-start mb-2">
+                  <div class="font-bold">{{ activity.name }}</div>
+                  <span class="text-xs text-gray-400">{{ activity.timestamp }}</span>
+                </div>
+                <div class="text-sm text-gray-400">{{ activity.action }}</div>
+              </div>
+            </ng-template>
+          </p-timeline>
+        </p-card>
+      </div>
+
+      <div class="col-12 lg:col-6">
+        <p-card>
+          <ng-template pTemplate="header">
+            <div class="card-header-custom">
+              <div class="flex align-items-center gap-2">
+                <i class="pi pi-file text-primary text-xl"></i>
+                <h3 class="m-0">Casos Pendientes de Aprobación</h3>
+              </div>
+              <p-badge [value]="pendingCases.length" severity="warning"></p-badge>
+            </div>
+          </ng-template>
+          <p-table [value]="pendingCases" [paginator]="true" [rows]="5" styleClass="p-datatable-sm">
+            <ng-template pTemplate="header">
+              <tr>
+                <th>TÍTULO</th>
+                <th>ESTADO</th>
+                <th>ACCIONES</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-case>
+              <tr>
+                <td>
+                  <div class="font-bold text-sm">{{ case.title }}</div>
+                  <div class="text-xs text-gray-400">{{ case.submittedBy }} • {{ case.date }}</div>
+                </td>
+                <td>
+                  <p-tag [value]="case.status.toUpperCase()" [severity]="getStatusSeverity(case.status)"></p-tag>
+                </td>
+                <td>
+                  <div class="flex gap-1">
+                    <p-button 
+                      icon="pi pi-check" 
+                      styleClass="p-button-rounded p-button-text p-button-success p-button-sm" 
+                      pTooltip="Aprobar"
+                      (click)="approveCase(case)"
+                    ></p-button>
+                    <p-button 
+                      icon="pi pi-times" 
+                      styleClass="p-button-rounded p-button-text p-button-danger p-button-sm" 
+                      pTooltip="Rechazar"
+                      (click)="rejectCase(case)"
+                    ></p-button>
+                  </div>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </p-card>
+      </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="grid mt-4">
+      <div class="col-12">
+        <p-card>
+          <ng-template pTemplate="header">
+            <div class="card-header-custom">
+              <h3 class="m-0">Acciones Rápidas</h3>
+            </div>
+          </ng-template>
+          <div class="flex flex-wrap gap-2">
+            <p-button label="Aprobar Proveedores" icon="pi pi-user-plus" styleClass="p-button-primary" (click)="navigateToApprovals()"></p-button>
+            <p-button label="Review Casos Uso" icon="pi pi-file-edit" styleClass="p-button-primary" (click)="navigateToCases()"></p-button>
+            <p-button label="Ver Churn Report" icon="pi pi-chart-bar" styleClass="p-button-outlined" (click)="navigateToChurnReport()"></p-button>
+            <p-button label="Analytics Completo" icon="pi pi-chart-line" styleClass="p-button-outlined" (click)="navigateToAnalytics()"></p-button>
+          </div>
+        </p-card>
+      </div>
+    </div>
   </div>
 </div>

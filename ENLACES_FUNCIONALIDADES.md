@@ -173,3 +173,5 @@
 - El Deal Room tiene todas las mejoras implementadas (soporte, ROI, preguntas unificadas, aprobaciones)
 - Los badges están disponibles en `/client/badges` y `/provider/badges` (aunque no están en el menú, están en las rutas)
 
+
+

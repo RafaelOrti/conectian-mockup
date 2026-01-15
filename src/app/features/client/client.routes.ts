@@ -42,6 +42,12 @@ export const CLIENT_ROUTES: Routes = [
     title: 'Publicar Caso RFID | Cliente'
   },
   {
+    path: 'request/:id/responses',
+    loadComponent: () => import('./request-responses/request-responses.component')
+      .then(m => m.RequestResponsesComponent),
+    title: 'Respuestas a Solicitud | Cliente'
+  },
+  {
     path: 'innovation-center',
     loadComponent: () => import('./innovation-center/clientinnovationcenter.component')
       .then(m => m.ClientInnovationCenterComponent),
@@ -118,5 +124,11 @@ export const CLIENT_ROUTES: Routes = [
     loadComponent: () => import('./ecosystem/clientecosystem.component')
       .then(m => m.ClientEcosystemComponent),
     title: 'Ecosistema | Cliente'
+  },
+  {
+    path: 'deal-room/:id',
+    loadComponent: () => import('./deal-room/client-deal-room.component')
+      .then(m => m.ClientDealRoomComponent),
+    title: 'Deal Room | Cliente'
   }
 ];

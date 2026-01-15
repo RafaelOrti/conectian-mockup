@@ -13,12 +13,15 @@
         <!-- Video Section -->
         <div class="case-video-container">
           <div class="video-placeholder">
-            <div class="play-button">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M8 5v14l11-7z"/>
-              </svg>
+            <img src="assets/images/use-cases/demo-preview.png" alt="Demo Preview" class="video-thumbnail" />
+            <div class="video-overlay">
+              <div class="play-button">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M8 5v14l11-7z"/>
+                </svg>
+              </div>
+              <span class="video-label">Ver Demo Interactiva</span>
             </div>
-            <span class="video-label">Ver Demo Interactiva</span>
           </div>
         </div>
         
@@ -121,7 +124,7 @@
         <!-- CTAs -->
         <div class="cta-section">
           <app-button variant="primary" (clickEvent)="startConversation()" style="width: 100%; margin-bottom: 1rem;">
-            💬 Iniciar Conversación Segura
+            💬 Iniciar Conversación
           </app-button>
           <app-button variant="secondary" (clickEvent)="viewProviderProfile()" style="width: 100%;">
             Ver Perfil del Proveedor

@@ -1,11 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
-import { NavbarComponent } from '../../shared/components/navbar/navbar.component';
-import { CardComponent } from '../../shared/components/card/card.component';
-import { ButtonComponent } from '../../shared/components/button/button.component';
-import { BadgeComponent } from '../../shared/components/badge/badge.component';
+import { ActivatedRoute, Router } from '@angular/router';
+import { NavbarComponent } from '../../../shared/components/navbar/navbar.component';
 
 interface Message {
   sender: 'client' | 'provider';
@@ -59,26 +56,91 @@ interface UnifiedQuestion {
   relatedDocuments?: string[];
 }
 
+import { TabViewModule } from 'primeng/tabview';
+import { CardModule } from 'primeng/card';
+import { ButtonModule } from 'primeng/button';
+import { TagModule } from 'primeng/tag';
+import { AvatarModule } from 'primeng/avatar';
+import { TableModule } from 'primeng/table';
+import { DialogModule } from 'primeng/dialog';
+import { InputTextModule } from 'primeng/inputtext';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { TimelineModule } from 'primeng/timeline';
+import { FileUploadModule } from 'primeng/fileupload';
+import { ProgressBarModule } from 'primeng/progressbar';
+import { AccordionModule } from 'primeng/accordion';
+import { TooltipModule } from 'primeng/tooltip';
+import { ToastModule } from 'primeng/toast';
+import { CalendarModule } from 'primeng/calendar';
+import { DropdownModule } from 'primeng/dropdown';
+import { InputTextareaModule } from 'primeng/inputtextarea';
+import { MessageService, ConfirmationService } from 'primeng/api';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { CheckboxModule } from 'primeng/checkbox';
+
 @Component({
-  selector: 'app-deal-room',
+  selector: 'app-client-deal-room',
   standalone: true,
-  imports: [CommonModule, FormsModule, NavbarComponent, CardComponent, ButtonComponent, BadgeComponent],
-  templateUrl: './dealroom.component.html',
-  styleUrls: ['./dealroom.component.scss']
+  imports: [
+    CommonModule,
+    FormsModule,
+    NavbarComponent,
+    TabViewModule,
+    CardModule,
+    ButtonModule,
+    TagModule,
+    AvatarModule,
+    TableModule,
+    DialogModule,
+    InputTextModule,
+    InputNumberModule,
+    TimelineModule,
+    FileUploadModule,
+    ProgressBarModule,
+    AccordionModule,
+    TooltipModule,
+    ToastModule,
+    CalendarModule,
+    DropdownModule,
+    InputTextareaModule,
+    ConfirmDialogModule,
+    CheckboxModule
+  ],
+  providers: [MessageService, ConfirmationService],
+  templateUrl: './client-deal-room.component.html',
+  styleUrls: ['./client-deal-room.component.scss']
 })
-export class DealRoomComponent implements OnInit {
+export class ClientDealRoomComponent implements OnInit {
+  userRole: 'client' = 'client';
   dealId: string = '';
-  activeTab: number = 1;
+  activeTab: number = 0;
   today: Date = new Date();
+
+  // Modals state
   showROICalculator: boolean = false;
   showSupportModal: boolean = false;
   showUnifiedQuestions: boolean = false;
   showAchievementModal: boolean = false;
+  showMeetingModal: boolean = false;
+  showProposalModal: boolean = false;
+  showUploadModal: boolean = false;
+  showDocumentModal: boolean = false;
+
+  // Data for modals
   achievementData = {
     title: '',
     description: '',
     image: '🚀'
   };
+
+  meetingData = {
+    title: '',
+    date: null,
+    duration: 30,
+    participants: [] as string[]
+  };
+
+  selectedDocument: any = null;
 
   dealInfo = {
     title: 'Proyecto: Chatbot para E-commerce',
@@ -87,7 +149,6 @@ export class DealRoomComponent implements OnInit {
     status: 'active'
   };
 
-  // Tab 1: Chat
   messages: Message[] = [
     {
       sender: 'provider',
@@ -105,7 +166,6 @@ export class DealRoomComponent implements OnInit {
   ];
   newMessage: string = '';
 
-  // Tab 4: Milestones with approvals
   milestones: Milestone[] = [
     {
       id: 1,
@@ -153,10 +213,17 @@ export class DealRoomComponent implements OnInit {
   proposal = {
     title: 'Propuesta: Chatbot Inteligente',
     value: 25000,
-    timeline: '8 semanas'
+    timeline: '8 semanas',
+    description: 'Desarrollo e implementación de un chatbot basado en IA para atención al cliente en e-commerce, con integración a CRM y pasarela de pagos.',
+    deliverables: [
+      'Documento de Especificación de Requisitos',
+      'Prototipo Funcional',
+      'Código Fuente Documentado',
+      'Manual de Usuario y Administración',
+      'Sesión de Capacitación'
+    ]
   };
 
-  // ROI Calculator
   roiCalculation: ROICalculation = {
     initialInvestment: 25000,
     monthlySavings: 5000,
@@ -166,7 +233,6 @@ export class DealRoomComponent implements OnInit {
     totalSavings: 0
   };
 
-  // Support
   supportTickets: SupportTicket[] = [
     {
       id: 'TICK-001',
@@ -195,7 +261,6 @@ export class DealRoomComponent implements OnInit {
     description: ''
   };
 
-  // Unified Questions
   unifiedQuestions: UnifiedQuestion[] = [
     {
       id: 'Q1',
@@ -234,7 +299,6 @@ export class DealRoomComponent implements OnInit {
     }
   ];
 
-  // Tab 2: Teams
   clientTeam = [
     { name: 'Carlos Martínez', role: 'Project Manager', status: 'active' },
     { name: 'Ana García', role: 'Technical Lead', status: 'active' },
@@ -248,7 +312,6 @@ export class DealRoomComponent implements OnInit {
     { name: 'David Torres', role: 'QA Engineer', status: 'active' }
   ];
 
-  // Tab 3: Documents
   documents = [
     {
       id: '1',
@@ -284,7 +347,6 @@ export class DealRoomComponent implements OnInit {
     }
   ];
 
-  // Tab 5: Legal Documents
   legalDocuments = [
     {
       id: '1',
@@ -312,7 +374,6 @@ export class DealRoomComponent implements OnInit {
     }
   ];
 
-  // Tab 6: Reviews
   reviews = [
     {
       id: '1',
@@ -338,7 +399,12 @@ export class DealRoomComponent implements OnInit {
     return Math.round((sum / this.reviews.length) * 10) / 10;
   }
 
-  constructor(private route: ActivatedRoute) { }
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private messageService: MessageService,
+    private confirmationService: ConfirmationService
+  ) { }
 
   ngOnInit(): void {
     this.dealId = this.route.snapshot.paramMap.get('id') || '';
@@ -358,35 +424,97 @@ export class DealRoomComponent implements OnInit {
         timestamp: 'Ahora'
       });
       this.newMessage = '';
+      setTimeout(() => {
+        this.messageService.add({ severity: 'info', summary: 'Nuevo Mensaje', detail: 'Nexus Solutions ha respondido.' });
+      }, 2000);
     }
   }
 
+  openMeetingModal(): void {
+    this.showMeetingModal = true;
+  }
+
+  scheduleMeeting(): void {
+    if (this.meetingData.title && this.meetingData.date) {
+      this.messageService.add({ severity: 'success', summary: 'Reunión Agendada', detail: `Reunión "${this.meetingData.title}" programada con éxito.` });
+      this.showMeetingModal = false;
+      this.meetingData = { title: '', date: null, duration: 30, participants: [] };
+    } else {
+      this.messageService.add({ severity: 'warn', summary: 'Datos Incompletos', detail: 'Por favor complete el título y la fecha.' });
+    }
+  }
+
+  openProposalDetails(): void {
+    this.showProposalModal = true;
+  }
+
   acceptProposal(): void {
-    console.log('Proposal accepted');
+    this.confirmationService.confirm({
+      message: '¿Estás seguro de que deseas aceptar esta propuesta? Esto iniciará la siguiente fase del proyecto.',
+      header: 'Confirmar Aceptación',
+      icon: 'pi pi-check-circle',
+      accept: () => {
+        this.messageService.add({ severity: 'success', summary: 'Propuesta Aceptada', detail: 'Has aceptado la propuesta correctamente.' });
+        this.showProposalModal = false;
+      }
+    });
   }
 
   rejectProposal(): void {
-    console.log('Proposal rejected');
+    this.confirmationService.confirm({
+      message: '¿Estás seguro de que deseas rechazar esta propuesta?',
+      header: 'Confirmar Rechazo',
+      icon: 'pi pi-times-circle',
+      acceptButtonStyleClass: 'p-button-danger',
+      accept: () => {
+        this.messageService.add({ severity: 'info', summary: 'Propuesta Rechazada', detail: 'Has rechazado la propuesta.' });
+        this.showProposalModal = false;
+      }
+    });
   }
 
   uploadDocument(): void {
-    console.log('Upload document');
+    this.showUploadModal = true;
+  }
+
+  onUpload(event: any): void {
+    this.messageService.add({ severity: 'success', summary: 'Documento Subido', detail: 'El documento se ha subido correctamente.' });
+    this.showUploadModal = false;
+    this.documents.unshift({
+      id: String(this.documents.length + 1),
+      name: event.files[0].name,
+      type: 'pdf',
+      uploadedBy: 'Yo',
+      uploadDate: new Date().toLocaleDateString(),
+      tags: ['Nuevo']
+    });
   }
 
   downloadDocument(docId: string): void {
-    console.log('Download document:', docId);
+    this.messageService.add({ severity: 'success', summary: 'Descargando', detail: 'La descarga ha comenzado.' });
   }
 
   viewDocument(docId: string): void {
-    console.log('View document:', docId);
+    const doc = this.documents.find(d => d.id === docId);
+    if (doc) {
+      this.selectedDocument = doc;
+      this.showDocumentModal = true;
+    }
   }
 
   viewLegalDocument(docId: string): void {
-    console.log('View legal document:', docId);
+    this.messageService.add({ severity: 'info', summary: 'Documento Legal', detail: 'Abriendo visor de documentos legales...' });
   }
 
   signDocument(docId: string): void {
-    console.log('Sign document:', docId);
+    this.confirmationService.confirm({
+      message: '¿Confirmas la firma digital de este documento?',
+      header: 'Firma Digital',
+      icon: 'pi pi-pencil',
+      accept: () => {
+        this.messageService.add({ severity: 'success', summary: 'Firmado', detail: 'Documento firmado digitalmente.' });
+      }
+    });
   }
 
   getStars(rating: number): string[] {
@@ -406,9 +534,8 @@ export class DealRoomComponent implements OnInit {
     return stars;
   }
 
-  // ROI Calculator
   toggleROICalculator(): void {
-    this.setActiveTab(8);
+    this.setActiveTab(7);
   }
 
   calculateROI(): void {
@@ -423,7 +550,10 @@ export class DealRoomComponent implements OnInit {
     this.roiCalculation.totalSavings = totalSavings;
   }
 
-  // Support
+  downloadROIReport(): void {
+    this.messageService.add({ severity: 'success', summary: 'Informe ROI', detail: 'Generando informe de ROI...' });
+  }
+
   toggleSupportModal(): void {
     this.showSupportModal = !this.showSupportModal;
   }
@@ -442,29 +572,39 @@ export class DealRoomComponent implements OnInit {
       this.supportTickets.unshift(ticket);
       this.newTicket = { title: '', category: 'general', priority: 'medium', description: '' };
       this.showSupportModal = false;
+      this.messageService.add({ severity: 'success', summary: 'Ticket Creado', detail: 'Tu ticket de soporte ha sido creado.' });
     }
   }
 
   getPriorityColor(priority: string): string {
     const colors: { [key: string]: string } = {
-      'urgent': '#f4444a',
-      'high': '#f96908',
-      'medium': '#0d86ff',
-      'low': '#18b981'
+      'urgent': 'danger',
+      'high': 'warning',
+      'medium': 'info',
+      'low': 'success'
     };
-    return colors[priority] || '#718096';
+    return colors[priority] || 'info';
   }
 
   getStatusColor(status: string): string {
     const colors: { [key: string]: string } = {
-      'open': '#f96908',
-      'in-progress': '#0d86ff',
-      'resolved': '#18b981'
+      'open': 'warning',
+      'in-progress': 'info',
+      'resolved': 'success'
     };
-    return colors[status] || '#718096';
+    return colors[status] || 'info';
   }
 
-  // Unified Questions
+  getCategorySeverity(category: string): string {
+    const severities: { [key: string]: string } = {
+      'technical': 'info',
+      'legal': 'warning',
+      'billing': 'success',
+      'general': 'secondary'
+    };
+    return severities[category] || 'secondary';
+  }
+
   toggleUnifiedQuestions(): void {
     this.showUnifiedQuestions = !this.showUnifiedQuestions;
   }
@@ -480,15 +620,10 @@ export class DealRoomComponent implements OnInit {
     return icons[category] || '❓';
   }
 
-  // PDF Generation
   generatePDFReport(): void {
-    // This would typically use a library like jsPDF or pdfmake
-    console.log('Generating PDF report...');
-    // TODO: Implement PDF generation with all deal room data
-    alert('Generando informe PDF... Esta funcionalidad se implementará con jsPDF o pdfmake.');
+    this.messageService.add({ severity: 'info', summary: 'Generando PDF', detail: 'El informe completo se está generando...' });
   }
 
-  // Milestone approvals
   getPendingApprovalsCount(milestone: Milestone): number {
     if (!milestone.pendingApprovals) return 0;
     return milestone.pendingApprovals.filter(a => a.status === 'pending').length;
@@ -499,7 +634,6 @@ export class DealRoomComponent implements OnInit {
     return milestone.pendingApprovals.filter(a => a.status === 'approved').length;
   }
 
-  // Support ticket counts
   getOpenTicketsCount(): number {
     return this.supportTickets.filter(t => t.status === 'open').length;
   }
@@ -523,7 +657,6 @@ export class DealRoomComponent implements OnInit {
     return Math.round(total / this.milestones.length);
   }
 
-  // Social Proof Engineering
   openAchievementModal(milestone?: Milestone): void {
     if (milestone) {
       this.achievementData = {
@@ -547,9 +680,17 @@ export class DealRoomComponent implements OnInit {
   }
 
   shareOnLinkedIn(): void {
-    // In a real app, this would open the LinkedIn share dialog with a generated image or post
     const url = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.href)}`;
     window.open(url, '_blank');
     this.showAchievementModal = false;
+    this.messageService.add({ severity: 'success', summary: 'Compartido', detail: 'Redirigiendo a LinkedIn...' });
+  }
+
+  getCompletedMilestonesCount(): number {
+    return this.milestones.filter(m => m.status === 'completed').length;
+  }
+
+  getPendingMilestonesCount(): number {
+    return this.milestones.filter(m => m.status !== 'completed').length;
   }
 }

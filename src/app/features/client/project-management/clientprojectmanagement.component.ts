@@ -38,7 +38,7 @@ interface Project {
 export class ClientProjectManagementComponent implements OnInit {
   projects: Project[] = [];
 
-  constructor(private router: Router) {}
+  constructor(private router: Router) { }
 
   ngOnInit(): void {
     // TODO: Load projects from backend API
@@ -97,7 +97,7 @@ export class ClientProjectManagementComponent implements OnInit {
   }
 
   openDealRoom(dealRoomId: string): void {
-    this.router.navigate(['/deal-room', dealRoomId]);
+    this.router.navigate(['/client/deal-room', dealRoomId]);
   }
 
   getStatusClass(status: string): string {
@@ -126,4 +126,6 @@ export class ClientProjectManagementComponent implements OnInit {
     }
   }
 }
+
+
 

@@ -6,45 +6,96 @@
   ></app-navbar>
 
   <div class="hub-container">
-    <div class="hub-header">
-      <h1>Mi Cuenta</h1>
-      <div class="tabs-container">
-        <button 
-          class="tab-btn" 
-          [class.active]="activeTab === 'profile'"
-          (click)="setActiveTab('profile')"
-        >
-          <span class="icon">👤</span> Mi Perfil
-        </button>
-        <button 
-          class="tab-btn" 
-          [class.active]="activeTab === 'company'"
-          (click)="setActiveTab('company')"
-        >
-          <span class="icon">🏢</span> Mi Empresa
-        </button>
-        <button 
-          class="tab-btn" 
-          [class.active]="activeTab === 'badges'"
-          (click)="setActiveTab('badges')"
-        >
-          <span class="icon">🏆</span> Badges y Recompensas
-        </button>
-        <button 
-          class="tab-btn" 
-          [class.active]="activeTab === 'payments'"
-          (click)="setActiveTab('payments')"
-        >
-          <span class="icon">💳</span> Pagos
-        </button>
+    <!-- Page Header -->
+    <div class="page-header">
+      <div class="header-content">
+        <div class="user-avatar-section">
+          <p-avatar 
+            label="M" 
+            size="xlarge"
+            shape="circle"
+            styleClass="user-avatar"
+          ></p-avatar>
+          <div class="user-info">
+            <h1>Mi Cuenta</h1>
+            <p class="user-subtitle">Gestiona tu perfil y configuración</p>
+          </div>
+        </div>
+        
+        <div class="header-stats">
+          <div class="stat-badge">
+            <i class="pi pi-chart-line"></i>
+            <div class="stat-content">
+              <span class="stat-value">{{ userStats.completionRate }}%</span>
+              <span class="stat-label">Completado</span>
+            </div>
+          </div>
+          <div class="stat-badge">
+            <i class="pi pi-star-fill"></i>
+            <div class="stat-content">
+              <span class="stat-value">{{ userStats.rating }}</span>
+              <span class="stat-label">Rating</span>
+            </div>
+          </div>
+          <div class="stat-badge">
+            <i class="pi pi-trophy"></i>
+            <div class="stat-content">
+              <span class="stat-value">{{ userStats.badges }}</span>
+              <span class="stat-label">Badges</span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="hub-content">
-      <app-provider-profile *ngIf="activeTab === 'profile'" [showNavbar]="false"></app-provider-profile>
-      <app-providercompany *ngIf="activeTab === 'company'" [showNavbar]="false"></app-providercompany>
-      <app-providerbadges *ngIf="activeTab === 'badges'" [showNavbar]="false"></app-providerbadges>
-      <app-providerpayments *ngIf="activeTab === 'payments'" [showNavbar]="false"></app-providerpayments>
+    <!-- Modern TabView -->
+    <div class="tabs-wrapper">
+      <p-tabView [(activeIndex)]="activeIndex" styleClass="professional-tabs">
+        <!-- Tab 1: Mi Perfil -->
+        <p-tabPanel>
+          <ng-template pTemplate="header">
+            <div class="tab-header">
+              <i class="pi pi-user"></i>
+              <span>Mi Perfil</span>
+            </div>
+          </ng-template>
+          <app-provider-profile [showNavbar]="false"></app-provider-profile>
+        </p-tabPanel>
+
+        <!-- Tab 2: Mi Empresa -->
+        <p-tabPanel>
+          <ng-template pTemplate="header">
+            <div class="tab-header">
+              <i class="pi pi-building"></i>
+              <span>Mi Empresa</span>
+            </div>
+          </ng-template>
+          <app-providercompany [showNavbar]="false"></app-providercompany>
+        </p-tabPanel>
+
+        <!-- Tab 3: Badges y Recompensas -->
+        <p-tabPanel>
+          <ng-template pTemplate="header">
+            <div class="tab-header">
+              <i class="pi pi-trophy"></i>
+              <span>Badges y Recompensas</span>
+              <p-badge [value]="userStats.badges.toString()" severity="success"></p-badge>
+            </div>
+          </ng-template>
+          <app-providerbadges [showNavbar]="false"></app-providerbadges>
+        </p-tabPanel>
+
+        <!-- Tab 4: Pagos -->
+        <p-tabPanel>
+          <ng-template pTemplate="header">
+            <div class="tab-header">
+              <i class="pi pi-wallet"></i>
+              <span>Pagos</span>
+            </div>
+          </ng-template>
+          <app-providerpayments [showNavbar]="false"></app-providerpayments>
+        </p-tabPanel>
+      </p-tabView>
     </div>
   </div>
 </div>

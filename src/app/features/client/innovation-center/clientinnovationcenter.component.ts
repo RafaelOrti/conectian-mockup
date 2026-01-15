@@ -1,13 +1,22 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NavbarComponent } from '../../../shared/components/navbar/navbar.component';
-import { CardComponent } from '../../../shared/components/card/card.component';
-import { ButtonComponent } from '../../../shared/components/button/button.component';
+import { CardModule } from 'primeng/card';
+import { ButtonModule } from 'primeng/button';
+import { ProgressBarModule } from 'primeng/progressbar';
+import { TagModule } from 'primeng/tag';
 
 @Component({
   selector: 'app-clientinnovationcenter',
   standalone: true,
-  imports: [CommonModule, NavbarComponent, CardComponent, ButtonComponent],
+  imports: [
+    CommonModule,
+    NavbarComponent,
+    CardModule,
+    ButtonModule,
+    ProgressBarModule,
+    TagModule
+  ],
   templateUrl: './clientinnovationcenter.component.html',
   styleUrls: ['./clientinnovationcenter.component.scss']
 })

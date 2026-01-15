@@ -2,9 +2,13 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { NavbarComponent } from '../../../shared/components/navbar/navbar.component';
-import { CardComponent } from '../../../shared/components/card/card.component';
-import { BadgeComponent } from '../../../shared/components/badge/badge.component';
-import { ButtonComponent } from '../../../shared/components/button/button.component';
+import { CardModule } from 'primeng/card';
+import { TagModule } from 'primeng/tag';
+import { ButtonModule } from 'primeng/button';
+import { AvatarModule } from 'primeng/avatar';
+import { ProgressBarModule } from 'primeng/progressbar';
+import { SelectButtonModule } from 'primeng/selectbutton';
+import { FormsModule } from '@angular/forms';
 
 interface Lead {
   id: string;
@@ -30,7 +34,17 @@ interface Lead {
 @Component({
   selector: 'app-leads-crm',
   standalone: true,
-  imports: [CommonModule, NavbarComponent, CardComponent, BadgeComponent, ButtonComponent],
+  imports: [
+    CommonModule,
+    NavbarComponent,
+    CardModule,
+    TagModule,
+    ButtonModule,
+    AvatarModule,
+    ProgressBarModule,
+    SelectButtonModule,
+    FormsModule
+  ],
   templateUrl: './leadscrm.component.html',
   styleUrls: ['./leadscrm.component.scss']
 })
@@ -39,34 +53,40 @@ export class LeadsCrmComponent {
 
   activeView: 'all' | 'leads' | 'projects' = 'all';
 
+  viewOptions = [
+    { label: 'Todos', value: 'all' },
+    { label: 'Leads', value: 'leads' },
+    { label: 'Proyectos', value: 'projects' }
+  ];
+
   allColumns = [
     {
       id: 'nuevo', title: 'Nuevo', count: 12, color: 'blue', leads: [
-        { id: '1', companyName: 'NeuroTech Solutions', logo: '🧠', priority: 'Alta' as const },
-        { id: '2', companyName: 'Apex AI Corp', logo: '⚡', priority: 'Media' as const },
-        { id: '3', companyName: 'Quantum Data', logo: '📊', priority: 'Baja' as const }
+        { id: '1', companyName: 'NeuroTech Solutions', logo: 'assets/images/companies/tech-company.png', priority: 'Alta' as const },
+        { id: '2', companyName: 'Apex AI Corp', logo: 'assets/images/companies/startup.png', priority: 'Media' as const },
+        { id: '3', companyName: 'Quantum Data', logo: 'assets/images/companies/fintech.png', priority: 'Baja' as const }
       ]
     },
     {
       id: 'contactado', title: 'Contactado', count: 8, color: 'purple', leads: [
-        { id: '4', companyName: 'Cognitive Dynamics', logo: '🎯', priority: 'Alta' as const, contactDate: '15 de Octubre', nextFollowUp: 'Mañana' },
-        { id: '5', companyName: 'Synthesis AI', logo: '🔬', priority: 'Media' as const, contactDate: '14 de Octubre', nextFollowUp: 'Mañana' }
+        { id: '4', companyName: 'Cognitive Dynamics', logo: 'assets/images/companies/tech-company.png', priority: 'Alta' as const, contactDate: '15 de Octubre', nextFollowUp: 'Mañana' },
+        { id: '5', companyName: 'Synthesis AI', logo: 'assets/images/companies/startup.png', priority: 'Media' as const, contactDate: '14 de Octubre', nextFollowUp: 'Mañana' }
       ]
     },
     {
       id: 'negociacion', title: 'En Negociación', count: 5, color: 'orange', leads: [
-        { id: '6', companyName: 'DeepMind Ventures', logo: '🚀', priority: 'Alta' as const, proposalSent: true, progress: 80 },
-        { id: '7', companyName: 'Future Logic', logo: '💡', priority: 'Alta' as const, proposalSent: true, progress: 100 }
+        { id: '6', companyName: 'DeepMind Ventures', logo: 'assets/images/companies/enterprise.png', priority: 'Alta' as const, proposalSent: true, progress: 80 },
+        { id: '7', companyName: 'Future Logic', logo: 'assets/images/companies/tech-company.png', priority: 'Alta' as const, proposalSent: true, progress: 100 }
       ]
     },
     {
       id: 'ganado', title: 'Cerrado-Ganado ✅', count: 6, color: 'green', leads: [
-        { id: '8', companyName: 'Global AI Systems', logo: '🌍', priority: 'Alta' as const },
+        { id: '8', companyName: 'Global AI Systems', logo: 'assets/images/companies/enterprise.png', priority: 'Alta' as const },
         // Proyectos integrados en Cerrado-Ganado
         {
           id: 'p1',
           companyName: 'Repsol',
-          logo: '⛽',
+          logo: 'assets/images/companies/enterprise.png',
           priority: 'Alta' as const,
           isProject: true,
           dealRoomId: 'deal-1',
@@ -80,7 +100,7 @@ export class LeadsCrmComponent {
         {
           id: 'p2',
           companyName: 'BBVA',
-          logo: '🏦',
+          logo: 'assets/images/companies/fintech.png',
           priority: 'Alta' as const,
           isProject: true,
           dealRoomId: 'deal-2',
@@ -94,7 +114,7 @@ export class LeadsCrmComponent {
         {
           id: 'p3',
           companyName: 'Inditex',
-          logo: '👔',
+          logo: 'assets/images/companies/enterprise.png',
           priority: 'Media' as const,
           isProject: true,
           dealRoomId: 'deal-3',
@@ -109,7 +129,7 @@ export class LeadsCrmComponent {
     },
     {
       id: 'perdido', title: 'Cerrado-Perdido ❌', count: 2, color: 'red', leads: [
-        { id: '9', companyName: 'Alpha Intelligence', logo: '🔷', priority: 'Baja' as const, followUpDate: 'Follow-up en 3 meses' }
+        { id: '9', companyName: 'Alpha Intelligence', logo: 'assets/images/companies/startup.png', priority: 'Baja' as const, followUpDate: 'Follow-up en 3 meses' }
       ]
     }
   ];
@@ -145,32 +165,33 @@ export class LeadsCrmComponent {
   };
 
   openDealRoom(dealRoomId: string): void {
-    this.router.navigate(['/deal-room', dealRoomId]);
+    this.router.navigate(['/provider/deal-room', dealRoomId]);
   }
 
-  getProjectStatusClass(status?: string): string {
+  getPrioritySeverity(priority: string): 'success' | 'info' | 'warning' | 'danger' | undefined {
+    switch (priority) {
+      case 'Alta': return 'danger';
+      case 'Media': return 'warning';
+      case 'Baja': return 'info';
+      default: return 'info';
+    }
+  }
+
+  getStatusSeverity(status?: string): 'success' | 'info' | 'warning' | 'danger' | undefined {
     switch (status) {
-      case 'active':
-        return 'status-active';
-      case 'completed':
-        return 'status-completed';
-      case 'on-hold':
-        return 'status-on-hold';
-      default:
-        return '';
+      case 'active': return 'success';
+      case 'completed': return 'info';
+      case 'on-hold': return 'warning';
+      default: return undefined;
     }
   }
 
   getProjectStatusLabel(status?: string): string {
     switch (status) {
-      case 'active':
-        return 'Activo';
-      case 'completed':
-        return 'Completado';
-      case 'on-hold':
-        return 'En Pausa';
-      default:
-        return '';
+      case 'active': return 'ACTIVO';
+      case 'completed': return 'COMPLETADO';
+      case 'on-hold': return 'EN PAUSA';
+      default: return '';
     }
   }
 

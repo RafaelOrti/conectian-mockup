@@ -1,4 +1,4 @@
-<div>
+<div class="leads-crm-page">
   <app-navbar 
     [userRole]="'PROVIDER'" 
     [userName]="'María González'" 
@@ -6,157 +6,133 @@
     [messageCount]="3"
   ></app-navbar>
   
-  <div class="leads-crm-container">
-    <header class="crm-header">
-      <h1>Bandeja de Leads y Proyectos</h1>
-      <div class="search-filters">
-        <input type="text" placeholder="Buscar leads, empresas, proyectos..." class="search-input" />
-        <button class="filter-btn">Fecha ▼</button>
-        <button class="filter-btn">Prioridad ▼</button>
-        <button class="filter-btn">Fuente ▼</button>
+  <div class="container">
+    <header class="page-header">
+      <div class="header-content">
+        <h1>Bandeja de Leads y Proyectos</h1>
+        <div class="search-filters">
+          <span class="p-input-icon-left">
+            <i class="pi pi-search"></i>
+            <input type="text" pInputText placeholder="Buscar leads, empresas..." class="search-input" />
+          </span>
+          <p-button label="Fecha" icon="pi pi-calendar" styleClass="p-button-outlined p-button-secondary"></p-button>
+          <p-button label="Prioridad" icon="pi pi-sort-amount-down" styleClass="p-button-outlined p-button-secondary"></p-button>
+          <p-button label="Fuente" icon="pi pi-filter" styleClass="p-button-outlined p-button-secondary"></p-button>
+        </div>
       </div>
     </header>
     
     <!-- Tabs para filtrar vista -->
     <div class="view-tabs">
-      <button 
-        class="view-tab"
-        [class.active]="activeView === 'all'"
-        (click)="activeView = 'all'"
-      >
-        <span>📋</span> Todos ({{ getAllCount() }})
-      </button>
-      <button 
-        class="view-tab"
-        [class.active]="activeView === 'leads'"
-        (click)="activeView = 'leads'"
-      >
-        <span>💼</span> Leads ({{ getLeadsCount() }})
-      </button>
-      <button 
-        class="view-tab"
-        [class.active]="activeView === 'projects'"
-        (click)="activeView = 'projects'"
-      >
-        <span>🚀</span> Proyectos ({{ getProjectsCount() }})
-      </button>
+      <p-selectButton [options]="viewOptions" [(ngModel)]="activeView" optionLabel="label" optionValue="value" styleClass="glass-select-button"></p-selectButton>
+      <div class="metrics-summary">
+        <span class="metric">
+          <span class="label">Conversión:</span>
+          <span class="value">{{ metrics.conversionRate }}%</span>
+        </span>
+        <span class="metric">
+          <span class="label">Tiempo prom:</span>
+          <span class="value">{{ metrics.avgTime }} días</span>
+        </span>
+      </div>
     </div>
     
     <!-- Kanban Board -->
     <div class="kanban-board">
       <div *ngFor="let column of columns" class="kanban-column" [attr.data-color]="column.color">
         <div class="column-header" [class]="'header-' + column.color">
-          <h3>{{ column.title }} ({{ column.count }})</h3>
+          <h3>{{ column.title }} <span class="count-badge">{{ column.count }}</span></h3>
         </div>
         
         <div class="column-content">
-          <app-card *ngFor="let lead of column.leads" class="lead-card">
-            <!-- Drag Handle -->
-            <div class="drag-handle">⋮⋮</div>
-            
-            <!-- Company Info -->
-            <div class="lead-header">
-              <span class="company-logo">{{ lead.logo }}</span>
-              <div class="company-info">
-                <h4>{{ lead.companyName }}</h4>
-                <span *ngIf="lead.isProject" class="project-badge">🚀 Proyecto Activo</span>
-              </div>
-            </div>
-            
-            <!-- Priority Badge -->
-            <app-badge 
-              [type]="lead.priority === 'Alta' ? 'danger' : lead.priority === 'Media' ? 'warning' : 'info'"
-              class="priority-badge"
-            >
-              {{lead.priority}}
-            </app-badge>
-            
-            <!-- Project Info (si es proyecto) -->
-            <div *ngIf="lead.isProject" class="project-info">
-              <h5 class="project-title">{{ lead.projectTitle }}</h5>
-              <div *ngIf="lead.value" class="lead-info">
-                <small>💰 Valor: ${{ lead.value?.toLocaleString() }}</small>
-              </div>
-              <div *ngIf="lead.timeline" class="lead-info">
-                <small>⏱️ Timeline: {{ lead.timeline }}</small>
-              </div>
-              <div *ngIf="lead.acceptedDate" class="lead-info">
-                <small>📅 Aceptado: {{ lead.acceptedDate }}</small>
-              </div>
-              <div *ngIf="lead.lastActivity" class="lead-info">
-                <small>🕐 Última actividad: {{ lead.lastActivity }}</small>
-              </div>
-              <div *ngIf="lead.projectStatus" class="project-status-badge">
-                <app-badge 
-                  [type]="lead.projectStatus === 'active' ? 'success' : lead.projectStatus === 'completed' ? 'info' : 'warning'"
-                >
-                  {{ getProjectStatusLabel(lead.projectStatus) }}
-                </app-badge>
-              </div>
-            </div>
-            
-            <!-- Lead Info (si es lead normal) -->
-            <ng-container *ngIf="!lead.isProject">
-              <div *ngIf="lead.contactDate" class="lead-info">
-                <small>Contactado: {{ lead.contactDate }}</small>
-              </div>
-              <div *ngIf="lead.nextFollowUp" class="lead-info">
-                <small class="text-purple">Próximo follow-up: {{ lead.nextFollowUp }}</small>
-              </div>
-              <div *ngIf="lead.proposalSent" class="lead-info">
-                <small class="text-success">✓ Propuesta enviada</small>
-                <div *ngIf="lead.progress" class="mini-progress">
-                  <div class="progress" [style.width.%]="lead.progress"></div>
-                  <span>{{ lead.progress }}% completo</span>
+          <div *ngFor="let lead of column.leads" class="lead-item">
+            <p-card styleClass="lead-card">
+              <ng-template pTemplate="header">
+                <div class="card-header-content">
+                  <div class="company-info">
+                    <p-avatar [image]="lead.logo" shape="circle" size="normal" styleClass="company-avatar"></p-avatar>
+                    <div class="info-text">
+                      <h4>{{ lead.companyName }}</h4>
+                      <p-tag *ngIf="lead.isProject" value="Proyecto Activo" severity="success" icon="pi pi-rocket"></p-tag>
+                    </div>
+                  </div>
+                  <div class="drag-handle"><i class="pi pi-ellipsis-v"></i></div>
                 </div>
+              </ng-template>
+
+              <div class="card-body">
+                <!-- Priority Badge -->
+                <div class="priority-section">
+                  <p-tag [value]="lead.priority" [severity]="getPrioritySeverity(lead.priority)" styleClass="priority-tag"></p-tag>
+                </div>
+                
+                <!-- Project Info (si es proyecto) -->
+                <div *ngIf="lead.isProject" class="project-info">
+                  <h5 class="project-title">{{ lead.projectTitle }}</h5>
+                  <div class="info-grid">
+                    <div *ngIf="lead.value" class="info-item">
+                      <i class="pi pi-money-bill"></i> ${{ lead.value?.toLocaleString() }}
+                    </div>
+                    <div *ngIf="lead.timeline" class="info-item">
+                      <i class="pi pi-clock"></i> {{ lead.timeline }}
+                    </div>
+                    <div *ngIf="lead.acceptedDate" class="info-item">
+                      <i class="pi pi-calendar"></i> {{ lead.acceptedDate }}
+                    </div>
+                  </div>
+                  <div *ngIf="lead.projectStatus" class="status-section">
+                    <p-tag [value]="getProjectStatusLabel(lead.projectStatus)" [severity]="getStatusSeverity(lead.projectStatus)"></p-tag>
+                  </div>
+                </div>
+                
+                <!-- Lead Info (si es lead normal) -->
+                <ng-container *ngIf="!lead.isProject">
+                  <div *ngIf="lead.contactDate" class="info-row">
+                    <small>Contactado: {{ lead.contactDate }}</small>
+                  </div>
+                  <div *ngIf="lead.nextFollowUp" class="info-row highlight">
+                    <small><i class="pi pi-bell"></i> Próximo: {{ lead.nextFollowUp }}</small>
+                  </div>
+                  <div *ngIf="lead.proposalSent" class="proposal-section">
+                    <small class="success-text"><i class="pi pi-check"></i> Propuesta enviada</small>
+                    <div *ngIf="lead.progress" class="progress-container">
+                      <p-progressBar [value]="lead.progress" [showValue]="true" styleClass="h-1"></p-progressBar>
+                    </div>
+                  </div>
+                  <div *ngIf="column.id === 'ganado'" class="action-row">
+                    <p-button label="Solicitar reseña" styleClass="p-button-text p-button-sm"></p-button>
+                  </div>
+                  <div *ngIf="lead.followUpDate" class="info-row muted">
+                    <small>{{ lead.followUpDate }}</small>
+                  </div>
+                </ng-container>
               </div>
-              <div *ngIf="column.id === 'ganado'" class="lead-info">
-                <button class="action-link">Solicitar reseña</button>
-              </div>
-              <div *ngIf="lead.followUpDate" class="lead-info">
-                <small class="text-muted">{{ lead.followUpDate }}</small>
-              </div>
-            </ng-container>
-            
-            <!-- Actions -->
-            <div class="lead-actions">
-              <button 
-                *ngIf="lead.isProject && lead.dealRoomId" 
-                class="deal-room-btn"
-                (click)="openDealRoom(lead.dealRoomId!); $event.stopPropagation()"
-              >
-                Abrir Deal Room →
-              </button>
-              <ng-container *ngIf="!lead.isProject">
-                <button class="icon-btn" title="Ver">👁️</button>
-                <button class="icon-btn" title="Chat">💬</button>
-                <button class="icon-btn" title="Más">⋮</button>
-              </ng-container>
-            </div>
-          </app-card>
+
+              <ng-template pTemplate="footer">
+                <div class="card-footer-actions">
+                  <p-button 
+                    *ngIf="lead.isProject && lead.dealRoomId" 
+                    label="Abrir Deal Room" 
+                    icon="pi pi-external-link" 
+                    styleClass="p-button-primary w-full"
+                    (click)="openDealRoom(lead.dealRoomId!); $event.stopPropagation()"
+                  ></p-button>
+                  <div *ngIf="!lead.isProject" class="icon-actions">
+                    <p-button icon="pi pi-eye" styleClass="p-button-text p-button-secondary p-button-rounded"></p-button>
+                    <p-button icon="pi pi-comments" styleClass="p-button-text p-button-secondary p-button-rounded"></p-button>
+                    <p-button icon="pi pi-ellipsis-h" styleClass="p-button-text p-button-secondary p-button-rounded"></p-button>
+                  </div>
+                </div>
+              </ng-template>
+            </p-card>
+          </div>
           
           <!-- Alert for Nuevo column -->
           <div *ngIf="column.id === 'nuevo' && column.leads.length > 0" class="column-alert">
-            ⏰ Responde en <24h para todos los leads nuevos
+            <i class="pi pi-clock"></i> Responde en <24h
           </div>
         </div>
       </div>
     </div>
-    
-    <!-- Metrics Bar -->
-    <footer class="metrics-bar">
-      <div class="metric">
-        <span class="metric-label">Conversion rate:</span>
-        <span class="metric-value">{{ metrics.conversionRate }}%</span>
-      </div>
-      <div class="metric">
-        <span class="metric-label">Tiempo promedio:</span>
-        <span class="metric-value">{{ metrics.avgTime }} días</span>
-      </div>
-      <div class="metric">
-        <span class="metric-label">Ganados este mes:</span>
-        <span class="metric-value text-success">{{ metrics.wonThisMonth }}</span>
-      </div>
-    </footer>
   </div>
 </div>

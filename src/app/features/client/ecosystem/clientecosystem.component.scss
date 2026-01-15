@@ -22,42 +22,43 @@
     margin-bottom: $spacing-6;
   }
 
-  .tabs-container {
-    display: flex;
-    gap: $spacing-4;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    
-    .tab-btn {
+  ::ng-deep .glass-tabs {
+    .p-tabview-nav {
       background: transparent;
       border: none;
-      padding: $spacing-4 $spacing-6;
-      color: $text-secondary;
-      font-size: $font-size-lg;
-      font-weight: $font-weight-medium;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: $spacing-2;
-      border-bottom: 2px solid transparent;
-      transition: all 0.2s;
-
-      &:hover {
-        color: $text-primary;
-        background: rgba(255, 255, 255, 0.02);
-      }
-
-      &.active {
-        color: $primary-blue;
-        border-bottom-color: $primary-blue;
-      }
-
-      .icon {
-        font-size: $font-size-xl;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      
+      li {
+        .p-tabview-nav-link {
+          background: transparent;
+          border: none;
+          color: $text-secondary;
+          font-weight: 500;
+          padding: 1rem 1.5rem;
+          transition: all 0.2s;
+          border-bottom: 2px solid transparent;
+          
+          &:not(.p-disabled):focus {
+            box-shadow: none;
+          }
+        }
+        
+        &.p-highlight .p-tabview-nav-link {
+          background: transparent;
+          color: $primary-blue;
+          border-color: $primary-blue;
+        }
+        
+        &:not(.p-highlight):not(.p-disabled):hover .p-tabview-nav-link {
+          background: rgba(255, 255, 255, 0.02);
+          color: $text-primary;
+        }
       }
     }
+    
+    .p-tabview-panels {
+      background: transparent;
+      padding: 2rem 0;
+    }
   }
-}
-
-.hub-content {
-  // Ajustes para los componentes hijos
 }

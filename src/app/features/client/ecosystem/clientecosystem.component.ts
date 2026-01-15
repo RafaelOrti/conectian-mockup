@@ -5,17 +5,22 @@ import { ClientInnovationCenterComponent } from '../innovation-center/clientinno
 import { ClientGrowthCenterComponent } from '../growth-center/clientgrowthcenter.component';
 import { ClientMarketAnalysisComponent } from '../market-analysis/clientmarketanalysis.component';
 
+import { TabViewModule } from 'primeng/tabview';
+
 @Component({
   selector: 'app-client-ecosystem',
   standalone: true,
-  imports: [CommonModule, NavbarComponent, ClientInnovationCenterComponent, ClientGrowthCenterComponent, ClientMarketAnalysisComponent],
+  imports: [
+    CommonModule,
+    NavbarComponent,
+    ClientInnovationCenterComponent,
+    ClientGrowthCenterComponent,
+    ClientMarketAnalysisComponent,
+    TabViewModule
+  ],
   templateUrl: './clientecosystem.component.html',
   styleUrls: ['./clientecosystem.component.scss']
 })
 export class ClientEcosystemComponent {
-  activeTab: 'innovation' | 'growth' | 'market' = 'innovation';
-
-  setActiveTab(tab: 'innovation' | 'growth' | 'market') {
-    this.activeTab = tab;
-  }
+  // PrimeNG TabView handles state internally
 }

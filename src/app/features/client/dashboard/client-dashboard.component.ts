@@ -7,9 +7,16 @@ import { CardComponent } from '../../../shared/components/card/card.component';
 import { BadgeComponent } from '../../../shared/components/badge/badge.component';
 import { ButtonComponent } from '../../../shared/components/button/button.component';
 
+// PrimeNG Imports
+import { InputTextareaModule } from 'primeng/inputtextarea';
+import { ButtonModule } from 'primeng/button';
+import { CardModule } from 'primeng/card';
+import { AvatarModule } from 'primeng/avatar';
+
 interface CaseStudy {
   id: string;
   title: string;
+  image: string; // Nueva propiedad para la imagen del caso de uso
   provider: {
     name: string;
     logo: string;
@@ -41,7 +48,11 @@ interface FeaturedProvider {
     NavbarComponent,
     CardComponent,
     BadgeComponent,
-    ButtonComponent
+    ButtonComponent,
+    InputTextareaModule,
+    ButtonModule,
+    CardModule,
+    AvatarModule
   ],
   templateUrl: './client-dashboard.component.html',
   styleUrls: ['./client-dashboard.component.scss']
@@ -71,9 +82,10 @@ export class ClientDashboardComponent implements OnInit {
     {
       id: 'featured-1',
       title: 'Solución Integral de IA Empresarial',
+      image: 'assets/images/use-cases/analytics.png',
       provider: {
         name: 'DataLogic AI',
-        logo: '🤖',
+        logo: 'assets/images/companies/tech-company.png',
         verified: true
       },
       relevanceScore: 98,
@@ -88,9 +100,10 @@ export class ClientDashboardComponent implements OnInit {
     {
       id: 'featured-2',
       title: 'Plataforma de Automatización Inteligente',
+      image: 'assets/images/use-cases/automation.png',
       provider: {
         name: 'Nexus Solutions',
-        logo: '⚡',
+        logo: 'assets/images/companies/startup.png',
         verified: true
       },
       relevanceScore: 96,
@@ -105,9 +118,10 @@ export class ClientDashboardComponent implements OnInit {
     {
       id: 'featured-3',
       title: 'Optimización Avanzada con Machine Learning',
+      image: 'assets/images/use-cases/analytics.png',
       provider: {
         name: 'Optimizer AI',
-        logo: '📊',
+        logo: 'assets/images/companies/enterprise.png',
         verified: true
       },
       relevanceScore: 94,
@@ -123,9 +137,10 @@ export class ClientDashboardComponent implements OnInit {
     {
       id: '1',
       title: 'Optimización de Cadena de Suministro Global',
+      image: 'assets/images/use-cases/supply-chain.png',
       provider: {
         name: 'DataLogic AI',
-        logo: '🤖',
+        logo: 'assets/images/companies/tech-company.png',
         verified: true
       },
       relevanceScore: 92,
@@ -139,9 +154,10 @@ export class ClientDashboardComponent implements OnInit {
     {
       id: '2',
       title: 'Automatización de Servicio al Cliente para E-commerce',
+      image: 'assets/images/use-cases/chatbot.png',
       provider: {
         name: 'Nexus Solutions',
-        logo: '⚡',
+        logo: 'assets/images/companies/startup.png',
         verified: true
       },
       relevanceScore: 89,
@@ -155,9 +171,10 @@ export class ClientDashboardComponent implements OnInit {
     {
       id: '3',
       title: 'Predicción de Fraude en Transacciones Financieras',
+      image: 'assets/images/use-cases/fraud-detection.png',
       provider: {
         name: 'FinTech AI',
-        logo: '🔐',
+        logo: 'assets/images/companies/fintech.png',
         verified: true
       },
       relevanceScore: 95,
@@ -171,9 +188,10 @@ export class ClientDashboardComponent implements OnInit {
     {
       id: '4',
       title: 'Personalización de Marketing en Tiempo Real',
+      image: 'assets/images/use-cases/marketing.png',
       provider: {
         name: 'MarketSense',
-        logo: '📈',
+        logo: 'assets/images/companies/startup.png',
         verified: true
       },
       relevanceScore: 87,
@@ -187,9 +205,10 @@ export class ClientDashboardComponent implements OnInit {
     {
       id: '5',
       title: 'Análisis de Sentimiento en Redes Sociales',
+      image: 'assets/images/use-cases/social-sentiment.png',
       provider: {
         name: 'SocialPulse',
-        logo: '💬',
+        logo: 'assets/images/companies/startup.png',
         verified: true
       },
       relevanceScore: 84,
@@ -203,9 +222,10 @@ export class ClientDashboardComponent implements OnInit {
     {
       id: '6',
       title: 'Diagnóstico Médico Asistido por IA',
+      image: 'assets/images/use-cases/healthcare.png',
       provider: {
         name: 'MediTech AI',
-        logo: '🏥',
+        logo: 'assets/images/companies/enterprise.png',
         verified: true
       },
       relevanceScore: 91,
@@ -222,6 +242,7 @@ export class ClientDashboardComponent implements OnInit {
     {
       id: 'prop-1',
       title: 'Propuesta Personalizada: Automatización de Inventario',
+      image: 'assets/images/use-cases/automation.png',
       provider: { name: 'LogiTech Solutions', logo: '📦', verified: true },
       relevanceScore: 100,
       kpis: [{ label: 'Ahorro Est.', value: '30%', icon: '💰' }],
@@ -231,6 +252,7 @@ export class ClientDashboardComponent implements OnInit {
     {
       id: 'prop-2',
       title: 'Propuesta: Chatbot Interno HR',
+      image: 'assets/images/use-cases/chatbot.png',
       provider: { name: 'HR Tech AI', logo: '👥', verified: false },
       relevanceScore: 95,
       kpis: [{ label: 'Eficiencia', value: '40%', icon: '⚡' }],
@@ -385,8 +407,17 @@ export class ClientDashboardComponent implements OnInit {
     return this.caseStudies.filter(c => !c.featured);
   }
 
+  // Notification counters for Navbar
+  projectNotifications: number = 5;
+  messageNotifications: number = 3;
+  generalNotifications: number = 4;
+
   publishRFP(): void {
     this.router.navigate(['/client/publish-rfid']);
+  }
+
+  viewResponses(requestId: string): void {
+    this.router.navigate(['/client/request', requestId, 'responses']);
   }
 
   scrollToCases(): void {

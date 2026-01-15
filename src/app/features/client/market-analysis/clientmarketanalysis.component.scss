@@ -9,6 +9,7 @@
   &.no-navbar {
     padding-top: 0;
     min-height: auto;
+    background: transparent;
   }
 }
 
@@ -28,6 +29,9 @@
     font-size: $font-size-3xl;
     font-weight: $font-weight-bold;
     margin-bottom: $spacing-2;
+    background: linear-gradient(90deg, #fff, #a0aec0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
 
   .subtitle {
@@ -38,17 +42,6 @@
   .header-actions {
     display: flex;
     gap: $spacing-4;
-
-    .period-select {
-      padding: $spacing-2 $spacing-4;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: $border-radius-base;
-      color: $text-primary;
-      cursor: pointer;
-
-      option { background: $bg-dark; }
-    }
   }
 }
 
@@ -62,97 +55,75 @@
     grid-template-columns: 1fr;
   }
 
-  .chart-card {
-    display: flex;
-    flex-direction: column;
-
-    .card-header {
+  ::ng-deep .chart-card, ::ng-deep .competitors-card {
+    .p-card {
+      background: rgba(30, 39, 54, 0.6);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 1rem;
+      height: 100%;
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: $spacing-6;
-
-      h3 { font-size: $font-size-xl; }
-
-      .legend {
+      flex-direction: column;
+      
+      .p-card-body {
+        flex: 1;
         display: flex;
-        gap: $spacing-4;
-        font-size: $font-size-sm;
-        color: $text-secondary;
-
-        .item {
-          display: flex;
-          align-items: center;
-          gap: $spacing-2;
-
-          .dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            
-            &.blue { background: $primary-blue; }
-            &.purple { background: $ai-purple; }
-          }
-        }
+        flex-direction: column;
+        padding: 0;
+      }
+      
+      .p-card-content {
+        padding: 0;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
       }
     }
 
-    .chart-placeholder {
-      flex: 1;
-      min-height: 300px;
-      background: rgba(255, 255, 255, 0.02);
-      border-radius: $border-radius-base;
-      padding: $spacing-4;
-      
-      .chart-bg {
-        width: 100%;
-        height: 100%;
-        
-        .line-chart {
-          width: 100%;
-          height: 100%;
-          overflow: visible;
-        }
-      }
+    .card-header-content {
+      padding: 1.5rem;
+      h3 { font-size: $font-size-xl; margin: 0; }
     }
   }
 
-  .competitors-card {
-    h3 { margin-bottom: $spacing-6; }
+  .chart-container {
+    padding: 0 1.5rem 1.5rem;
+    flex: 1;
+    display: flex;
+    align-items: center;
+  }
 
-    .competitors-list {
-      display: flex;
-      flex-direction: column;
-      gap: $spacing-6;
+  .competitors-list {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-6;
+    padding: 0 1.5rem 1.5rem;
 
-      .competitor-item {
-        .comp-info {
-          display: flex;
-          justify-content: space-between;
-          margin-bottom: $spacing-2;
-          font-size: $font-size-sm;
+    .competitor-item {
+      .comp-info {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: $spacing-2;
+        font-size: $font-size-sm;
 
-          .comp-name { color: $text-secondary; }
-          .comp-share { 
-            font-weight: bold;
-            &.highlight { color: $primary-blue; }
-          }
+        .comp-name { color: $text-secondary; }
+        .comp-share { 
+          font-weight: bold;
+          &.highlight { color: $primary-blue; }
         }
+      }
 
-        .progress-bar {
-          height: 8px;
-          background: rgba(255, 255, 255, 0.1);
-          border-radius: $border-radius-full;
-          overflow: hidden;
-
-          .fill {
-            height: 100%;
-            background: $text-secondary;
-            border-radius: $border-radius-full;
-
-            &.highlight { background: $primary-blue; }
-          }
+      ::ng-deep .p-progressbar {
+        height: 8px;
+        background: rgba(255, 255, 255, 0.1);
+        
+        .p-progressbar-value {
+          background: $text-secondary;
         }
+      }
+      
+      ::ng-deep .highlight-bar .p-progressbar-value {
+        background: $primary-blue;
       }
     }
   }
@@ -160,18 +131,45 @@
 
 .insights-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: $spacing-6;
 
-  .insight-card {
-    display: flex;
-    flex-direction: column;
-    gap: $spacing-4;
-    padding: $spacing-6;
-    transition: transform 0.2s;
+  @media (max-width: 1400px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
 
-    &:hover {
-      transform: translateY(-4px);
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+
+  ::ng-deep .insight-card {
+    .p-card {
+      background: rgba(30, 39, 54, 0.6);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 1rem;
+      height: 100%;
+      transition: transform 0.2s;
+      
+      &:hover {
+        transform: translateY(-4px);
+        background: rgba(30, 39, 54, 0.8);
+      }
+      
+      .p-card-body {
+        padding: 1.5rem;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+      }
+      
+      .p-card-content {
+        padding: 0;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
     }
 
     .insight-header {
@@ -196,8 +194,8 @@
       }
     }
 
-    h3 { font-size: $font-size-lg; line-height: 1.3; }
-    p { color: $text-secondary; font-size: $font-size-sm; line-height: 1.5; flex: 1; }
+    h3 { font-size: $font-size-lg; line-height: 1.3; margin: 0; }
+    p { color: $text-secondary; font-size: $font-size-sm; line-height: 1.5; margin: 0; flex: 1; }
 
     .read-more {
       color: $primary-blue;
@@ -209,3 +207,38 @@
     }
   }
 }
+
+/* PrimeNG Overrides */
+::ng-deep .glass-dropdown {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: $border-radius-base;
+  
+  .p-dropdown-label {
+    color: $text-primary;
+  }
+  
+  .p-dropdown-trigger {
+    color: $text-secondary;
+  }
+  
+  .p-dropdown-panel {
+    background: $bg-card;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    
+    .p-dropdown-items .p-dropdown-item {
+      color: $text-secondary;
+      
+      &:hover {
+        background: rgba(255, 255, 255, 0.05);
+        color: $text-primary;
+      }
+      
+      &.p-highlight {
+        background: rgba(13, 134, 255, 0.1);
+        color: $primary-blue;
+      }
+    }
+  }
+}
+

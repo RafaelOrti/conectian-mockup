@@ -9,6 +9,7 @@
   &.no-navbar {
     padding-top: 0;
     min-height: auto;
+    background: transparent;
   }
 }
 
@@ -25,6 +26,9 @@
     font-size: $font-size-3xl;
     font-weight: $font-weight-bold;
     margin-bottom: $spacing-2;
+    background: linear-gradient(90deg, #fff, #a0aec0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
 
   .subtitle {
@@ -44,54 +48,51 @@
 }
 
 .map-section {
-  .map-card {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
+  ::ng-deep .map-card {
+    .p-card {
+      background: rgba(30, 39, 54, 0.6);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 1rem;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      
+      .p-card-body {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        padding: 0;
+      }
+      
+      .p-card-content {
+        padding: 0;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+      }
+    }
 
-    .card-header {
+    .card-header-content {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: $spacing-6;
+      padding: 1.5rem;
 
-      h3 { font-size: $font-size-xl; }
-
-      .map-controls {
-        display: flex;
-        gap: $spacing-2;
-        background: rgba(255, 255, 255, 0.05);
-        padding: 4px;
-        border-radius: $border-radius-base;
-
-        .control-btn {
-          padding: 4px 12px;
-          border: none;
-          background: none;
-          color: $text-secondary;
-          border-radius: $border-radius-sm;
-          cursor: pointer;
-          font-size: $font-size-sm;
-
-          &.active {
-            background: $bg-dark;
-            color: $text-primary;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-          }
-        }
-      }
+      h3 { font-size: $font-size-xl; margin: 0; }
     }
 
     .map-placeholder {
       flex: 1;
       min-height: 400px;
       background: #1a1f3a;
-      border-radius: $border-radius-lg;
       position: relative;
       overflow: hidden;
       display: flex;
       align-items: center;
       justify-content: center;
+      border-bottom-left-radius: 1rem;
+      border-bottom-right-radius: 1rem;
 
       .map-bg {
         color: rgba(255, 255, 255, 0.1);
@@ -121,35 +122,77 @@
 
   .metrics-grid {
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(3, 1fr);
     gap: $spacing-4;
 
+    @media (max-width: 1024px) {
+      grid-template-columns: 1fr;
+    }
+
     .metric-card {
+      background: rgba(30, 39, 54, 0.6);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 1rem;
+      padding: 1.5rem;
       display: flex;
       flex-direction: column;
-      gap: $spacing-2;
-      padding: $spacing-6;
+      gap: 0.5rem;
+      transition: transform 0.2s;
+      
+      &:hover {
+        transform: translateY(-2px);
+        background: rgba(30, 39, 54, 0.8);
+      }
 
-      .metric-label { color: $text-secondary; font-size: $font-size-sm; }
-      .metric-value { font-size: $font-size-3xl; font-weight: bold; color: $text-primary; }
-      .metric-trend {
-        font-size: $font-size-xs;
-        font-weight: $font-weight-medium;
+      .metric-label { color: $text-secondary; font-size: $font-size-sm; text-transform: uppercase; letter-spacing: 0.5px; }
+      
+      .metric-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
         
-        &.up { color: $success-green; }
-        &.down { color: $danger-red; }
-        &.stable { color: $text-secondary; }
+        .metric-value { font-size: 2rem; font-weight: 700; color: $text-primary; }
+        
+        .metric-trend {
+          font-size: $font-size-sm;
+          font-weight: $font-weight-medium;
+          display: flex;
+          align-items: center;
+          gap: 0.25rem;
+          
+          &.up { color: $success-green; }
+          &.down { color: $danger-red; }
+          &.stable { color: $text-secondary; }
+        }
+      }
+      
+      .metric-sub {
+        font-size: 0.8rem;
+        color: $text-muted;
       }
     }
   }
 
-  .recommendations-card {
-    h3 { margin-bottom: $spacing-6; }
+  ::ng-deep .recommendations-card {
+    .p-card {
+      background: rgba(30, 39, 54, 0.6);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 1rem;
+    }
+
+    h3 { margin-bottom: 0; font-size: 1.25rem; }
 
     .recommendations-list {
-      display: flex;
-      flex-direction: column;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
       gap: $spacing-4;
+      padding: 1.5rem;
+
+      @media (max-width: 1024px) {
+        grid-template-columns: 1fr;
+      }
 
       .recommendation-item {
         display: flex;
@@ -176,26 +219,32 @@
         .rec-content {
           flex: 1;
 
-          h4 { font-size: $font-size-base; margin-bottom: $spacing-1; }
+          h4 { font-size: $font-size-base; margin-bottom: $spacing-1; color: $text-primary; }
           p { font-size: $font-size-sm; color: $text-secondary; line-height: 1.4; }
-        }
-
-        .action-btn {
-          padding: 6px 12px;
-          background: none;
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          border-radius: $border-radius-base;
-          color: $text-primary;
-          font-size: $font-size-xs;
-          cursor: pointer;
-          white-space: nowrap;
-
-          &:hover {
-            background: $primary-blue;
-            border-color: $primary-blue;
-          }
         }
       }
     }
   }
 }
+
+/* PrimeNG Overrides */
+::ng-deep .glass-select-button {
+  .p-button {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: $text-secondary;
+    
+    &.p-highlight {
+      background: $primary-blue;
+      border-color: $primary-blue;
+      color: white;
+    }
+    
+    &:not(.p-highlight):not(.p-disabled):hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+  }
+}
+
+

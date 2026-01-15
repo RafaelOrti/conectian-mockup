@@ -28,7 +28,7 @@ export class ClientNotificationsComponent implements OnInit {
   notifications: Notification[] = [];
   unreadCount: number = 0;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router) { }
 
   ngOnInit(): void {
     this.loadNotifications();
@@ -44,7 +44,7 @@ export class ClientNotificationsComponent implements OnInit {
         message: 'Nexus Solutions ha enviado un mensaje en el proyecto "Chatbot para E-commerce"',
         timestamp: 'Hace 5 minutos',
         read: false,
-        actionUrl: '/deal-room/deal-1',
+        actionUrl: '/client/deal-room/deal-1',
         icon: '💬'
       },
       {
@@ -54,7 +54,7 @@ export class ClientNotificationsComponent implements OnInit {
         message: 'DataLogic AI ha actualizado la propuesta para "Sistema de Detección de Fraude"',
         timestamp: 'Hace 1 hora',
         read: false,
-        actionUrl: '/deal-room/deal-2',
+        actionUrl: '/client/deal-room/deal-2',
         icon: '📄'
       },
       {
@@ -64,7 +64,7 @@ export class ClientNotificationsComponent implements OnInit {
         message: 'El hito "Análisis de Requisitos" ha sido completado en el proyecto "Chatbot para E-commerce"',
         timestamp: 'Hace 2 horas',
         read: false,
-        actionUrl: '/deal-room/deal-1',
+        actionUrl: '/client/deal-room/deal-1',
         icon: '✅'
       },
       {
@@ -84,7 +84,7 @@ export class ClientNotificationsComponent implements OnInit {
         message: 'Nexus Solutions ha compartido un nuevo documento en el Deal Room',
         timestamp: 'Ayer',
         read: true,
-        actionUrl: '/deal-room/deal-1',
+        actionUrl: '/client/deal-room/deal-1',
         icon: '📎'
       },
       {
@@ -103,7 +103,7 @@ export class ClientNotificationsComponent implements OnInit {
         message: 'DataLogic AI ha enviado una propuesta para tu caso de uso "Sistema de Detección de Fraude"',
         timestamp: 'Hace 3 días',
         read: true,
-        actionUrl: '/deal-room/deal-2',
+        actionUrl: '/client/deal-room/deal-2',
         icon: '💰'
       }
     ];

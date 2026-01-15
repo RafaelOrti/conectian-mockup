@@ -123,5 +123,11 @@ export const PROVIDER_ROUTES: Routes = [
     loadComponent: () => import('./ecosystem/providerecosystem.component')
       .then(m => m.ProviderEcosystemComponent),
     title: 'Ecosistema | Proveedor'
+  },
+  {
+    path: 'deal-room/:id',
+    loadComponent: () => import('./deal-room/provider-deal-room.component')
+      .then(m => m.ProviderDealRoomComponent),
+    title: 'Deal Room | Proveedor'
   }
 ];

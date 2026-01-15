@@ -8,107 +8,245 @@
   ></app-navbar>
   
   <div class="container">
-    <div class="page-header">
-      <div>
-        <h1>🌟 Referidos y Networking</h1>
-        <p class="subtitle">Expande tu red y colabora con otros proveedores</p>
+    <!-- Page Header -->
+    <header class="page-header">
+      <div class="header-content">
+        <div class="header-icon-wrapper">
+          <div class="header-icon">
+            <i class="pi pi-share-alt"></i>
+          </div>
+        </div>
+        <div class="header-text">
+          <h1>Referidos y Networking</h1>
+          <p class="subtitle">Expande tu red y colabora con otros proveedores de IA</p>
+        </div>
       </div>
-      <app-button variant="primary" icon="🤝">Invitar Partner</app-button>
-    </div>
+      <app-button variant="primary" icon="🤝">
+        <span>Invitar Partner</span>
+      </app-button>
+    </header>
 
-    <div class="referrals-layout">
-      <!-- Stats Cards -->
+    <!-- Stats Section -->
+    <section class="stats-section">
       <div class="stats-grid">
-        <app-card class="stat-card">
-          <div class="stat-icon network">🌐</div>
-          <div class="stat-info">
-            <span class="stat-value">24</span>
-            <span class="stat-label">Partners Activos</span>
+        <!-- Active Partners -->
+        <div class="stat-card partners-card">
+          <div class="stat-background">
+            <div class="stat-pattern"></div>
           </div>
-        </app-card>
-        <app-card class="stat-card">
-          <div class="stat-icon deals">💼</div>
-          <div class="stat-info">
-            <span class="stat-value">8</span>
-            <span class="stat-label">Deals Compartidos</span>
+          <div class="stat-content">
+            <div class="stat-icon-circle">
+              <i class="pi pi-users"></i>
+            </div>
+            <div class="stat-info">
+              <span class="stat-value">{{ stats.activePartners }}</span>
+              <span class="stat-label">Partners Activos</span>
+              <div class="stat-trend positive">
+                <i class="pi pi-arrow-up"></i>
+                <span>+12% este mes</span>
+              </div>
+            </div>
           </div>
-        </app-card>
-        <app-card class="stat-card">
-          <div class="stat-icon commission">💰</div>
-          <div class="stat-info">
-            <span class="stat-value">€1,250</span>
-            <span class="stat-label">Comisiones Generadas</span>
+        </div>
+
+        <!-- Shared Deals -->
+        <div class="stat-card deals-card">
+          <div class="stat-background">
+            <div class="stat-pattern"></div>
           </div>
-        </app-card>
+          <div class="stat-content">
+            <div class="stat-icon-circle">
+              <i class="pi pi-briefcase"></i>
+            </div>
+            <div class="stat-info">
+              <span class="stat-value">{{ stats.sharedDeals }}</span>
+              <span class="stat-label">Deals Compartidos</span>
+              <div class="stat-trend positive">
+                <i class="pi pi-arrow-up"></i>
+                <span>+3 últimos 7 días</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Commissions -->
+        <div class="stat-card commission-card">
+          <div class="stat-background">
+            <div class="stat-pattern"></div>
+          </div>
+          <div class="stat-content">
+            <div class="stat-icon-circle">
+              <i class="pi pi-money-bill"></i>
+            </div>
+            <div class="stat-info">
+              <span class="stat-value">€{{ stats.commissionsEarned.toLocaleString() }}</span>
+              <span class="stat-label">Comisiones Generadas</span>
+              <div class="stat-trend positive">
+                <i class="pi pi-arrow-up"></i>
+                <span>+€250 esta semana</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Networking Opportunities -->
+    <section class="opportunities-section">
+      <div class="section-header">
+        <h2>
+          <i class="pi pi-bolt"></i>
+          Oportunidades de Networking
+        </h2>
+        <span class="opportunities-count">{{ opportunities.length }} disponibles</span>
       </div>
 
-      <!-- Networking Opportunities -->
-      <section class="networking-section">
-        <h2>Oportunidades de Networking</h2>
-        <div class="opportunities-grid">
-          <app-card class="opportunity-card">
-            <div class="opp-header">
-              <span class="tag collaboration">Colaboración</span>
-              <span class="date">Hace 2 días</span>
-            </div>
-            <h3>Proyecto de Visión Artificial</h3>
-            <p>Empresa de robótica busca partner especializado en Computer Vision para proyecto industrial.</p>
-            <div class="opp-footer">
-              <div class="company-info">
-                <div class="avatar">R</div>
-                <span>Robotics Corp</span>
-              </div>
-              <button class="connect-btn">Conectar</button>
-            </div>
-          </app-card>
-
-          <app-card class="opportunity-card">
-            <div class="opp-header">
-              <span class="tag joint-venture">Joint Venture</span>
-              <span class="date">Hace 5 días</span>
-            </div>
-            <h3>Expansión a Mercado LATAM</h3>
-            <p>Consultora busca socio tecnológico para implementar soluciones de IA en banca latinoamericana.</p>
-            <div class="opp-footer">
-              <div class="company-info">
-                <div class="avatar">F</div>
-                <span>FinTech Global</span>
-              </div>
-              <button class="connect-btn">Conectar</button>
-            </div>
-          </app-card>
-
-          <app-card class="opportunity-card">
-            <div class="opp-header">
-              <span class="tag referral">Referido</span>
-              <span class="date">Hace 1 semana</span>
-            </div>
-            <h3>Cliente Enterprise busca NLP</h3>
-            <p>Tenemos un cliente grande que necesita procesamiento de lenguaje natural. Buscamos experto.</p>
-            <div class="opp-footer">
-              <div class="company-info">
-                <div class="avatar">D</div>
-                <span>Data Solutions</span>
-              </div>
-              <button class="connect-btn">Conectar</button>
-            </div>
-          </app-card>
-        </div>
-      </section>
-
-      <!-- Referral Link Section -->
-      <app-card class="referral-link-card">
-        <div class="link-content">
-          <div class="link-info">
-            <h3>Invita a otros proveedores</h3>
-            <p>Gana comisiones por cada proveedor que se una a la plataforma a través de tu enlace.</p>
+      <div class="opportunities-grid">
+        <div *ngFor="let opp of opportunities" class="opportunity-card" [attr.data-type]="opp.type">
+          <!-- Card Background -->
+          <div class="card-background">
+            <div class="bg-gradient"></div>
+            <div class="bg-dots"></div>
           </div>
-          <div class="link-box">
-            <input type="text" value="https://conectian.com/partner/techsolutions-ai" readonly>
-            <button class="copy-btn">Copiar</button>
+
+          <!-- Card Content -->
+          <div class="card-content-wrapper">
+            <!-- Header -->
+            <div class="card-header">
+              <div class="type-badge" [attr.data-color]="getTypeColor(opp.type)">
+                <i class="pi" [ngClass]="{
+                  'pi-handshake': opp.type === 'collaboration',
+                  'pi-users': opp.type === 'joint-venture',
+                  'pi-share-alt': opp.type === 'referral'
+                }"></i>
+                <span>{{ getTypeLabel(opp.type) }}</span>
+              </div>
+              <span class="posted-date">{{ opp.postedDate }}</span>
+            </div>
+
+            <!-- Company Info -->
+            <div class="company-section">
+              <div class="company-avatar" [style.background]="opp.company.color">
+                {{ opp.company.avatar }}
+              </div>
+              <div class="company-info">
+                <span class="company-name">{{ opp.company.name }}</span>
+                <span class="verified-badge">
+                  <i class="pi pi-check-circle"></i>
+                  Verificado
+                </span>
+              </div>
+            </div>
+
+            <!-- Title & Description -->
+            <div class="opportunity-content">
+              <h3 class="opportunity-title">{{ opp.title }}</h3>
+              <p class="opportunity-description">{{ opp.description }}</p>
+            </div>
+
+            <!-- Skills Tags -->
+            <div class="skills-section">
+              <div class="skill-tag" *ngFor="let skill of opp.skills">
+                <i class="pi pi-code"></i>
+                {{ skill }}
+              </div>
+            </div>
+
+            <!-- Budget & Action -->
+            <div class="card-footer">
+              <div class="budget-section" *ngIf="opp.budget">
+                <i class="pi pi-wallet"></i>
+                <span>{{ opp.budget }}</span>
+              </div>
+              <button class="connect-button" (click)="connectWithCompany(opp.id)">
+                <span>Conectar</span>
+                <i class="pi pi-arrow-right"></i>
+              </button>
+            </div>
           </div>
         </div>
-      </app-card>
-    </div>
+      </div>
+    </section>
+
+    <!-- Referral Link Section -->
+    <section class="referral-link-section">
+      <div class="referral-card">
+        <div class="referral-background">
+          <div class="referral-gradient"></div>
+          <div class="referral-pattern"></div>
+        </div>
+
+        <div class="referral-content">
+          <div class="referral-icon-wrapper">
+            <div class="referral-icon">
+              <i class="pi pi-link"></i>
+            </div>
+          </div>
+
+          <div class="referral-info">
+            <h3>Invita a Otros Proveedores</h3>
+            <p>Gana comisiones recurrentes por cada proveedor que se una a la plataforma a través de tu enlace de referido.</p>
+
+            <div class="benefits-grid">
+              <div class="benefit-item">
+                <i class="pi pi-check-circle"></i>
+                <span>5% comisión recurrente</span>
+              </div>
+              <div class="benefit-item">
+                <i class="pi pi-check-circle"></i>
+                <span>Bonos por hitos alcanzados</span>
+              </div>
+              <div class="benefit-item">
+                <i class="pi pi-check-circle"></i>
+                <span>Acceso a programa VIP</span>
+              </div>
+            </div>
+
+            <!-- Link Box -->
+            <div class="link-box-wrapper">
+              <div class="link-box">
+                <div class="link-input-wrapper">
+                  <i class="pi pi-link link-icon"></i>
+                  <input type="text" [value]="referralLink" readonly>
+                </div>
+                <button class="copy-button" (click)="copyLink()">
+                  <i class="pi pi-copy"></i>
+                  <span>Copiar</span>
+                </button>
+              </div>
+
+              <!-- Social Share -->
+              <div class="social-share">
+                <span class="share-label">Compartir en:</span>
+                <button class="social-btn linkedin">
+                  <i class="pi pi-linkedin"></i>
+                  LinkedIn
+                </button>
+                <button class="social-btn twitter">
+                  <i class="pi pi-twitter"></i>
+                  Twitter
+                </button>
+                <button class="social-btn whatsapp">
+                  <i class="pi pi-whatsapp"></i>
+                  WhatsApp
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Illustration -->
+          <div class="referral-illustration">
+            <div class="illustration-circle">
+              <i class="pi pi-users"></i>
+            </div>
+            <div class="illustration-dots">
+              <span class="dot"></span>
+              <span class="dot"></span>
+              <span class="dot"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
   </div>
 </div>

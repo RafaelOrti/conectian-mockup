@@ -1,432 +1,159 @@
 @import '../../../../styles/variables';
 
-.admin-users-page {
+.admin-users {
   min-height: 100vh;
-  background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
+  background: $bg-dark;
+  color: $text-primary;
   padding-top: 80px;
 }
 
 .container {
-  max-width: 1400px;
+  max-width: 1600px;
   margin: 0 auto;
-  padding: $spacing-8;
+  padding: $spacing-6;
 }
 
+// Page Header
 .page-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: $spacing-6;
   flex-wrap: wrap;
-  gap: $spacing-4;
+  gap: 1rem;
+  margin-bottom: $spacing-6;
 
-  h1 {
-    font-size: $font-size-3xl;
-    font-weight: $font-weight-bold;
-    color: #ffffff;
-    margin: 0;
-    background: linear-gradient(135deg, #0d86ff 0%, #6b5cf0 100%);
+  .page-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem 0;
+    display: flex;
+    align-items: center;
+    background: linear-gradient(90deg, #fff, #a0aec0);
     -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
     background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
 
-  .subtitle {
-    font-size: $font-size-base;
-    color: rgba(255, 255, 255, 0.7);
-    margin-top: $spacing-1;
+  .page-subtitle {
+    margin: 0;
+    color: $text-secondary;
   }
 
   .header-actions {
     display: flex;
-    gap: $spacing-3;
+    gap: 0.5rem;
   }
 }
 
-.tabs {
-  display: flex;
-  gap: $spacing-2;
-  margin-bottom: $spacing-6;
-  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
-}
-
-.tab {
-  padding: $spacing-4 $spacing-6;
-  background: transparent;
-  border: none;
-  border-bottom: 3px solid transparent;
-  color: $text-secondary;
-  font-size: $font-size-base;
-  font-weight: $font-weight-medium;
-  cursor: pointer;
-  transition: all $transition-base;
-
-  &:hover {
-    color: $text-primary;
+// PrimeNG Overrides
+::ng-deep {
+  // Cards
+  .p-card {
+    background: rgba(30, 39, 54, 0.6) !important;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 1rem !important;
+    color: $text-primary !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2) !important;
   }
 
-  &.active {
-    color: $primary-blue;
-    border-bottom-color: $primary-blue;
-  }
-}
-
-.stats-bar {
-  display: flex;
-  gap: $spacing-4;
-  padding: $spacing-4;
-  background: rgba(255, 255, 255, 0.03);
-  border-radius: $border-radius-base;
-  margin-bottom: $spacing-4;
-  flex-wrap: wrap;
-}
-
-.stat-item {
-  display: flex;
-  align-items: center;
-  gap: $spacing-2;
-
-  .stat-label {
-    color: $text-secondary;
-    font-size: $font-size-sm;
-  }
-
-  .stat-value {
-    color: #ffffff;
-    font-weight: $font-weight-semibold;
-  }
-}
-
-.filters-bar {
-  display: flex;
-  gap: $spacing-4;
-  margin-bottom: $spacing-6;
-  align-items: center;
-  flex-wrap: wrap;
-}
-
-.search-box {
-  position: relative;
-  flex: 1;
-  min-width: 250px;
-
-  .search-input {
-    width: 100%;
-    padding: $spacing-3 $spacing-10 $spacing-3 $spacing-4;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: $border-radius-base;
-    color: #ffffff;
-    font-size: $font-size-base;
-
-    &:focus {
-      outline: none;
-      border-color: $primary-blue;
+  .stat-card {
+    .p-card-body {
+      padding: 1.5rem !important;
     }
 
-    &::placeholder {
-      color: rgba(255, 255, 255, 0.4);
+    .stat-content {
+      text-align: center;
+
+      .stat-value {
+        font-size: 2rem;
+        font-weight: 700;
+        background: linear-gradient(90deg, #0d86ff, #00d4ff);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .stat-label {
+        color: $text-secondary;
+        font-size: 0.875rem;
+        margin-top: 0.5rem;
+      }
     }
   }
 
-  .search-icon {
-    position: absolute;
-    right: $spacing-4;
-    top: 50%;
-    transform: translateY(-50%);
-    color: $text-secondary;
+  // TabView
+  .p-tabview {
+    .p-tabview-nav {
+      background: transparent !important;
+      border: none !important;
+
+      li {
+        .p-tabview-nav-link {
+          background: rgba(255, 255, 255, 0.05) !important;
+          border: 1px solid rgba(255, 255, 255, 0.1) !important;
+          color: $text-secondary !important;
+          border-radius: 0.5rem 0.5rem 0 0 !important;
+          
+          &:hover {
+            background: rgba(255, 255, 255, 0.1) !important;
+          }
+        }
+
+        &.p-highlight .p-tabview-nav-link {
+          background: rgba(13, 134, 255, 0.2) !important;
+          border-color: rgba(13, 134, 255, 0.4) !important;
+          color: $primary-blue !important;
+        }
+      }
+    }
+
+    .p-tabview-panels {
+      background: transparent !important;
+      padding: $spacing-4 0 !important;
+    }
   }
-}
 
-.filter-buttons {
-  display: flex;
-  gap: $spacing-2;
-}
-
-.filter-btn {
-  padding: $spacing-2 $spacing-4;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: $border-radius-base;
-  color: $text-secondary;
-  font-size: $font-size-sm;
-  cursor: pointer;
-  transition: all $transition-base;
-
-  &:hover {
-    background: rgba(255, 255, 255, 0.1);
-  }
-
-  &.active {
-    background: rgba(13, 134, 255, 0.2);
-    border-color: $primary-blue;
-    color: $primary-blue;
-  }
-}
-
-.users-table-card {
-  overflow-x: auto;
-}
-
-.users-table {
-  width: 100%;
-  border-collapse: collapse;
-
-  thead {
-    background: rgba(255, 255, 255, 0.03);
-    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
-
-    th {
-      padding: $spacing-4;
-      text-align: left;
-      font-size: $font-size-sm;
-      font-weight: $font-weight-semibold;
-      color: $text-secondary;
+  // Table
+  .p-datatable {
+    .p-datatable-thead > tr > th {
+      background: rgba(0, 0, 0, 0.3);
+      color: $text-primary;
+      font-weight: 600;
       text-transform: uppercase;
+      font-size: 0.75rem;
       letter-spacing: 0.5px;
+      border-bottom: 2px solid rgba(13, 134, 255, 0.3);
     }
-  }
 
-  tbody {
-    .user-row {
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-      cursor: pointer;
-      transition: all $transition-base;
+    .p-datatable-tbody > tr {
+      transition: all 0.2s ease;
 
       &:hover {
-        background: rgba(255, 255, 255, 0.03);
+        background: rgba(13, 134, 255, 0.05);
       }
 
-      &.selected {
-        background: rgba(13, 134, 255, 0.1);
-      }
-
-      td {
-        padding: $spacing-4;
-        color: #ffffff;
-        font-size: $font-size-base;
+      > td {
+        border-color: rgba(255, 255, 255, 0.05);
       }
     }
   }
-}
 
-.user-info {
-  .user-email {
-    font-weight: $font-weight-semibold;
-    margin-bottom: $spacing-1;
-  }
-
-  .user-company {
-    font-size: $font-size-sm;
-    color: $text-secondary;
+  .table-header {
+    padding: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   }
 }
 
-.plan-info {
-  display: flex;
-  flex-direction: column;
-  gap: $spacing-1;
-
-  .plan-name {
-    font-weight: $font-weight-semibold;
-  }
-
-  .plan-price {
-    font-size: $font-size-sm;
-    color: $text-secondary;
-  }
-}
-
-.status-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: $spacing-1;
-  padding: $spacing-1 $spacing-3;
-  border-radius: $border-radius-base;
-  font-size: $font-size-sm;
-
-  &.active {
-    background: rgba(76, 175, 80, 0.2);
-    color: $success-green;
-  }
-}
-
-.rating {
-  font-size: $font-size-xs;
-  color: $text-secondary;
-  margin-top: $spacing-1;
-}
-
-.activity-info {
-  display: flex;
-  flex-direction: column;
-  gap: $spacing-1;
-  font-size: $font-size-sm;
-  color: $text-secondary;
-}
-
-.action-buttons {
-  display: flex;
-  gap: $spacing-2;
-}
-
-.btn-icon {
-  background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: $border-radius-base;
-  padding: $spacing-2;
-  cursor: pointer;
-  font-size: $font-size-base;
-  transition: all $transition-base;
-
-  &:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: $primary-blue;
-  }
-}
-
-.btn-approve,
-.btn-reject {
-  padding: $spacing-2 $spacing-4;
-  border: none;
-  border-radius: $border-radius-base;
-  cursor: pointer;
-  font-size: $font-size-base;
-  transition: all $transition-base;
-}
-
-.btn-approve {
-  background: rgba(76, 175, 80, 0.2);
-  color: $success-green;
-
-  &:hover {
-    background: rgba(76, 175, 80, 0.3);
-  }
-}
-
-.btn-reject {
-  background: rgba(244, 68, 74, 0.2);
-  color: #f4444a;
-
-  &:hover {
-    background: rgba(244, 68, 74, 0.3);
-  }
-}
-
-.bulk-actions {
-  display: flex;
-  align-items: center;
-  gap: $spacing-4;
-  padding: $spacing-4;
-  background: rgba(255, 255, 255, 0.03);
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  margin-top: $spacing-4;
-
-  .bulk-info {
-    color: $text-secondary;
-    font-size: $font-size-sm;
-  }
-
-  .bulk-select {
-    padding: $spacing-2 $spacing-4;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: $border-radius-base;
-    color: #ffffff;
-    cursor: pointer;
-  }
-}
-
-.user-detail-panel {
-  margin-top: $spacing-6;
-}
-
-.detail-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: $spacing-6;
-  padding-bottom: $spacing-4;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-
-  h3 {
-    font-size: $font-size-xl;
-    color: #ffffff;
-    margin: 0;
-  }
-
-  .close-btn {
-    background: transparent;
-    border: none;
-    color: $text-secondary;
-    font-size: $font-size-2xl;
-    cursor: pointer;
-    padding: 0;
-    width: 32px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: $border-radius-base;
-    transition: all $transition-base;
-
-    &:hover {
-      background: rgba(255, 255, 255, 0.1);
-      color: #ffffff;
-    }
-  }
-}
-
-.detail-content {
-  .detail-section {
-    margin-bottom: $spacing-6;
-
-    h4 {
-      font-size: $font-size-base;
-      font-weight: $font-weight-semibold;
-      color: $text-secondary;
-      margin-bottom: $spacing-3;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-  }
-
-  .detail-item {
-    display: flex;
-    justify-content: space-between;
-    padding: $spacing-3 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-
-    .detail-label {
-      color: $text-secondary;
-    }
-
-    .detail-value {
-      color: #ffffff;
-      font-weight: $font-weight-semibold;
-    }
-  }
-}
-
-.detail-actions {
-  display: flex;
-  gap: $spacing-3;
-  margin-top: $spacing-6;
-  padding-top: $spacing-6;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-@media (max-width: $breakpoint-md) {
-  .filters-bar {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .users-table {
-    font-size: $font-size-sm;
-  }
-
-  .detail-actions {
-    flex-direction: column;
-  }
-}
+// Utility classes
+.mb-4 { margin-bottom: 1.5rem; }
+.mr-2 { margin-right: 0.5rem; }
+.ml-2 { margin-left: 0.5rem; }
+.text-sm { font-size: 0.875rem; }
+.text-xs { font-size: 0.75rem; }
+.font-bold { font-weight: 700; }
+.text-gray-400 { color: #94a3b8; }
+.flex { display: flex; }
+.gap-1 { gap: 0.25rem; }
+.gap-2 { gap: 0.5rem; }
+.align-items-center { align-items: center; }

@@ -9,101 +9,103 @@
   ></app-navbar>
   
   <div class="container">
-    <div class="page-header">
+    <div class="page-header d-flex justify-between align-start mb-8">
       <div>
-        <h1>🏢 Mi Empresa</h1>
-        <p class="subtitle">Gestiona los perfiles y departamentos de tu organización</p>
+        <h1 class="mb-2">🏢 Mi Empresa</h1>
+        <p class="text-secondary">Gestiona los perfiles y departamentos de tu organización</p>
       </div>
-      <app-button variant="primary" icon="➕">Invitar Miembro</app-button>
+      <button class="btn btn-primary">
+        <span class="icon">➕</span> Invitar Miembro
+      </button>
     </div>
 
     <!-- Company Overview -->
-    <app-card class="company-info-card">
-      <div class="company-header">
-        <div class="logo-placeholder">TS</div>
-        <div class="company-details">
-          <h2>TechSolutions SL</h2>
-          <p class="industry">Tecnología y Software</p>
-          <div class="meta-info">
+    <div class="card company-info-card mb-8">
+      <div class="company-header d-flex align-center gap-6">
+        <div class="logo-placeholder rounded-lg d-flex align-center justify-center font-bold text-white text-2xl" style="width: 80px; height: 80px; background: linear-gradient(135deg, #0d86ff, #6b5cf0);">TS</div>
+        <div class="company-details flex-1">
+          <h2 class="text-2xl mb-1">TechSolutions SL</h2>
+          <p class="text-blue font-medium mb-2">Tecnología y Software</p>
+          <div class="meta-info d-flex gap-6 text-secondary text-sm">
             <span>📍 Madrid, España</span>
             <span>👥 45 Empleados</span>
             <span>🌐 techsolutions.com</span>
           </div>
         </div>
-        <button class="edit-btn">Editar Perfil</button>
+        <button class="btn btn-secondary">Editar Perfil</button>
       </div>
-    </app-card>
+    </div>
 
     <!-- Departments Grid -->
-    <div class="departments-layout">
+    <div class="departments-layout d-flex flex-column gap-8">
       <!-- Dirección -->
       <section class="department-section">
-        <div class="dept-header">
-          <h3>Dirección</h3>
-          <span class="count">3 miembros</span>
+        <div class="dept-header d-flex align-baseline gap-4 mb-6 pb-2 border-bottom border-surface-border" style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+          <h3 class="text-xl">Dirección</h3>
+          <span class="text-secondary text-sm">3 miembros</span>
         </div>
-        <div class="members-grid">
-          <app-card class="member-card">
-            <div class="member-avatar">CM</div>
-            <div class="member-info">
-              <h4>Carlos Martínez</h4>
-              <span class="role">CEO & Founder</span>
-              <span class="email">carlos&#64;techsolutions.com</span>
+        <div class="members-grid d-grid gap-6" style="grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));">
+          <div class="card member-card d-flex align-center gap-4 p-4 hover:translate-y-1 transition-transform">
+            <div class="member-avatar rounded-full bg-surface-hover d-flex align-center justify-center font-bold" style="width: 48px; height: 48px;">CM</div>
+            <div class="member-info flex-1 overflow-hidden">
+              <h4 class="text-base mb-1 truncate">Carlos Martínez</h4>
+              <span class="text-blue text-xs mb-1 d-block">CEO & Founder</span>
+              <span class="text-secondary text-xs truncate d-block">carlos&#64;techsolutions.com</span>
             </div>
-            <span class="status-badge active">Activo</span>
-          </app-card>
+            <span class="badge badge-success">Activo</span>
+          </div>
           
-          <app-card class="member-card">
-            <div class="member-avatar">AL</div>
-            <div class="member-info">
-              <h4>Ana López</h4>
-              <span class="role">CTO</span>
-              <span class="email">ana&#64;techsolutions.com</span>
+          <div class="card member-card d-flex align-center gap-4 p-4 hover:translate-y-1 transition-transform">
+            <div class="member-avatar rounded-full bg-surface-hover d-flex align-center justify-center font-bold" style="width: 48px; height: 48px;">AL</div>
+            <div class="member-info flex-1 overflow-hidden">
+              <h4 class="text-base mb-1 truncate">Ana López</h4>
+              <span class="text-blue text-xs mb-1 d-block">CTO</span>
+              <span class="text-secondary text-xs truncate d-block">ana&#64;techsolutions.com</span>
             </div>
-            <span class="status-badge active">Activo</span>
-          </app-card>
+            <span class="badge badge-success">Activo</span>
+          </div>
         </div>
       </section>
 
       <!-- Tecnología -->
       <section class="department-section">
-        <div class="dept-header">
-          <h3>Tecnología e Innovación</h3>
-          <span class="count">12 miembros</span>
+        <div class="dept-header d-flex align-baseline gap-4 mb-6 pb-2 border-bottom border-surface-border" style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+          <h3 class="text-xl">Tecnología e Innovación</h3>
+          <span class="text-secondary text-sm">12 miembros</span>
         </div>
-        <div class="members-grid">
-          <app-card class="member-card">
-            <div class="member-avatar">JR</div>
-            <div class="member-info">
-              <h4>Javier Ruiz</h4>
-              <span class="role">Lead Developer</span>
-              <span class="email">javier&#64;techsolutions.com</span>
+        <div class="members-grid d-grid gap-6" style="grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));">
+          <div class="card member-card d-flex align-center gap-4 p-4 hover:translate-y-1 transition-transform">
+            <div class="member-avatar rounded-full bg-surface-hover d-flex align-center justify-center font-bold" style="width: 48px; height: 48px;">JR</div>
+            <div class="member-info flex-1 overflow-hidden">
+              <h4 class="text-base mb-1 truncate">Javier Ruiz</h4>
+              <span class="text-blue text-xs mb-1 d-block">Lead Developer</span>
+              <span class="text-secondary text-xs truncate d-block">javier&#64;techsolutions.com</span>
             </div>
-            <span class="status-badge active">Activo</span>
-          </app-card>
+            <span class="badge badge-success">Activo</span>
+          </div>
 
-          <app-card class="member-card">
-            <div class="member-avatar">MS</div>
-            <div class="member-info">
-              <h4>María Sánchez</h4>
-              <span class="role">AI Engineer</span>
-              <span class="email">maria&#64;techsolutions.com</span>
+          <div class="card member-card d-flex align-center gap-4 p-4 hover:translate-y-1 transition-transform">
+            <div class="member-avatar rounded-full bg-surface-hover d-flex align-center justify-center font-bold" style="width: 48px; height: 48px;">MS</div>
+            <div class="member-info flex-1 overflow-hidden">
+              <h4 class="text-base mb-1 truncate">María Sánchez</h4>
+              <span class="text-blue text-xs mb-1 d-block">AI Engineer</span>
+              <span class="text-secondary text-xs truncate d-block">maria&#64;techsolutions.com</span>
             </div>
-            <span class="status-badge active">Activo</span>
-          </app-card>
+            <span class="badge badge-success">Activo</span>
+          </div>
 
-          <app-card class="member-card">
-            <div class="member-avatar">DP</div>
-            <div class="member-info">
-              <h4>David Pérez</h4>
-              <span class="role">Frontend Dev</span>
-              <span class="email">david&#64;techsolutions.com</span>
+          <div class="card member-card d-flex align-center gap-4 p-4 hover:translate-y-1 transition-transform">
+            <div class="member-avatar rounded-full bg-surface-hover d-flex align-center justify-center font-bold" style="width: 48px; height: 48px;">DP</div>
+            <div class="member-info flex-1 overflow-hidden">
+              <h4 class="text-base mb-1 truncate">David Pérez</h4>
+              <span class="text-blue text-xs mb-1 d-block">Frontend Dev</span>
+              <span class="text-secondary text-xs truncate d-block">david&#64;techsolutions.com</span>
             </div>
-            <span class="status-badge away">Ausente</span>
-          </app-card>
+            <span class="badge badge-warning">Ausente</span>
+          </div>
           
-          <div class="add-member-card">
-            <span class="plus-icon">+</span>
+          <div class="add-member-card d-flex flex-column align-center justify-center gap-2 p-4 rounded-lg cursor-pointer transition-all hover:bg-surface-hover hover:text-blue hover:border-blue" style="background: rgba(255,255,255,0.02); border: 1px dashed rgba(255,255,255,0.1); min-height: 80px; color: #94a3b8;">
+            <span class="plus-icon text-2xl">+</span>
             <span>Añadir al equipo</span>
           </div>
         </div>
@@ -111,30 +113,30 @@
 
       <!-- Ventas -->
       <section class="department-section">
-        <div class="dept-header">
-          <h3>Ventas y Marketing</h3>
-          <span class="count">8 miembros</span>
+        <div class="dept-header d-flex align-baseline gap-4 mb-6 pb-2 border-bottom border-surface-border" style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+          <h3 class="text-xl">Ventas y Marketing</h3>
+          <span class="text-secondary text-sm">8 miembros</span>
         </div>
-        <div class="members-grid">
-          <app-card class="member-card">
-            <div class="member-avatar">LG</div>
-            <div class="member-info">
-              <h4>Lucía García</h4>
-              <span class="role">Head of Sales</span>
-              <span class="email">lucia&#64;techsolutions.com</span>
+        <div class="members-grid d-grid gap-6" style="grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));">
+          <div class="card member-card d-flex align-center gap-4 p-4 hover:translate-y-1 transition-transform">
+            <div class="member-avatar rounded-full bg-surface-hover d-flex align-center justify-center font-bold" style="width: 48px; height: 48px;">LG</div>
+            <div class="member-info flex-1 overflow-hidden">
+              <h4 class="text-base mb-1 truncate">Lucía García</h4>
+              <span class="text-blue text-xs mb-1 d-block">Head of Sales</span>
+              <span class="text-secondary text-xs truncate d-block">lucia&#64;techsolutions.com</span>
             </div>
-            <span class="status-badge active">Activo</span>
-          </app-card>
+            <span class="badge badge-success">Activo</span>
+          </div>
 
-          <app-card class="member-card">
-            <div class="member-avatar">RT</div>
-            <div class="member-info">
-              <h4>Roberto Torres</h4>
-              <span class="role">Account Manager</span>
-              <span class="email">roberto&#64;techsolutions.com</span>
+          <div class="card member-card d-flex align-center gap-4 p-4 hover:translate-y-1 transition-transform">
+            <div class="member-avatar rounded-full bg-surface-hover d-flex align-center justify-center font-bold" style="width: 48px; height: 48px;">RT</div>
+            <div class="member-info flex-1 overflow-hidden">
+              <h4 class="text-base mb-1 truncate">Roberto Torres</h4>
+              <span class="text-blue text-xs mb-1 d-block">Account Manager</span>
+              <span class="text-secondary text-xs truncate d-block">roberto&#64;techsolutions.com</span>
             </div>
-            <span class="status-badge pending">Pendiente</span>
-          </app-card>
+            <span class="badge badge-info">Pendiente</span>
+          </div>
         </div>
       </section>
     </div>

@@ -32,11 +32,14 @@ export const routes: Routes = [
       .then(m => m.PROVIDER_ROUTES)
   },
 
-  // Deal Room routes
+
+
+  // PrimeNG Demo route
   {
-    path: 'deal-room/:id',
-    loadComponent: () => import('./features/deal-room/dealroom.component')
-      .then(m => m.DealRoomComponent)
+    path: 'primeng-demo',
+    loadComponent: () => import('./shared/components/primeng-demo/primeng-demo.component')
+      .then(m => m.PrimengDemoComponent),
+    title: 'PrimeNG Demo | Conectian'
   },
 
   // Admin routes (lazy loaded)

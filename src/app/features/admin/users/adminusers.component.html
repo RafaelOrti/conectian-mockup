@@ -1,384 +1,295 @@
-<div class="admin-users-page">
-  <app-navbar 
-    [userRole]="'ADMIN'" 
-    [userName]="'Admin User'"
-    [notificationCount]="5"
-  ></app-navbar>
+<div class="admin-users">
+  <p-toast></p-toast>
+  <p-confirmDialog></p-confirmDialog>
   
+  <app-navbar 
+    userRole="ADMIN"
+    userName="Admin User"
+    [notificationCount]="3"
+  ></app-navbar>
+
   <div class="container">
-    <div class="page-header">
+    <!-- Page Header -->
+    <div class="page-header mb-4">
       <div>
-        <h1>👥 Usuarios</h1>
-        <p class="subtitle">Gestión de CEOs y Proveedores</p>
+        <h1 class="page-title">
+          <i class="pi pi-users mr-2"></i>
+          Usuarios
+        </h1>
+        <p class="page-subtitle">Gestión de CEOs y Proveedores</p>
       </div>
       <div class="header-actions">
-        <app-button 
-          *ngIf="activeTab === 'ceos'"
-          variant="primary" 
-          (clickEvent)="inviteUser('ceo')"
-        >
-          + Invite CEO
-        </app-button>
-        <app-button 
-          *ngIf="activeTab === 'providers'"
-          variant="primary" 
-          (clickEvent)="inviteUser('provider')"
-        >
-          + Invite Proveedor
-        </app-button>
-        <app-button 
-          *ngIf="activeTab === 'providers' && providerStats.pending > 0"
-          variant="warning" 
-          (clickEvent)="activeTab = 'pending'"
-        >
-          Pending ({{providerStats.pending}})
-        </app-button>
+        <p-button label="Export CSV" icon="pi pi-download" styleClass="p-button-outlined" (click)="exportCSV()"></p-button>
+        <p-button label="+ Invite CEO" icon="pi pi-user-plus" (click)="inviteUser('ceo')"></p-button>
       </div>
     </div>
 
     <!-- Tabs -->
-    <div class="tabs">
-      <button 
-        class="tab"
-        [class.active]="activeTab === 'ceos'"
-        (click)="activeTab = 'ceos'; filterUsers()"
-      >
-        CEOs
-      </button>
-      <button 
-        class="tab"
-        [class.active]="activeTab === 'providers'"
-        (click)="activeTab = 'providers'; filterUsers()"
-      >
-        Proveedores
-      </button>
-      <button 
-        class="tab"
-        [class.active]="activeTab === 'pending'"
-        (click)="activeTab = 'pending'; selectedStatus = 'pending'; filterUsers()"
-      >
-        Pendientes de Aprobación
-      </button>
-    </div>
-
-    <!-- Stats Bar -->
-    <div class="stats-bar" *ngIf="activeTab === 'ceos'">
-      <div class="stat-item">
-        <span class="stat-label">Mostrando:</span>
-        <span class="stat-value">{{ceoStats.total}} CEOs</span>
-      </div>
-      <div class="stat-item">
-        <span class="stat-label">Free:</span>
-        <span class="stat-value">{{ceoStats.free}}</span>
-      </div>
-      <div class="stat-item">
-        <span class="stat-label">PRO IA:</span>
-        <span class="stat-value">{{ceoStats.pro}}</span>
-      </div>
-      <div class="stat-item">
-        <span class="stat-label">Active:</span>
-        <span class="stat-value">{{ceoStats.active}}</span>
-      </div>
-    </div>
-
-    <div class="stats-bar" *ngIf="activeTab === 'providers'">
-      <div class="stat-item">
-        <span class="stat-label">Stats:</span>
-        <span class="stat-value">{{providerStats.total}} total</span>
-      </div>
-      <div class="stat-item">
-        <span class="stat-label">|</span>
-        <span class="stat-value">{{providerStats.active}} active</span>
-      </div>
-      <div class="stat-item">
-        <span class="stat-label">|</span>
-        <span class="stat-value">{{providerStats.paused}} churned</span>
-      </div>
-      <div class="stat-item">
-        <span class="stat-label">MRR Proveedores:</span>
-        <span class="stat-value">€{{providerStats.mrr.toLocaleString()}}/mes</span>
-      </div>
-    </div>
-
-    <!-- Filters and Search -->
-    <div class="filters-bar">
-      <div class="search-box">
-        <input 
-          type="text" 
-          [(ngModel)]="searchQuery"
-          (input)="filterUsers()"
-          [placeholder]="activeTab === 'ceos' ? 'Buscar CEOs...' : 'Buscar Proveedores...'"
-          class="search-input"
-        />
-        <span class="search-icon">🔍</span>
-      </div>
-      
-      <div class="filter-buttons">
-        <button 
-          class="filter-btn"
-          [class.active]="selectedStatus === 'all'"
-          (click)="selectedStatus = 'all'; filterUsers()"
-        >
-          Todos
-        </button>
-        <button 
-          class="filter-btn"
-          [class.active]="selectedStatus === 'active'"
-          (click)="selectedStatus = 'active'; filterUsers()"
-        >
-          Activos
-        </button>
-        <button 
-          *ngIf="activeTab === 'providers'"
-          class="filter-btn"
-          [class.active]="selectedStatus === 'pending'"
-          (click)="selectedStatus = 'pending'; filterUsers()"
-        >
-          Pendientes
-        </button>
-        <button 
-          class="filter-btn"
-          [class.active]="selectedStatus === 'inactive'"
-          (click)="selectedStatus = 'inactive'; filterUsers()"
-        >
-          {{activeTab === 'providers' ? 'Pausados' : 'Inactivos'}}
-        </button>
-      </div>
-
-      <app-button variant="secondary" (clickEvent)="exportCSV()">
-        Export CSV
-      </app-button>
-    </div>
-
-    <!-- Users Table -->
-    <app-card class="users-table-card">
-      <table class="users-table">
-        <thead>
-          <tr>
-            <th>
-              <input 
-                type="checkbox" 
-                (change)="toggleSelectAll()"
-                [checked]="areAllSelected()"
-              />
-            </th>
-            <th>Email</th>
-            <th *ngIf="activeTab === 'providers'">Empresa</th>
-            <th>Plan</th>
-            <th>Active</th>
-            <th>Joined</th>
-            <th *ngIf="activeTab === 'ceos'">Actividad</th>
-            <th *ngIf="activeTab === 'providers'">Leads</th>
-            <th *ngIf="activeTab === 'providers'">Status</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- CEOs Table -->
-          <ng-container *ngIf="activeTab === 'ceos'">
-            <tr 
-              *ngFor="let user of filteredCEOs"
-              class="user-row"
-              [class.selected]="selectedUser?.id === user.id"
-              (click)="selectUser(user)"
-            >
-            <td>
-              <input 
-                type="checkbox" 
-                [checked]="selectedUsers.includes(user.id)"
-                (click)="$event.stopPropagation(); toggleUserSelection(user.id)"
-              />
-            </td>
-            <td>
-              <div class="user-info">
-                <div class="user-email">{{user.email}}</div>
-                <div class="user-company" *ngIf="user.company">{{user.company}}</div>
-              </div>
-            </td>
-            <td>
-              <div class="plan-info">
-                <span class="plan-name">{{user.plan}}</span>
-                <span class="plan-price" *ngIf="user.planPrice">{{user.planPrice}}</span>
-              </div>
-            </td>
-            <td>
-              <span class="status-badge" [class.active]="user.active">
-                {{user.active ? '✅' : '❌'}} {{user.active ? user.lastActive : '30d'}}
-              </span>
-            </td>
-            <td>{{user.joined}}</td>
-            <td>
-              <div class="activity-info" *ngIf="user.actions">
-                <span>Búsquedas: {{user.actions}}</span>
-                <span *ngIf="user.dealRooms">• Deal Rooms: {{user.dealRooms}}</span>
-              </div>
-            </td>
-            <td>
-              <div class="action-buttons">
-                <button class="btn-icon" (click)="editUser(user); $event.stopPropagation()" title="Ver detalles">
-                  👁️
-                </button>
-                <button class="btn-icon" (click)="editUser(user); $event.stopPropagation()" title="Editar">
-                  ⚙️
-                </button>
-              </div>
-            </td>
-            </tr>
-          </ng-container>
-
-          <!-- Providers Table -->
-          <ng-container *ngIf="activeTab === 'providers'">
-            <tr 
-              *ngFor="let user of filteredProviders"
-              class="user-row"
-              [class.selected]="selectedUser?.id === user.id"
-              (click)="selectUser(user)"
-            >
-            <td>
-              <input 
-                type="checkbox" 
-                [checked]="selectedUsers.includes(user.id)"
-                (click)="$event.stopPropagation(); toggleUserSelection(user.id)"
-              />
-            </td>
-            <td>
-              <div class="user-info">
-                <div class="user-email">{{user.email}}</div>
-              </div>
-            </td>
-            <td>
-              <div class="user-company">{{user.company}}</div>
-              <div class="user-location" *ngIf="user.company">Madrid</div>
-            </td>
-            <td>
-              <div class="plan-info">
-                <span class="plan-name">{{user.plan}}</span>
-                <span class="plan-price" *ngIf="user.planPrice">{{user.planPrice}}</span>
-              </div>
-            </td>
-            <td>
-              <span class="status-badge" [class.active]="user.active">
-                {{user.active ? '✅' : user.status === 'pending' ? '⏳' : '⏸️'}} 
-                {{user.status === 'pending' ? 'Pending' : user.status === 'paused' ? 'Paused' : 'Active'}}
-              </span>
-              <div class="rating" *ngIf="user.rating">
-                Rating: {{user.rating}}
-              </div>
-            </td>
-            <td>{{user.joined}}</td>
-            <td>{{user.leads || 0}}</td>
-            <td>
-              <div class="action-buttons">
-                <button 
-                  *ngIf="user.status === 'pending'"
-                  class="btn-approve"
-                  (click)="approveProvider(user); $event.stopPropagation()"
-                >
-                  ✅
-                </button>
-                <button 
-                  *ngIf="user.status === 'pending'"
-                  class="btn-reject"
-                  (click)="rejectProvider(user); $event.stopPropagation()"
-                >
-                  ❌
-                </button>
-                <button 
-                  *ngIf="user.status !== 'pending'"
-                  class="btn-icon"
-                  (click)="editUser(user); $event.stopPropagation()"
-                >
-                  👁️
-                </button>
-                <button 
-                  *ngIf="user.status !== 'pending'"
-                  class="btn-icon"
-                  (click)="editUser(user); $event.stopPropagation()"
-                >
-                  ⚙️
-                </button>
-              </div>
-            </td>
-            </tr>
-          </ng-container>
-        </tbody>
-      </table>
-
-      <!-- Bulk Actions -->
-      <div class="bulk-actions" *ngIf="selectedUsers.length > 0">
-        <span class="bulk-info">{{selectedUsers.length}} seleccionados</span>
-        <select class="bulk-select" (change)="bulkAction($any($event.target).value)">
-          <option value="">Acción masiva...</option>
-          <option value="activate">Activar</option>
-          <option value="suspend">Suspender</option>
-          <option value="delete">Eliminar</option>
-        </select>
-      </div>
-    </app-card>
-
-    <!-- User Detail Panel -->
-    <app-card *ngIf="selectedUser" class="user-detail-panel">
-      <div class="detail-header">
-        <h3>{{selectedUser.email}}</h3>
-        <button class="close-btn" (click)="selectedUser = null">×</button>
-      </div>
-      
-      <div class="detail-content">
-        <div class="detail-section">
-          <div class="detail-item">
-            <span class="detail-label">Plan:</span>
-            <span class="detail-value">{{selectedUser.plan}} {{selectedUser.planPrice || ''}}</span>
+    <p-tabView [(activeIndex)]="activeTab">
+      <!-- CEOs Tab -->
+      <p-tabPanel header="CEOs" leftIcon="pi pi-users">
+        <ng-template pTemplate="header">
+          <div class="flex align-items-center gap-2">
+            <i class="pi pi-users"></i>
+            <span>CEOs</span>
+            <p-badge [value]="ceoStats.total" styleClass="ml-2"></p-badge>
           </div>
-          <div class="detail-item">
-            <span class="detail-label">Joined:</span>
-            <span class="detail-value">{{selectedUser.joined}}</span>
+        </ng-template>
+
+        <!-- Stats Cards -->
+        <div class="grid mb-4">
+          <div class="col-12 md:col-3">
+            <p-card styleClass="stat-card">
+              <div class="stat-content">
+                <div class="stat-value">{{ceoStats.total}}</div>
+                <div class="stat-label">Mostra total</div>
+              </div>
+            </p-card>
+          </div>
+          <div class="col-12 md:col-3">
+            <p-card styleClass="stat-card">
+              <div class="stat-content">
+                <div class="stat-value">{{ceoStats.free}}</div>
+                <div class="stat-label">Free</div>
+              </div>
+            </p-card>
+          </div>
+          <div class="col-12 md:col-3">
+            <p-card styleClass="stat-card">
+              <div class="stat-content">
+                <div class="stat-value">{{ceoStats.pro}}</div>
+                <div class="stat-label">PRO IA</div>
+              </div>
+            </p-card>
+          </div>
+          <div class="col-12 md:col-3">
+            <p-card styleClass="stat-card">
+              <div class="stat-content">
+                <div class="stat-value">{{ceoStats.active}}</div>
+                <div class="stat-label">Active</div>
+              </div>
+            </p-card>
           </div>
         </div>
 
-        <div class="detail-section" *ngIf="selectedUser.type === 'ceo'">
-          <h4>ACTIVITY:</h4>
-          <div class="detail-item">
-            <span class="detail-label">Búsquedas IA:</span>
-            <span class="detail-value">{{selectedUser.actions || 0}} (avg 12/día)</span>
+        <!-- Table -->
+        <p-card>
+          <ng-template pTemplate="header">
+            <div class="table-header">
+              <div class="flex gap-2">
+                <span class="p-input-icon-left">
+                  <i class="pi pi-search"></i>
+                  <input pInputText type="text" [(ngModel)]="searchQuery" placeholder="Buscar CEOs..." (input)="onGlobalFilter(dt1, $event)" />
+                </span>
+                <p-dropdown [options]="statusOptions" [(ngModel)]="selectedStatus" optionLabel="label" placeholder="Estado"></p-dropdown>
+                <p-button icon="pi pi-filter-slash" styleClass="p-button-text" pTooltip="Limpiar filtros"></p-button>
+              </div>
+            </div>
+          </ng-template>
+          
+          <p-table 
+            #dt1
+            [value]="ceos" 
+            [globalFilterFields]="['email','company','plan']"
+            [(selection)]="selectedUsers"
+            [paginator]="true" 
+            [rows]="10"
+            [rowsPerPageOptions]="[5, 10, 25]"
+            [showCurrentPageReport]="true"
+            currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} CEOs"
+            styleClass="p-datatable-gridlines">
+            <ng-template pTemplate="header">
+              <tr>
+                <th style="width: 3rem">
+                  <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                </th>
+                <th pSortableColumn="email">
+                  EMAIL <p-sortIcon field="email"></p-sortIcon>
+                </th>
+                <th pSortableColumn="plan">
+                  PLAN <p-sortIcon field="plan"></p-sortIcon>
+                </th>
+                <th pSortableColumn="active">
+                  ACTIVE <p-sortIcon field="active"></p-sortIcon>
+                </th>
+                <th>JOINED</th>
+                <th>ACTIONS</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-user>
+              <tr>
+                <td>
+                  <p-tableCheckbox [value]="user"></p-tableCheckbox>
+                </td>
+                <td>
+                  <div>
+                    <div class="font-bold">{{ user.email }}</div>
+                    <div class="text-sm text-gray-400" *ngIf="user.company">{{ user.company }}</div>
+                  </div>
+                </td>
+                <td>
+                  <p-tag [value]="user.plan" [severity]="getPlanSeverity(user.plan)"></p-tag>
+                  <div class="text-xs text-gray-400" *ngIf="user.planPrice">{{ user.planPrice }}</div>
+                </td>
+                <td>
+                  <p-tag 
+                    [value]="user.active ? 'Hace ' + user.lastActive : '30d'" 
+                    [severity]="user.active ? 'success' : 'danger'"
+                    [icon]="user.active ? 'pi pi-check' : 'pi pi-times'"
+                  ></p-tag>
+                </td>
+                <td>{{ user.joined }}</td>
+                <td>
+                  <div class="flex gap-1">
+                    <p-button icon="pi pi-eye" styleClass="p-button-rounded p-button-text" pTooltip="Ver"></p-button>
+                    <p-button icon="pi pi-pencil" styleClass="p-button-rounded p-button-text" pTooltip="Editar" (click)="editUser(user)"></p-button>
+                    <p-button icon="pi pi-ban" styleClass="p-button-rounded p-button-text p-button-warning" pTooltip="Suspender" (click)="suspendUser(user)"></p-button>
+                  </div>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </p-card>
+      </p-tabPanel>
+
+      <!-- Providers Tab -->
+      <p-tabPanel header="Proveedores" leftIcon="pi pi-briefcase">
+        <ng-template pTemplate="header">
+          <div class="flex align-items-center gap-2">
+            <i class="pi pi-briefcase"></i>
+            <span>Proveedores</span>
+            <p-badge [value]="providerStats.total" styleClass="ml-2"></p-badge>
           </div>
-          <div class="detail-item">
-            <span class="detail-label">Proveedores contactados:</span>
-            <span class="detail-value">8</span>
+        </ng-template>
+
+        <!-- Stats Cards -->
+        <div class="grid mb-4">
+          <div class="col-12 md:col-3">
+            <p-card styleClass="stat-card">
+              <div class="stat-content">
+                <div class="stat-value">{{providerStats.total}}</div>
+                <div class="stat-label">Total</div>
+              </div>
+            </p-card>
           </div>
-          <div class="detail-item">
-            <span class="detail-label">Deal Rooms:</span>
-            <span class="detail-value">{{selectedUser.dealRooms || 0}} activos</span>
+          <div class="col-12 md:col-3">
+            <p-card styleClass="stat-card">
+              <div class="stat-content">
+                <div class="stat-value">{{providerStats.active}}</div>
+                <div class="stat-label">Activos</div>
+              </div>
+            </p-card>
           </div>
-          <div class="detail-item">
-            <span class="detail-label">Last seen:</span>
-            <span class="detail-value">{{selectedUser.lastActive}}</span>
+          <div class="col-12 md:col-3">
+            <p-card styleClass="stat-card">
+              <div class="stat-content">
+                <div class="stat-value">{{providerStats.pending}}</div>
+                <div class="stat-label">Pendientes</div>
+              </div>
+            </p-card>
+          </div>
+          <div class="col-12 md:col-3">
+            <p-card styleClass="stat-card">
+              <div class="stat-content">
+                <div class="stat-value">€{{providerStats.mrr.toLocaleString('es-ES')}}</div>
+                <div class="stat-label">MRR</div>
+              </div>
+            </p-card>
           </div>
         </div>
 
-        <div class="detail-section">
-          <h4>BILLING:</h4>
-          <div class="detail-item">
-            <span class="detail-label">Next payment:</span>
-            <span class="detail-value">15 Ene ({{selectedUser.planPrice || 'N/A'}})</span>
-          </div>
-          <div class="detail-item">
-            <span class="detail-label">LTV:</span>
-            <span class="detail-value">€297</span>
-          </div>
-        </div>
+        <!-- Table similar to CEOs -->
+        <p-card>
+          <ng-template pTemplate="header">
+            <div class="table-header">
+              <div class="flex gap-2">
+                <span class="p-input-icon-left">
+                  <i class="pi pi-search"></i>
+                  <input pInputText type="text" placeholder="Buscar proveedores..." (input)="onGlobalFilter(dt2, $event)" />
+                </span>
+              </div>
+            </div>
+          </ng-template>
+          
+          <p-table 
+            #dt2
+            [value]="providers" 
+            [paginator]="true" 
+            [rows]="10"
+            styleClass="p-datatable-gridlines">
+            <ng-template pTemplate="header">
+              <tr>
+                <th>EMAIL</th>
+                <th>PLAN</th>
+                <th>ESTADO</th>
+                <th>ACCIONES</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-provider>
+              <tr>
+                <td>
+                  <div class="font-bold">{{ provider.email }}</div>
+                  <div class="text-sm text-gray-400">{{ provider.company }}</div>
+                </td>
+                <td>
+                  <p-tag [value]="provider.plan" [severity]="getPlanSeverity(provider.plan)"></p-tag>
+                </td>
+                <td>
+                  <p-tag [value]="provider.status?.toUpperCase() || 'N/A'" [severity]="getStatusSeverity(provider.status || '')"></p-tag>
+                </td>
+                <td>
+                  <div class="flex gap-1">
+                    <p-button icon="pi pi-eye" styleClass="p-button-rounded p-button-text"></p-button>
+                    <p-button icon="pi pi-pencil" styleClass="p-button-rounded p-button-text" (click)="editUser(provider)"></p-button>
+                  </div>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </p-card>
+      </p-tabPanel>
 
-        <div class="detail-actions">
-          <app-button variant="secondary" (clickEvent)="editUser(selectedUser!)">
-            Editar
-          </app-button>
-          <app-button variant="warning" (clickEvent)="suspendUser(selectedUser!)">
-            Suspend
-          </app-button>
-          <app-button variant="danger" (clickEvent)="deleteUser(selectedUser!)">
-            Delete
-          </app-button>
-        </div>
-      </div>
-    </app-card>
+      <!-- Pending Approvals Tab -->
+      <p-tabPanel header="Pendientes de Aprobación">
+        <ng-template pTemplate="header">
+          <div class="flex align-items-center gap-2">
+            <i class="pi pi-clock"></i>
+            <span>Pendientes de Aprobación</span>
+            <p-badge [value]="pendingApprovals.length" severity="warning" styleClass="ml-2"></p-badge>
+          </div>
+        </ng-template>
+
+        <p-card>
+          <p-table [value]="pendingApprovals" styleClass="p-datatable-gridlines">
+            <ng-template pTemplate="header">
+              <tr>
+                <th>PROVEEDOR</th>
+                <th>PLAN</th>
+                <th>FECHA</th>
+                <th>ACCIONES</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-provider>
+              <tr>
+                <td>
+                  <div class="font-bold">{{ provider.email }}</div>
+                  <div class="text-sm text-gray-400">{{ provider.company }}</div>
+                </td>
+                <td>
+                  <p-tag [value]="provider.plan"></p-tag>
+                </td>
+                <td>{{ provider.joined }}</td>
+                <td>
+                  <div class="flex gap-2">
+                    <p-button label="Aprobar" icon="pi pi-check" styleClass="p-button-success p-button-sm" (click)="approveProvider(provider)"></p-button>
+                    <p-button label="Rechazar" icon="pi pi-times" styleClass="p-button-danger p-button-sm" (click)="rejectProvider(provider)"></p-button>
+                  </div>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </p-card>
+      </p-tabPanel>
+    </p-tabView>
   </div>
 </div>

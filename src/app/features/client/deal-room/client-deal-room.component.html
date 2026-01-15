@@ -1,0 +1,933 @@
+<div class="deal-room-page">
+  <p-toast></p-toast>
+  <p-confirmDialog [style]="{width: '50vw'}"></p-confirmDialog>
+  
+  <app-navbar 
+    userRole="CLIENT"
+    userName="Carlos Martínez"
+    [notificationCount]="3"
+  ></app-navbar>
+  
+  <div class="container">
+    <!-- Header -->
+    <header class="page-header">
+      <div class="header-content">
+        <div class="header-main">
+          <h1>{{ dealInfo.title }}</h1>
+          <div class="deal-meta">
+            <span class="deal-participants">
+              <i class="pi pi-building"></i> {{ dealInfo.client }} 
+              <i class="pi pi-arrows-h mx-2"></i> 
+              <i class="pi pi-briefcase"></i> {{ dealInfo.provider }}
+            </span>
+            <p-tag [value]="dealInfo.status === 'active' ? 'Activo' : 'Inactivo'" [severity]="dealInfo.status === 'active' ? 'success' : 'danger'"></p-tag>
+          </div>
+        </div>
+        <div class="header-actions">
+          <p-button label="Generar Informe PDF" icon="pi pi-file-pdf" styleClass="p-button-outlined p-button-secondary" (click)="generatePDFReport()"></p-button>
+          <p-button label="Compartir Logro" icon="pi pi-linkedin" styleClass="p-button-outlined p-button-info" (click)="openAchievementModal()"></p-button>
+          <p-button label="Preguntas Unificadas" icon="pi pi-question-circle" styleClass="p-button-primary" (click)="toggleUnifiedQuestions()"></p-button>
+        </div>
+      </div>
+    </header>
+    
+    <!-- Tabs -->
+    <p-tabView [(activeIndex)]="activeTab" styleClass="glass-tabs">
+      <!-- Tab 0: Chat -->
+      <p-tabPanel header="Chat & Comunicación" leftIcon="pi pi-comments">
+        <div class="chat-layout">
+          <div class="chat-main">
+            <p-card styleClass="chat-card h-full">
+              <div class="chat-messages" #scrollContainer>
+                <div *ngFor="let msg of messages" class="message" [class.message-own]="msg.sender === userRole" [class.message-other]="msg.sender !== userRole">
+                  <div class="message-avatar" *ngIf="msg.sender !== userRole">
+                    <p-avatar [label]="msg.senderName.charAt(0)" shape="circle" size="large"></p-avatar>
+                  </div>
+                  <div class="message-bubble">
+                    <div class="message-header">
+                      <strong>{{ msg.senderName }}</strong>
+                      <span class="timestamp">{{ msg.timestamp }}</span>
+                    </div>
+                    <div class="message-content">
+                      {{ msg.content }}
+                      <div *ngIf="msg.attachment" class="attachment-chip">
+                        <i class="pi pi-file"></i> {{ msg.attachment }}
+                        <button class="download-icon" (click)="downloadDocument('1')"><i class="pi pi-download"></i></button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="chat-input-area">
+                <button pButton icon="pi pi-paperclip" class="p-button-rounded p-button-text p-button-secondary"></button>
+                <input type="text" pInputText [(ngModel)]="newMessage" (keyup.enter)="sendMessage()" placeholder="Escribe un mensaje..." class="flex-1 mx-2" />
+                <button pButton icon="pi pi-send" class="p-button-rounded p-button-primary" (click)="sendMessage()"></button>
+              </div>
+            </p-card>
+          </div>
+          
+          <div class="chat-sidebar">
+            <p-card styleClass="tools-card">
+              <h3><i class="pi pi-wrench"></i> Herramientas Rápidas</h3>
+              <div class="tools-list flex flex-column gap-2">
+                <button pButton label="Agendar Videollamada" icon="pi pi-video" class="p-button-outlined p-button-secondary w-full" (click)="openMeetingModal()"></button>
+                <button pButton label="Calculadora ROI" icon="pi pi-chart-line" class="p-button-outlined p-button-secondary w-full" (click)="activeTab = 7"></button>
+                <button pButton label="Soporte" icon="pi pi-life-buoy" class="p-button-outlined p-button-secondary w-full" (click)="activeTab = 6"></button>
+              </div>
+            </p-card>
+          </div>
+        </div>
+      </p-tabPanel>
+
+      <!-- Tab 1: Equipos -->
+      <p-tabPanel header="Equipos" leftIcon="pi pi-users">
+        <div class="teams-grid">
+          <p-card header="Equipo Cliente" styleClass="team-card modern-card h-full">
+            <ng-template pTemplate="header">
+              <div class="card-header-modern">
+                <i class="pi pi-building header-icon"></i>
+                <h3>Equipo Cliente</h3>
+                <span class="team-count">{{ clientTeam.length }} miembros</span>
+              </div>
+            </ng-template>
+            <div class="team-list">
+              <div *ngFor="let member of clientTeam" class="team-member-card">
+                <p-avatar [label]="member.name.charAt(0)" shape="circle" size="large" styleClass="member-avatar"></p-avatar>
+                <div class="member-info">
+                  <div class="member-name">{{ member.name }}</div>
+                  <div class="member-role">{{ member.role }}</div>
+                </div>
+                <p-tag 
+                  [value]="member.status === 'active' ? 'ACTIVO' : 'INACTIVO'" 
+                  [severity]="member.status === 'active' ? 'success' : 'warning'"
+                  styleClass="member-status"
+                ></p-tag>
+              </div>
+            </div>
+          </p-card>
+
+          <p-card header="Equipo Proveedor" styleClass="team-card modern-card h-full">
+            <ng-template pTemplate="header">
+              <div class="card-header-modern">
+                <i class="pi pi-briefcase header-icon"></i>
+                <h3>Equipo Proveedor</h3>
+                <span class="team-count">{{ providerTeam.length }} miembros</span>
+              </div>
+            </ng-template>
+            <div class="team-list">
+              <div *ngFor="let member of providerTeam" class="team-member-card">
+                <p-avatar [label]="member.name.charAt(0)" shape="circle" size="large" styleClass="member-avatar"></p-avatar>
+                <div class="member-info">
+                  <div class="member-name">{{ member.name }}</div>
+                  <div class="member-role">{{ member.role }}</div>
+                </div>
+                <p-tag 
+                  [value]="member.status === 'active' ? 'ACTIVO' : 'INACTIVO'" 
+                  [severity]="member.status === 'active' ? 'success' : 'warning'"
+                  styleClass="member-status"
+                ></p-tag>
+              </div>
+            </div>
+          </p-card>
+        </div>
+      </p-tabPanel>
+
+      <!-- Tab 2: Documentos -->
+      <p-tabPanel header="Documentos" leftIcon="pi pi-file">
+        <div class="flex justify-content-between align-items-center mb-4">
+          <h2>Documentos Compartidos</h2>
+          <p-button label="Subir Documento" icon="pi pi-upload" (click)="uploadDocument()"></p-button>
+        </div>
+        <div class="grid">
+          <div *ngFor="let doc of documents" class="col-12 md:col-6 lg:col-3">
+            <p-card styleClass="doc-card h-full cursor-pointer hover:shadow-4 transition-all transition-duration-200" (click)="viewDocument(doc.id)">
+              <div class="flex align-items-center mb-3">
+                <i class="pi pi-file-pdf text-4xl text-primary mr-3" *ngIf="doc.type === 'pdf'"></i>
+                <i class="pi pi-file-word text-4xl text-blue-500 mr-3" *ngIf="doc.type === 'doc'"></i>
+                <i class="pi pi-file-excel text-4xl text-green-500 mr-3" *ngIf="doc.type === 'xls'"></i>
+                <div>
+                  <div class="font-bold">{{ doc.name }}</div>
+                  <div class="text-xs text-gray-400">{{ doc.uploadDate }}</div>
+                </div>
+              </div>
+              <div class="flex gap-1 flex-wrap mb-3">
+                <p-tag *ngFor="let tag of doc.tags" [value]="tag" severity="info" styleClass="text-xs"></p-tag>
+              </div>
+              <div class="flex justify-content-end gap-2">
+                <button pButton icon="pi pi-download" class="p-button-rounded p-button-text p-button-sm" (click)="downloadDocument(doc.id); $event.stopPropagation()"></button>
+                <button pButton icon="pi pi-eye" class="p-button-rounded p-button-text p-button-sm" (click)="viewDocument(doc.id); $event.stopPropagation()"></button>
+              </div>
+            </p-card>
+          </div>
+        </div>
+      </p-tabPanel>
+
+      <!-- Tab 3: Hitos -->
+      <p-tabPanel header="Hitos & Propuesta" leftIcon="pi pi-flag">
+        <div class="grid">
+          <div class="col-12 lg:col-8">
+            <!-- Progress Overview Card -->
+            <div class="progress-overview-card mb-4">
+              <div class="progress-header">
+                <div class="progress-info">
+                  <h2 class="progress-title">
+                    <i class="pi pi-chart-line"></i>
+                    Progreso del Proyecto
+                  </h2>
+                  <p class="progress-subtitle">{{ calculateTotalProgress() }}% Completado</p>
+                </div>
+                <div class="progress-stats">
+                  <div class="stat-item">
+                    <span class="stat-value">{{ getCompletedMilestonesCount() }}</span>
+                    <span class="stat-label">Completados</span>
+                  </div>
+                  <div class="stat-divider"></div>
+                  <div class="stat-item">
+                    <span class="stat-value">{{ getPendingMilestonesCount() }}</span>
+                    <span class="stat-label">Pendientes</span>
+                  </div>
+                </div>
+              </div>
+              <div class="progress-bar-wrapper">
+                <p-progressBar [value]="calculateTotalProgress()" [showValue]="false" styleClass="custom-progress"></p-progressBar>
+              </div>
+            </div>
+
+            <!-- Milestones Timeline -->
+            <div class="milestones-container">
+              <div *ngFor="let milestone of milestones; let i = index" class="milestone-item" [attr.data-status]="milestone.status">
+                <div class="milestone-connector" *ngIf="i < milestones.length - 1"></div>
+                
+                <div class="milestone-marker">
+                  <div class="marker-icon" [class.completed]="milestone.status === 'completed'" 
+                       [class.in-progress]="milestone.status === 'in-progress'"
+                       [class.awaiting]="milestone.status === 'awaiting-approval'"
+                       [class.pending]="milestone.status === 'pending'">
+                    <i *ngIf="milestone.status === 'completed'" class="pi pi-check"></i>
+                    <i *ngIf="milestone.status === 'in-progress'" class="pi pi-spin pi-spinner"></i>
+                    <i *ngIf="milestone.status === 'awaiting-approval'" class="pi pi-clock"></i>
+                    <i *ngIf="milestone.status === 'pending'" class="pi pi-circle"></i>
+                  </div>
+                </div>
+
+                <div class="milestone-content">
+                  <div class="milestone-header">
+                    <div class="milestone-title-section">
+                      <h3 class="milestone-title">{{ milestone.title }}</h3>
+                      <span class="milestone-date">
+                        <i class="pi pi-calendar"></i>
+                        {{ milestone.date }}
+                      </span>
+                    </div>
+                    <p-tag 
+                      [value]="milestone.status === 'completed' ? 'COMPLETADO' : milestone.status === 'in-progress' ? 'EN PROGRESO' : milestone.status === 'awaiting-approval' ? 'ESPERANDO APROBACIÓN' : 'PENDIENTE'" 
+                      [severity]="milestone.status === 'completed' ? 'success' : milestone.status === 'in-progress' ? 'info' : milestone.status === 'awaiting-approval' ? 'warning' : 'secondary'"
+                      [icon]="milestone.status === 'completed' ? 'pi pi-check-circle' : milestone.status === 'in-progress' ? 'pi pi-sync' : milestone.status === 'awaiting-approval' ? 'pi pi-clock' : 'pi pi-circle'"
+                    ></p-tag>
+                  </div>
+
+                  <div *ngIf="milestone.progress" class="milestone-progress">
+                    <div class="progress-label">
+                      <span>Progreso</span>
+                      <span class="progress-percentage">{{ milestone.progress }}%</span>
+                    </div>
+                    <div class="mini-progress-bar">
+                      <div class="mini-progress-fill" [style.width.%]="milestone.progress"></div>
+                    </div>
+                  </div>
+
+                  <div *ngIf="milestone.pendingApprovals && milestone.pendingApprovals.length > 0" class="milestone-approvals">
+                    <div class="approvals-header">
+                      <i class="pi pi-users"></i>
+                      <span>Aprobaciones ({{ getApprovedCount(milestone) }}/{{ milestone.pendingApprovals.length }})</span>
+                    </div>
+                    <div class="approvals-list">
+                      <div *ngFor="let approval of milestone.pendingApprovals" class="approval-item">
+                        <p-avatar 
+                          [label]="approval.personName.charAt(0)" 
+                          shape="circle" 
+                          size="normal"
+                          [styleClass]="approval.status === 'approved' ? 'approval-approved' : approval.status === 'rejected' ? 'approval-rejected' : 'approval-pending'"
+                          pTooltip="{{approval.personName}} ({{approval.role}})"
+                          tooltipPosition="top"
+                        ></p-avatar>
+                        <div class="approval-details">
+                          <div class="approval-name">{{ approval.personName }}</div>
+                          <div class="approval-role">{{ approval.role }}</div>
+                        </div>
+                        <i *ngIf="approval.status === 'approved'" class="pi pi-check-circle approval-status-icon approved"></i>
+                        <i *ngIf="approval.status === 'pending'" class="pi pi-clock approval-status-icon pending"></i>
+                        <i *ngIf="approval.status === 'rejected'" class="pi pi-times-circle approval-status-icon rejected"></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 lg:col-4">
+            <div class="sidebar-sticky">
+              <!-- Proposal Card -->
+              <p-card styleClass="proposal-card modern-card mb-4">
+                <ng-template pTemplate="header">
+                  <div class="card-header-modern">
+                    <div class="header-left">
+                      <div class="header-icon-wrapper">
+                        <i class="pi pi-file-edit header-icon"></i>
+                      </div>
+                      <h3>Propuesta Activa</h3>
+                    </div>
+                  </div>
+                </ng-template>
+                
+                <div class="proposal-content">
+                  <div class="proposal-value-section">
+                    <div class="value-label">
+                      <i class="pi pi-euro"></i>
+                      Valor del Proyecto
+                    </div>
+                    <div class="value-amount-wrapper">
+                      <div class="value-amount">€{{ proposal.value.toLocaleString() }}</div>
+                      <div class="value-indicator">
+                        <i class="pi pi-arrow-up"></i>
+                        <span>Presupuesto confirmado</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="proposal-metrics-grid">
+                    <div class="metric-item">
+                      <div class="metric-icon">
+                        <i class="pi pi-clock"></i>
+                      </div>
+                      <div class="metric-info">
+                        <div class="metric-value">{{ proposal.timeline }}</div>
+                        <div class="metric-label">Duración</div>
+                      </div>
+                    </div>
+
+                    <div class="metric-item">
+                      <div class="metric-icon">
+                        <i class="pi pi-list"></i>
+                      </div>
+                      <div class="metric-info">
+                        <div class="metric-value">{{ proposal.deliverables.length }}</div>
+                        <div class="metric-label">Entregables</div>
+                      </div>
+                    </div>
+
+                    <div class="metric-item">
+                      <div class="metric-icon">
+                        <i class="pi pi-users"></i>
+                      </div>
+                      <div class="metric-info">
+                        <div class="metric-value">{{ providerTeam.length }}</div>
+                        <div class="metric-label">Miembros</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="proposal-divider"></div>
+
+                  <div class="proposal-actions">
+                    <p-button 
+                      label="Ver Detalles Completos" 
+                      icon="pi pi-external-link" 
+                      styleClass="p-button-outlined p-button-secondary w-full mb-2" 
+                      (click)="openProposalDetails()"
+                    ></p-button>
+                    <p-button 
+                      label="Aceptar Propuesta" 
+                      icon="pi pi-check" 
+                      styleClass="p-button-success w-full p-button-lg" 
+                      (click)="acceptProposal()"
+                    ></p-button>
+                  </div>
+                </div>
+              </p-card>
+
+              <!-- Project Stats Card -->
+              <p-card styleClass="stats-card modern-card">
+                <ng-template pTemplate="header">
+                  <div class="card-header-modern">
+                    <i class="pi pi-chart-bar header-icon"></i>
+                    <h3>Estadísticas</h3>
+                  </div>
+                </ng-template>
+                
+                <div class="stats-grid">
+                  <div class="stat-box" [attr.data-stat]="'documents'">
+                    <div class="stat-icon-wrapper">
+                      <div class="stat-icon documents">
+                        <i class="pi pi-file"></i>
+                      </div>
+                      <div class="stat-icon-glow documents"></div>
+                    </div>
+                    <div class="stat-content">
+                      <div class="stat-number">{{ documents.length }}</div>
+                      <div class="stat-text">Documentos</div>
+                      <div class="stat-badge" *ngIf="documents.length > 0">
+                        <i class="pi pi-check-circle"></i> Disponibles
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="stat-box" [attr.data-stat]="'reviews'">
+                    <div class="stat-icon-wrapper">
+                      <div class="stat-icon reviews">
+                        <i class="pi pi-star"></i>
+                      </div>
+                      <div class="stat-icon-glow reviews"></div>
+                    </div>
+                    <div class="stat-content">
+                      <div class="stat-number">{{ averageRating }}</div>
+                      <div class="stat-text">Rating Promedio</div>
+                      <div class="stat-badge reviews">
+                        <i class="pi pi-star-fill"></i> Excelente
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="stat-box" [attr.data-stat]="'tickets'">
+                    <div class="stat-icon-wrapper">
+                      <div class="stat-icon tickets">
+                        <i class="pi pi-ticket"></i>
+                      </div>
+                      <div class="stat-icon-glow tickets"></div>
+                    </div>
+                    <div class="stat-content">
+                      <div class="stat-number">{{ getOpenTicketsCount() }}</div>
+                      <div class="stat-text">Tickets Abiertos</div>
+                      <div class="stat-badge tickets" [class.urgent]="getOpenTicketsCount() > 2">
+                        <i class="pi pi-info-circle"></i> {{ getOpenTicketsCount() > 0 ? 'Requiere atención' : 'Todo al día' }}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="stat-box" [attr.data-stat]="'team'">
+                    <div class="stat-icon-wrapper">
+                      <div class="stat-icon team">
+                        <i class="pi pi-users"></i>
+                      </div>
+                      <div class="stat-icon-glow team"></div>
+                    </div>
+                    <div class="stat-content">
+                      <div class="stat-number">{{ clientTeam.length + providerTeam.length }}</div>
+                      <div class="stat-text">Participantes</div>
+                      <div class="stat-badge team">
+                        <i class="pi pi-check"></i> Activos
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </p-card>
+            </div>
+          </div>
+        </div>
+      </p-tabPanel>
+
+      <!-- Tab 4: Legal -->
+      <p-tabPanel header="Legal & NDA" leftIcon="pi pi-briefcase">
+        <div class="legal-documents-section">
+          <div class="section-header mb-5">
+            <div>
+              <h2 class="section-title">Documentos Legales y Acuerdos</h2>
+              <p class="section-subtitle">Gestiona los contratos y acuerdos de confidencialidad del proyecto</p>
+            </div>
+          </div>
+
+          <p-table [value]="legalDocuments" styleClass="p-datatable-gridlines modern-table">
+            <ng-template pTemplate="header">
+              <tr>
+                <th style="width: 40%">Documento</th>
+                <th style="width: 15%">Versión</th>
+                <th style="width: 20%">Estado</th>
+                <th style="width: 25%">Acciones</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-doc>
+              <tr class="document-row">
+                <td>
+                  <div class="document-info">
+                    <div class="doc-icon">
+                      <i class="pi pi-file-pdf"></i>
+                    </div>
+                    <div>
+                      <div class="doc-title">{{ doc.title }}</div>
+                      <div class="doc-description">{{ doc.description }}</div>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <span class="version-badge">v{{ doc.version }}</span>
+                </td>
+                <td>
+                  <p-tag 
+                    [value]="doc.status === 'signed' ? 'Firmado' : doc.status === 'pending' ? 'Pendiente' : 'Borrador'" 
+                    [severity]="doc.status === 'signed' ? 'success' : doc.status === 'pending' ? 'warning' : 'info'"
+                    styleClass="status-tag"
+                  ></p-tag>
+                </td>
+                <td>
+                  <div class="action-buttons">
+                    <button 
+                      pButton 
+                      icon="pi pi-eye" 
+                      class="p-button-rounded p-button-text p-button-info" 
+                      pTooltip="Ver documento"
+                      tooltipPosition="top"
+                      (click)="viewLegalDocument(doc.id)"
+                    ></button>
+                    <button 
+                      pButton 
+                      icon="pi pi-pencil" 
+                      class="p-button-rounded p-button-text p-button-success" 
+                      pTooltip="Firmar documento"
+                      tooltipPosition="top"
+                      *ngIf="doc.status !== 'signed'" 
+                      (click)="signDocument(doc.id)"
+                    ></button>
+                    <button 
+                      pButton 
+                      icon="pi pi-download" 
+                      class="p-button-rounded p-button-text p-button-secondary" 
+                      pTooltip="Descargar"
+                      tooltipPosition="top"
+                      (click)="downloadDocument(doc.id)"
+                    ></button>
+                  </div>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+      </p-tabPanel>
+
+      <!-- Tab 5: Reseñas -->
+      <p-tabPanel header="Reseñas" leftIcon="pi pi-star">
+        <div class="grid">
+          <div class="col-12 md:col-4">
+            <p-card styleClass="text-center h-full">
+              <div class="text-6xl font-bold text-primary mb-2">{{ averageRating }}</div>
+              <div class="flex justify-content-center gap-1 mb-2 text-yellow-400 text-xl">
+                <i class="pi pi-star-fill" *ngFor="let s of getStars(averageRating)"></i>
+              </div>
+              <div class="text-gray-400">{{ reviews.length }} reseñas</div>
+            </p-card>
+          </div>
+          <div class="col-12 md:col-8">
+            <div *ngFor="let review of reviews" class="mb-3">
+              <p-card>
+                <div class="flex align-items-center mb-2">
+                  <p-avatar [label]="review.reviewer.charAt(0)" shape="circle" styleClass="mr-2"></p-avatar>
+                  <div>
+                    <div class="font-bold">{{ review.reviewer }}</div>
+                    <div class="text-xs text-gray-400">{{ review.date }}</div>
+                  </div>
+                  <div class="ml-auto flex text-yellow-400">
+                    <i class="pi pi-star-fill" *ngFor="let s of getStars(review.rating)"></i>
+                  </div>
+                </div>
+                <p>{{ review.comment }}</p>
+              </p-card>
+            </div>
+          </div>
+        </div>
+      </p-tabPanel>
+
+      <!-- Tab 6: Soporte -->
+      <p-tabPanel header="Soporte" leftIcon="pi pi-life-buoy">
+        <div class="support-section">
+          <div class="support-header">
+            <div>
+              <h2>Centro de Soporte</h2>
+              <p class="support-subtitle">Gestiona y realiza seguimiento de tus tickets de soporte</p>
+            </div>
+            <p-button label="+ Crear Ticket" icon="pi pi-plus" styleClass="p-button-primary" (click)="toggleSupportModal()"></p-button>
+          </div>
+
+          <!-- Support Statistics -->
+          <div class="support-stats-grid">
+            <div class="support-stat-card" [attr.data-stat]="'open'">
+              <div class="stat-icon-wrapper">
+                <div class="stat-icon open">
+                  <i class="pi pi-ticket"></i>
+                </div>
+                <div class="stat-icon-glow open"></div>
+              </div>
+              <div class="stat-content">
+                <div class="stat-number">{{ getOpenTicketsCount() }}</div>
+                <div class="stat-label">Tickets Abiertos</div>
+              </div>
+            </div>
+
+            <div class="support-stat-card" [attr.data-stat]="'progress'">
+              <div class="stat-icon-wrapper">
+                <div class="stat-icon progress">
+                  <i class="pi pi-spin pi-spinner"></i>
+                </div>
+                <div class="stat-icon-glow progress"></div>
+              </div>
+              <div class="stat-content">
+                <div class="stat-number">{{ getInProgressTicketsCount() }}</div>
+                <div class="stat-label">En Progreso</div>
+              </div>
+            </div>
+
+            <div class="support-stat-card" [attr.data-stat]="'resolved'">
+              <div class="stat-icon-wrapper">
+                <div class="stat-icon resolved">
+                  <i class="pi pi-check-circle"></i>
+                </div>
+                <div class="stat-icon-glow resolved"></div>
+              </div>
+              <div class="stat-content">
+                <div class="stat-number">{{ getResolvedTicketsCount() }}</div>
+                <div class="stat-label">Resueltos</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Support Tickets Table -->
+          <div class="tickets-section">
+            <div class="tickets-header">
+              <h3>Tickets de Soporte</h3>
+              <span class="p-input-icon-left">
+                <i class="pi pi-search"></i>
+                <input type="text" pInputText placeholder="Buscar tickets..." />
+              </span>
+            </div>
+            <p-table [value]="supportTickets" styleClass="p-datatable-gridlines modern-table" [paginator]="true" [rows]="10">
+              <ng-template pTemplate="header">
+                <tr>
+                  <th style="width: 80px">
+                    <p-checkbox></p-checkbox>
+                  </th>
+                  <th>ID</th>
+                  <th style="width: 40%">TÍTULO</th>
+                  <th>CATEGORÍA</th>
+                  <th>PRIORIDAD</th>
+                  <th>ESTADO</th>
+                  <th style="width: 100px">ACCIONES</th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-ticket>
+                <tr class="ticket-row">
+                  <td>
+                    <p-checkbox></p-checkbox>
+                  </td>
+                  <td>
+                    <span class="ticket-id">{{ ticket.id }}</span>
+                  </td>
+                  <td>
+                    <div class="ticket-title-info">
+                      <div class="ticket-title">{{ ticket.title }}</div>
+                      <div class="ticket-date">
+                        <i class="pi pi-calendar"></i>
+                        Creado: {{ ticket.createdAt }}
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <p-tag 
+                      [value]="ticket.category.toUpperCase()" 
+                      [severity]="getCategorySeverity(ticket.category)"
+                      styleClass="category-tag"
+                    ></p-tag>
+                  </td>
+                  <td>
+                    <p-tag 
+                      [value]="ticket.priority.toUpperCase()" 
+                      [severity]="getPriorityColor(ticket.priority)"
+                      styleClass="priority-tag"
+                    ></p-tag>
+                  </td>
+                  <td>
+                    <p-tag 
+                      [value]="ticket.status === 'open' ? 'ABIERTO' : ticket.status === 'in-progress' ? 'EN PROGRESO' : 'RESUELTO'" 
+                      [severity]="getStatusColor(ticket.status)"
+                      styleClass="status-tag"
+                    ></p-tag>
+                  </td>
+                  <td>
+                    <div class="ticket-actions">
+                      <button 
+                        pButton 
+                        icon="pi pi-eye" 
+                        class="p-button-rounded p-button-text p-button-info" 
+                        pTooltip="Ver detalles"
+                        tooltipPosition="top"
+                      ></button>
+                      <button 
+                        pButton 
+                        icon="pi pi-pencil" 
+                        class="p-button-rounded p-button-text p-button-secondary" 
+                        pTooltip="Editar ticket"
+                        tooltipPosition="top"
+                      ></button>
+                    </div>
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+      </p-tabPanel>
+
+      <!-- Tab 7: Calculadora ROI -->
+      <p-tabPanel header="Calculadora ROI" leftIcon="pi pi-chart-line">
+        <div class="roi-layout">
+          <div class="roi-header mb-5">
+            <h2>Calculadora de Retorno de Inversión</h2>
+            <p class="text-gray-400">Proyecta el valor financiero y el impacto económico del proyecto</p>
+          </div>
+          
+          <div class="grid">
+            <!-- Input Card (Read-only for Client) -->
+            <div class="col-12 md:col-5">
+              <p-card styleClass="roi-inputs-card h-full">
+                <ng-template pTemplate="header">
+                  <div class="card-header-custom">
+                    <i class="pi pi-cog"></i>
+                    <span>Parámetros</span>
+                  </div>
+                </ng-template>
+                
+                <div class="p-fluid">
+                  <div class="field mb-4">
+                    <label>Inversión Inicial (€)</label>
+                    <p-inputNumber 
+                      [(ngModel)]="roiCalculation.initialInvestment" 
+                      mode="currency" 
+                      currency="EUR" 
+                      [disabled]="true"
+                      styleClass="readonly-input"
+                    ></p-inputNumber>
+                  </div>
+                  <div class="field mb-4">
+                    <label>Ahorros Mensuales (€)</label>
+                    <p-inputNumber 
+                      [(ngModel)]="roiCalculation.monthlySavings" 
+                      mode="currency" 
+                      currency="EUR" 
+                      [disabled]="true"
+                      styleClass="readonly-input"
+                    ></p-inputNumber>
+                  </div>
+                  <div class="field mb-0">
+                    <label>Horizonte (Meses): <span class="value-highlight">{{ roiCalculation.timeHorizon }}</span></label>
+                    <input 
+                      type="range" 
+                      min="6" 
+                      max="60" 
+                      [(ngModel)]="roiCalculation.timeHorizon" 
+                      class="w-full mt-3" 
+                      [disabled]="true"
+                    >
+                    <div class="range-labels">
+                      <span>6 meses</span>
+                      <span>60 meses</span>
+                    </div>
+                  </div>
+                </div>
+              </p-card>
+            </div>
+            
+            <!-- Results Card -->
+            <div class="col-12 md:col-7">
+              <p-card styleClass="roi-results-card h-full">
+                <ng-template pTemplate="header">
+                  <div class="card-header-custom">
+                    <i class="pi pi-chart-bar"></i>
+                    <span>Resultados Proyectados</span>
+                  </div>
+                </ng-template>
+                
+                <div class="roi-metrics">
+                  <div class="metric-item">
+                    <div class="metric-label">ROI Estimado</div>
+                    <div class="metric-value roi-value">{{ roiCalculation.roi }}%</div>
+                    <div class="metric-indicator positive">
+                      <i class="pi pi-arrow-up"></i> Rentabilidad alta
+                    </div>
+                  </div>
+                  <div class="metric-item">
+                    <div class="metric-label">Ahorro Total</div>
+                    <div class="metric-value">€{{ roiCalculation.totalSavings | number:'1.0-0' }}</div>
+                    <div class="metric-subtext">En {{ roiCalculation.timeHorizon }} meses</div>
+                  </div>
+                  <div class="metric-item">
+                    <div class="metric-label">Payback</div>
+                    <div class="metric-value">{{ roiCalculation.paybackPeriod }} <span class="unit">meses</span></div>
+                    <div class="metric-subtext">Recuperación de inversión</div>
+                  </div>
+                </div>
+
+                <div class="chart-section">
+                  <div class="chart-title">Proyección de Ahorro</div>
+                  <div class="roi-chart-placeholder">
+                    <div class="chart-bar" style="height: 30%">
+                      <span class="bar-label">Mes 3</span>
+                    </div>
+                    <div class="chart-bar" style="height: 45%">
+                      <span class="bar-label">Mes 6</span>
+                    </div>
+                    <div class="chart-bar" style="height: 60%">
+                      <span class="bar-label">Mes 9</span>
+                    </div>
+                    <div class="chart-bar" style="height: 75%">
+                      <span class="bar-label">Mes 12</span>
+                    </div>
+                    <div class="chart-bar highlight" style="height: 90%">
+                      <span class="bar-label">Mes 15</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="roi-actions">
+                  <p-button 
+                    label="Descargar Informe ROI" 
+                    icon="pi pi-download" 
+                    styleClass="p-button-outlined p-button-secondary w-full"
+                    (click)="downloadROIReport()"
+                  ></p-button>
+                </div>
+              </p-card>
+            </div>
+          </div>
+
+          <!-- Modo edición badge -->
+          <div class="info-banner mt-4">
+            <i class="pi pi-info-circle"></i>
+            <span>Los parámetros son configurados por el proveedor. Contacta con ellos para ajustar los valores.</span>
+          </div>
+        </div>
+      </p-tabPanel>
+    </p-tabView>
+  </div>
+
+  <!-- Dialogs -->
+  
+  <!-- Support Modal -->
+  <p-dialog [(visible)]="showSupportModal" header="Crear Ticket de Soporte" [modal]="true" [style]="{width: '50vw'}" [draggable]="false" [resizable]="false">
+    <div class="p-fluid">
+      <div class="field">
+        <label>Título</label>
+        <input type="text" pInputText [(ngModel)]="newTicket.title">
+      </div>
+      <div class="field">
+        <label>Categoría</label>
+        <p-dropdown [options]="['technical', 'legal', 'billing', 'general']" [(ngModel)]="newTicket.category"></p-dropdown>
+      </div>
+      <div class="field">
+        <label>Prioridad</label>
+        <p-dropdown [options]="['low', 'medium', 'high', 'urgent']" [(ngModel)]="newTicket.priority"></p-dropdown>
+      </div>
+      <div class="field">
+        <label>Descripción</label>
+        <textarea pInputTextarea [(ngModel)]="newTicket.description" rows="5"></textarea>
+      </div>
+    </div>
+    <ng-template pTemplate="footer">
+      <p-button label="Cancelar" icon="pi pi-times" (click)="showSupportModal = false" styleClass="p-button-text"></p-button>
+      <p-button label="Crear Ticket" icon="pi pi-check" (click)="createSupportTicket()" autofocus></p-button>
+    </ng-template>
+  </p-dialog>
+
+  <!-- Unified Questions Modal -->
+  <p-dialog [(visible)]="showUnifiedQuestions" header="Preguntas Unificadas" [modal]="true" [style]="{width: '70vw'}" [maximizable]="true">
+    <p-accordion>
+      <p-accordionTab *ngFor="let q of unifiedQuestions" [header]="q.question">
+        <p>{{ q.answer }}</p>
+        <div *ngIf="q.relatedDocuments?.length" class="mt-2">
+          <strong>Documentos:</strong>
+          <ul class="pl-4">
+            <li *ngFor="let d of q.relatedDocuments">{{ d }}</li>
+          </ul>
+        </div>
+      </p-accordionTab>
+    </p-accordion>
+  </p-dialog>
+
+  <!-- Achievement Modal -->
+  <p-dialog [(visible)]="showAchievementModal" header="Compartir Logro" [modal]="true" [style]="{width: '40vw'}">
+    <div class="text-center p-4 border-1 surface-border border-round mb-4 bg-bluegray-900">
+      <div class="text-6xl mb-3">{{ achievementData.image }}</div>
+      <h3>{{ achievementData.title }}</h3>
+      <p>{{ achievementData.description }}</p>
+      <div class="text-sm text-gray-400 mt-3">via Conectian · {{ today | date }}</div>
+    </div>
+    <ng-template pTemplate="footer">
+      <p-button label="Compartir en LinkedIn" icon="pi pi-linkedin" (click)="shareOnLinkedIn()"></p-button>
+    </ng-template>
+  </p-dialog>
+
+  <!-- Meeting Modal -->
+  <p-dialog [(visible)]="showMeetingModal" header="Agendar Videollamada" [modal]="true" [style]="{width: '40vw'}">
+    <div class="p-fluid">
+      <div class="field">
+        <label>Título de la Reunión</label>
+        <input type="text" pInputText [(ngModel)]="meetingData.title">
+      </div>
+      <div class="field">
+        <label>Fecha y Hora</label>
+        <p-calendar [(ngModel)]="meetingData.date" [showTime]="true" appendTo="body"></p-calendar>
+      </div>
+      <div class="field">
+        <label>Duración (minutos)</label>
+        <p-inputNumber [(ngModel)]="meetingData.duration" [min]="15" [step]="15"></p-inputNumber>
+      </div>
+    </div>
+    <ng-template pTemplate="footer">
+      <p-button label="Cancelar" icon="pi pi-times" (click)="showMeetingModal = false" styleClass="p-button-text"></p-button>
+      <p-button label="Agendar" icon="pi pi-calendar" (click)="scheduleMeeting()"></p-button>
+    </ng-template>
+  </p-dialog>
+
+  <!-- Proposal Details Modal -->
+  <p-dialog [(visible)]="showProposalModal" header="Detalles de la Propuesta" [modal]="true" [style]="{width: '60vw'}">
+    <div class="p-3">
+      <h2 class="text-primary">{{ proposal.title }}</h2>
+      <div class="grid mb-4">
+        <div class="col-6">
+          <div class="text-sm text-gray-400">Valor</div>
+          <div class="text-xl font-bold">€{{ proposal.value.toLocaleString() }}</div>
+        </div>
+        <div class="col-6">
+          <div class="text-sm text-gray-400">Duración Estimada</div>
+          <div class="text-xl font-bold">{{ proposal.timeline }}</div>
+        </div>
+      </div>
+      <p class="mb-4">{{ proposal.description }}</p>
+      
+      <h3>Entregables</h3>
+      <ul class="pl-4 mb-4">
+        <li *ngFor="let item of proposal.deliverables" class="mb-2">{{ item }}</li>
+      </ul>
+    </div>
+    <ng-template pTemplate="footer">
+      <div class="flex justify-content-end gap-2">
+        <p-button label="Cerrar" icon="pi pi-times" (click)="showProposalModal = false" styleClass="p-button-text"></p-button>
+        <p-button label="Rechazar" icon="pi pi-times" styleClass="p-button-danger p-button-outlined" (click)="rejectProposal()"></p-button>
+        <p-button label="Aceptar Propuesta" icon="pi pi-check" styleClass="p-button-success" (click)="acceptProposal()"></p-button>
+      </div>
+    </ng-template>
+  </p-dialog>
+
+  <!-- Upload Modal -->
+  <p-dialog [(visible)]="showUploadModal" header="Subir Documento" [modal]="true" [style]="{width: '50vw'}">
+    <p-fileUpload mode="advanced" [customUpload]="true" (uploadHandler)="onUpload($event)" [multiple]="false" accept=".pdf,.doc,.docx,.xls,.xlsx" [maxFileSize]="10000000" 
+                  [auto]="true" chooseLabel="Seleccionar Archivo"></p-fileUpload>
+  </p-dialog>
+
+  <!-- Document Viewer Modal -->
+  <p-dialog [(visible)]="showDocumentModal" [header]="selectedDocument?.name" [modal]="true" [style]="{width: '80vw', height: '80vh'}" [maximizable]="true">
+    <div class="h-full flex flex-column align-items-center justify-content-center bg-black-alpha-10 border-round p-5" *ngIf="selectedDocument">
+      <i class="pi pi-file text-6xl text-primary mb-4" style="font-size: 5rem"></i>
+      <h3>Vista Previa no disponible</h3>
+      <p>Este es un visor simulado para {{ selectedDocument.name }}</p>
+      <p-button label="Descargar Archivo" icon="pi pi-download" (click)="downloadDocument(selectedDocument.id)"></p-button>
+    </div>
+  </p-dialog>
+
+</div>

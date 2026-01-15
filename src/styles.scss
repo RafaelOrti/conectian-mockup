@@ -1,8 +1,50 @@
 /* ==========================================================================
    Global Styles - Conectian Platform
+   Integrated with PrimeNG
    ========================================================================== */
 
 @import './styles/variables';
+
+/* --------------------------------------------------------------------------
+   PrimeNG Theme Customization - Override CSS Variables
+   -------------------------------------------------------------------------- */
+
+:root {
+  /* Primary Colors - Matching Conectian palette */
+  --primary-color: #{$primary-blue};
+  --primary-color-text: #ffffff;
+  --primary-500: #{$primary-blue};
+  --primary-600: #{$primary-blue-hover};
+  --primary-400: #3d9eff;
+  --primary-300: #6db5ff;
+  --primary-200: #9dcdff;
+  --primary-100: #cde6ff;
+  
+  /* Surface Colors - Dark theme */
+  --surface-ground: #{$bg-dark};
+  --surface-section: #{$bg-dark-lighter};
+  --surface-card: #{$bg-card};
+  --surface-overlay: rgba(30, 39, 54, 0.95);
+  --surface-border: rgba(255, 255, 255, 0.1);
+  --surface-hover: rgba(255, 255, 255, 0.05);
+  
+  /* Text Colors */
+  --text-color: #{$text-primary};
+  --text-color-secondary: #{$text-secondary};
+  --text-color-muted: #{$text-muted};
+  
+  /* Font */
+  --font-family: #{$font-primary};
+  
+  /* Border Radius */
+  --border-radius: #{$border-radius-base};
+  
+  /* Focus Ring */
+  --focus-ring: 0 0 0 3px rgba(13, 134, 255, 0.2);
+  
+  /* Mask BG */
+  --maskbg: rgba(0, 0, 0, 0.6);
+}
 
 /* --------------------------------------------------------------------------
    Reset & Base Styles
@@ -366,3 +408,575 @@ a {
 .glow {
   animation: glow 2s ease-in-out infinite;
 }
+
+/* --------------------------------------------------------------------------
+   PrimeNG Component Customizations
+   -------------------------------------------------------------------------- */
+
+/* --- Buttons --- */
+.p-button {
+  font-family: $font-primary;
+  font-weight: $font-weight-semibold;
+  border-radius: $border-radius-base;
+  transition: all $transition-base;
+  
+  &:not(.p-button-outlined):not(.p-button-text):not(.p-button-link) {
+    background: $ai-gradient;
+    border: none;
+    box-shadow: $shadow-glow-blue;
+    
+    &:hover {
+      box-shadow: $shadow-glow-purple;
+      transform: translateY(-2px);
+    }
+  }
+  
+  &.p-button-secondary {
+    background: transparent;
+    border: 2px solid $ai-purple;
+    color: $ai-purple;
+    
+    &:hover {
+      background: rgba(107, 92, 240, 0.15);
+    }
+  }
+  
+  &.p-button-success {
+    background: $success-green;
+    border-color: $success-green;
+  }
+  
+  &.p-button-warning {
+    background: $warning-orange;
+    border-color: $warning-orange;
+  }
+  
+  &.p-button-danger {
+    background: $danger-red;
+    border-color: $danger-red;
+  }
+}
+
+/* --- Cards --- */
+.p-card {
+  @include glassmorphism;
+  border-radius: $border-radius-lg;
+  overflow: hidden;
+  transition: all $transition-base;
+  
+  &:hover {
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+  }
+  
+  .p-card-title {
+    color: $text-primary;
+    font-weight: $font-weight-bold;
+    font-size: $font-size-xl;
+  }
+  
+  .p-card-subtitle {
+    color: $text-secondary;
+    font-size: $font-size-sm;
+  }
+  
+  .p-card-content {
+    padding: $spacing-4 0;
+  }
+}
+
+/* --- Tables --- */
+.p-datatable {
+  .p-datatable-header {
+    background: transparent;
+    border: none;
+    padding: $spacing-4;
+  }
+  
+  .p-datatable-thead > tr > th {
+    background: rgba(255, 255, 255, 0.05);
+    color: $text-secondary;
+    font-weight: $font-weight-semibold;
+    text-transform: uppercase;
+    font-size: $font-size-xs;
+    letter-spacing: 0.5px;
+    border-color: rgba(255, 255, 255, 0.08);
+  }
+  
+  .p-datatable-tbody > tr {
+    background: transparent;
+    transition: background $transition-fast;
+    
+    > td {
+      border-color: rgba(255, 255, 255, 0.05);
+      color: $text-primary;
+    }
+    
+    &:hover {
+      background: rgba(255, 255, 255, 0.03);
+    }
+    
+    &.p-highlight {
+      background: rgba(13, 134, 255, 0.15);
+    }
+  }
+  
+  .p-sortable-column:not(.p-highlight):hover {
+    background: rgba(255, 255, 255, 0.05);
+  }
+  
+  .p-paginator {
+    background: transparent;
+    border: none;
+  }
+}
+
+/* --- Inputs --- */
+.p-inputtext,
+.p-dropdown,
+.p-multiselect,
+.p-calendar,
+.p-inputtextarea {
+  background: $input-bg;
+  border: 1px solid $input-border;
+  border-radius: $input-border-radius;
+  color: $text-primary;
+  font-family: $font-primary;
+  transition: all $transition-base;
+  
+  &:enabled:hover {
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+  
+  &:enabled:focus {
+    border-color: $primary-blue;
+    box-shadow: 0 0 0 3px rgba(13, 134, 255, 0.15);
+  }
+  
+  &::placeholder {
+    color: $text-muted;
+  }
+}
+
+.p-dropdown-panel,
+.p-multiselect-panel {
+  @include glassmorphism;
+  border-radius: $border-radius-md;
+  
+  .p-dropdown-item,
+  .p-multiselect-item {
+    color: $text-primary;
+    
+    &:hover {
+      background: rgba(255, 255, 255, 0.08);
+    }
+    
+    &.p-highlight {
+      background: rgba(13, 134, 255, 0.2);
+      color: $primary-blue;
+    }
+  }
+}
+
+/* --- Dialog/Modal --- */
+.p-dialog {
+  @include glassmorphism;
+  border-radius: $border-radius-lg;
+  box-shadow: $shadow-xl;
+  
+  .p-dialog-header {
+    background: transparent;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: $spacing-5 $spacing-6;
+    
+    .p-dialog-title {
+      color: $text-primary;
+      font-weight: $font-weight-bold;
+      font-size: $font-size-xl;
+    }
+    
+    .p-dialog-header-icons .p-dialog-header-icon {
+      color: $text-secondary;
+      
+      &:hover {
+        background: rgba(255, 255, 255, 0.1);
+        color: $text-primary;
+      }
+    }
+  }
+  
+  .p-dialog-content {
+    background: transparent;
+    padding: $spacing-6;
+    color: $text-secondary;
+  }
+  
+  .p-dialog-footer {
+    background: transparent;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding: $spacing-4 $spacing-6;
+  }
+}
+
+.p-dialog-mask {
+  backdrop-filter: blur(4px);
+}
+
+/* --- Toast/Messages --- */
+.p-toast {
+  .p-toast-message {
+    @include glassmorphism;
+    border-radius: $border-radius-md;
+    box-shadow: $shadow-lg;
+    
+    &.p-toast-message-success {
+      border-left: 4px solid $success-green;
+      
+      .p-toast-message-icon,
+      .p-toast-icon-close {
+        color: $success-green;
+      }
+    }
+    
+    &.p-toast-message-warn {
+      border-left: 4px solid $warning-orange;
+      
+      .p-toast-message-icon,
+      .p-toast-icon-close {
+        color: $warning-orange;
+      }
+    }
+    
+    &.p-toast-message-error {
+      border-left: 4px solid $danger-red;
+      
+      .p-toast-message-icon,
+      .p-toast-icon-close {
+        color: $danger-red;
+      }
+    }
+    
+    &.p-toast-message-info {
+      border-left: 4px solid $primary-blue;
+      
+      .p-toast-message-icon,
+      .p-toast-icon-close {
+        color: $primary-blue;
+      }
+    }
+  }
+  
+  .p-toast-summary {
+    color: $text-primary;
+    font-weight: $font-weight-semibold;
+  }
+  
+  .p-toast-detail {
+    color: $text-secondary;
+  }
+}
+
+/* --- Tags/Badges --- */
+.p-tag {
+  font-weight: $font-weight-semibold;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: $font-size-xs;
+  border-radius: $border-radius-full;
+  
+  &.p-tag-success {
+    background: rgba(24, 185, 129, 0.2);
+    color: $success-green;
+    border: 1px solid $success-green;
+  }
+  
+  &.p-tag-warning {
+    background: rgba(249, 105, 8, 0.2);
+    color: $warning-orange;
+    border: 1px solid $warning-orange;
+  }
+  
+  &.p-tag-danger {
+    background: rgba(244, 68, 74, 0.2);
+    color: $danger-red;
+    border: 1px solid $danger-red;
+  }
+  
+  &.p-tag-info {
+    background: rgba(13, 134, 255, 0.2);
+    color: $primary-blue;
+    border: 1px solid $primary-blue;
+  }
+}
+
+/* --- Avatar --- */
+.p-avatar {
+  background: $ai-gradient;
+  color: white;
+  font-weight: $font-weight-semibold;
+}
+
+/* --- Progress Bar --- */
+.p-progressbar {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: $border-radius-full;
+  height: 8px;
+  
+  .p-progressbar-value {
+    background: $ai-gradient;
+    border-radius: $border-radius-full;
+  }
+}
+
+/* --- Tabs --- */
+.p-tabview {
+  .p-tabview-nav {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    
+    li {
+      .p-tabview-nav-link {
+        background: transparent;
+        border: none;
+        color: $text-secondary;
+        font-weight: $font-weight-medium;
+        transition: all $transition-base;
+        
+        &:hover {
+          color: $text-primary;
+          background: rgba(255, 255, 255, 0.05);
+        }
+      }
+      
+      &.p-highlight .p-tabview-nav-link {
+        color: $primary-blue;
+        border-bottom: 2px solid $primary-blue;
+        background: transparent;
+      }
+    }
+  }
+  
+  .p-tabview-panels {
+    background: transparent;
+    padding: $spacing-6 0;
+  }
+}
+
+/* --- Menu --- */
+.p-menu,
+.p-tieredmenu,
+.p-contextmenu {
+  @include glassmorphism;
+  border-radius: $border-radius-md;
+  padding: $spacing-2;
+  
+  .p-menuitem-link {
+    border-radius: $border-radius-base;
+    color: $text-primary;
+    transition: all $transition-fast;
+    
+    &:hover {
+      background: rgba(255, 255, 255, 0.08);
+    }
+    
+    .p-menuitem-icon {
+      color: $text-secondary;
+    }
+    
+    .p-menuitem-text {
+      color: $text-primary;
+    }
+  }
+}
+
+/* --- Sidebar --- */
+.p-sidebar {
+  @include glassmorphism;
+  
+  .p-sidebar-header {
+    padding: $spacing-5 $spacing-6;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .p-sidebar-content {
+    padding: $spacing-6;
+  }
+  
+  .p-sidebar-close {
+    color: $text-secondary;
+    
+    &:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: $text-primary;
+    }
+  }
+}
+
+/* --- Accordion --- */
+.p-accordion {
+  .p-accordion-header {
+    .p-accordion-header-link {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: $text-primary;
+      border-radius: $border-radius-base;
+      transition: all $transition-base;
+      
+      &:hover {
+        background: rgba(255, 255, 255, 0.06);
+      }
+    }
+  }
+  
+  .p-accordion-content {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-top: none;
+    color: $text-secondary;
+  }
+}
+
+/* --- Tooltip --- */
+.p-tooltip {
+  .p-tooltip-text {
+    @include glassmorphism;
+    color: $text-primary;
+    font-size: $font-size-sm;
+    border-radius: $border-radius-base;
+    box-shadow: $shadow-md;
+  }
+}
+
+/* --- Chip --- */
+.p-chip {
+  background: rgba(255, 255, 255, 0.1);
+  color: $text-primary;
+  border-radius: $border-radius-full;
+  
+  .p-chip-icon {
+    color: $text-secondary;
+  }
+  
+  .p-chip-remove-icon {
+    color: $text-secondary;
+    
+    &:hover {
+      color: $danger-red;
+    }
+  }
+}
+
+/* --- Skeleton --- */
+.p-skeleton {
+  background: rgba(255, 255, 255, 0.08);
+  
+  &::after {
+    background: linear-gradient(90deg, 
+      transparent, 
+      rgba(255, 255, 255, 0.05), 
+      transparent
+    );
+  }
+}
+
+/* --- Steps/Stepper --- */
+.p-steps {
+  .p-steps-item {
+    .p-menuitem-link {
+      background: transparent;
+      
+      .p-steps-number {
+        background: rgba(255, 255, 255, 0.1);
+        color: $text-secondary;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+      }
+      
+      .p-steps-title {
+        color: $text-secondary;
+      }
+    }
+    
+    &.p-highlight .p-menuitem-link {
+      .p-steps-number {
+        background: $ai-gradient;
+        color: white;
+        border: none;
+      }
+      
+      .p-steps-title {
+        color: $text-primary;
+        font-weight: $font-weight-semibold;
+      }
+    }
+  }
+}
+
+/* --- Timeline --- */
+.p-timeline {
+  .p-timeline-event-marker {
+    background: $ai-gradient;
+    border: none;
+  }
+  
+  .p-timeline-event-connector {
+    background: rgba(255, 255, 255, 0.2);
+  }
+}
+
+/* --- FileUpload --- */
+.p-fileupload {
+  .p-fileupload-buttonbar {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .p-fileupload-content {
+    background: transparent;
+    border: 2px dashed rgba(255, 255, 255, 0.2);
+    border-radius: $border-radius-lg;
+    
+    &.p-fileupload-highlight {
+      border-color: $primary-blue;
+      background: rgba(13, 134, 255, 0.05);
+    }
+  }
+}
+
+/* --- Calendar --- */
+.p-datepicker {
+  @include glassmorphism;
+  border-radius: $border-radius-md;
+  
+  .p-datepicker-header {
+    background: transparent;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  table td > span {
+    border-radius: $border-radius-base;
+    
+    &:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+    
+    &.p-highlight {
+      background: $ai-gradient;
+      color: white;
+    }
+  }
+}
+
+/* --- Ripple Effect Enhancement --- */
+.p-ripple {
+  overflow: hidden;
+  position: relative;
+}
+
+/* --- PrimeIcons Custom Colors --- */
+.pi-success { color: $success-green; }
+.pi-warning { color: $warning-orange; }
+.pi-danger { color: $danger-red; }
+.pi-info { color: $primary-blue; }
+.pi-ai { color: $ai-purple; }

@@ -4,145 +4,675 @@
   min-height: 100vh;
   background: $bg-dark;
   color: $text-primary;
-  padding-top: 80px; // Fix for navbar overlap
+  padding-top: 80px;
+  padding-bottom: 4rem;
+
+  &.no-navbar {
+    padding-top: 0;
+    min-height: auto;
+  }
 }
 
 .container {
-  max-width: 1200px;
+  max-width: 1600px;
   margin: 0 auto;
-  padding: $spacing-8;
+  padding: 2rem 3rem 3rem;
 }
 
+// Page Header
 .page-header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: $spacing-8;
-
-  h1 {
-    font-size: $font-size-3xl;
-    font-weight: $font-weight-bold;
-    margin-bottom: $spacing-2;
-  }
-
-  .subtitle {
-    color: $text-secondary;
-    font-size: $font-size-lg;
-  }
-}
-
-.payments-layout {
-  display: flex;
-  flex-direction: column;
-  gap: $spacing-8;
-}
-
-.balance-card {
-  display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: $spacing-8;
-  background: linear-gradient(135deg, rgba(13, 134, 255, 0.1) 0%, rgba(107, 92, 240, 0.1) 100%);
-  border: 1px solid rgba(13, 134, 255, 0.2);
+  margin-bottom: 2.5rem;
+  gap: 2rem;
+  flex-wrap: wrap;
 
-  @media (max-width: 768px) {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: $spacing-6;
-  }
-
-  .balance-info {
+  .header-left {
     display: flex;
-    flex-direction: column;
-    gap: $spacing-2;
+    align-items: center;
+    gap: 1.5rem;
 
-    .label { color: $text-secondary; font-size: $font-size-sm; text-transform: uppercase; letter-spacing: 1px; }
-    .amount { font-size: 48px; font-weight: bold; color: $text-primary; line-height: 1; }
-    .pending { color: $text-muted; font-size: $font-size-sm; }
-  }
+    .header-icon {
+      width: 72px;
+      height: 72px;
+      border-radius: 1rem;
+      background: linear-gradient(135deg, rgba(34, 197, 94, 0.2) 0%, rgba(34, 197, 94, 0.05) 100%);
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
 
-  .balance-actions {
-    display: flex;
-    gap: $spacing-4;
+      i {
+        font-size: 2rem;
+        color: #22c55e;
+      }
+    }
 
-    .action-btn {
-      padding: $spacing-3 $spacing-6;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: $border-radius-base;
-      color: $text-primary;
-      cursor: pointer;
-      font-weight: $font-weight-medium;
-      transition: all 0.2s;
-
-      &:hover {
-        background: rgba(255, 255, 255, 0.1);
+    .header-text {
+      h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin: 0 0 0.5rem 0;
+        background: linear-gradient(135deg, #fff 0%, #22c55e 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
       }
 
-      &.primary {
-        background: $primary-blue;
-        border-color: $primary-blue;
-        
-        &:hover {
-          background: $primary-blue-hover;
-        }
+      .subtitle {
+        font-size: 1.125rem;
+        color: $text-secondary;
+        margin: 0;
+      }
+    }
+  }
+
+  ::ng-deep .withdraw-button {
+    .p-button {
+      background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+      border: none;
+      padding: 0.875rem 1.75rem;
+      font-weight: 600;
+      box-shadow: 0 4px 16px rgba(34, 197, 94, 0.3);
+      transition: all 0.3s ease;
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(34, 197, 94, 0.4);
       }
     }
   }
 }
 
-.transactions-section {
-  h2 { font-size: $font-size-xl; margin-bottom: $spacing-6; }
+// Balance Cards Grid
+.balance-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
 
-  .transactions-card {
-    padding: 0;
+::ng-deep .balance-card {
+  .p-card {
+    border-radius: 1.5rem;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     overflow: hidden;
+    position: relative;
 
-    .transactions-table {
-      width: 100%;
-      border-collapse: collapse;
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+    }
 
-      th {
-        text-align: left;
-        padding: $spacing-4;
-        background: rgba(255, 255, 255, 0.02);
+    &:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+    }
+  }
+
+  .p-card-body {
+    padding: 2rem;
+  }
+
+  &.main-balance .p-card {
+    background: linear-gradient(135deg, rgba(34, 197, 94, 0.15) 0%, rgba(30, 39, 54, 0.6) 100%);
+    border: 1px solid rgba(34, 197, 94, 0.3);
+
+    &::before {
+      background: linear-gradient(90deg, #22c55e 0%, #16a34a 100%);
+    }
+  }
+
+  &.pending-balance .p-card {
+    background: linear-gradient(135deg, rgba(249, 115, 22, 0.15) 0%, rgba(30, 39, 54, 0.6) 100%);
+    border: 1px solid rgba(249, 115, 22, 0.3);
+
+    &::before {
+      background: linear-gradient(90deg, #f97316 0%, #ea580c 100%);
+    }
+  }
+
+  &.total-earnings .p-card {
+    background: linear-gradient(135deg, rgba(13, 134, 255, 0.15) 0%, rgba(30, 39, 54, 0.6) 100%);
+    border: 1px solid rgba(13, 134, 255, 0.3);
+
+    &::before {
+      background: linear-gradient(90deg, #0d86ff 0%, #00d4ff 100%);
+    }
+  }
+
+  .card-content {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+
+    .card-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+
+      i {
+        font-size: 2rem;
+      }
+    }
+
+    .card-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+
+      .card-label {
+        font-size: 0.875rem;
         color: $text-secondary;
-        font-weight: $font-weight-medium;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        font-weight: 600;
       }
 
-      td {
-        padding: $spacing-4;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      .card-amount {
+        font-size: 2rem;
+        font-weight: 800;
         color: $text-primary;
-        font-size: $font-size-sm;
+        line-height: 1;
       }
 
-      .tx-id { font-family: monospace; color: $text-muted; }
-      
-      .amount {
-        font-weight: bold;
-        &.positive { color: $success-green; }
+      .card-sublabel {
+        font-size: 0.8125rem;
+        color: $text-secondary;
+      }
+    }
+  }
+
+  &.main-balance .card-content .card-icon i {
+    color: #22c55e;
+  }
+
+  &.pending-balance .card-content .card-icon i {
+    color: #f97316;
+  }
+
+  &.total-earnings .card-content .card-icon i {
+    color: $primary-blue;
+  }
+
+  .card-action {
+    .p-button {
+      width: 100%;
+    }
+  }
+}
+
+// Chart Card & Common Card Header
+::ng-deep .chart-card,
+::ng-deep .transactions-card,
+::ng-deep .bank-config-card {
+  margin-bottom: 3rem;
+
+  .p-card {
+    background: rgba(30, 39, 54, 0.6);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 1.5rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 1.5rem 1.5rem 0 0;
+
+    .header-content {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+
+      i {
+        font-size: 1.5rem;
+        color: $primary-blue;
       }
 
-      .status-badge {
-        display: inline-block;
-        padding: 4px 8px;
-        border-radius: $border-radius-base;
-        font-size: $font-size-xs;
-        
-        &.completed { background: rgba(24, 185, 129, 0.1); color: $success-green; }
-        &.pending { background: rgba(249, 105, 8, 0.1); color: $warning-orange; }
+      h3 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: $text-primary;
+        margin: 0;
+      }
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 0.75rem;
+    }
+  }
+}
+
+// Chart Container
+.chart-container {
+  padding: 2rem;
+}
+
+// Transactions Table
+::ng-deep .transactions-table {
+  .p-datatable {
+    background: transparent;
+    color: $text-primary;
+
+    .p-datatable-header {
+      background: transparent;
+      border: none;
+      padding: 1.5rem 2rem;
+    }
+
+    .p-datatable-thead > tr > th {
+      background: rgba(255, 255, 255, 0.03);
+      color: $text-secondary;
+      border: none;
+      padding: 1rem 1.5rem;
+      font-weight: 600;
+      font-size: 0.875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .p-datatable-tbody > tr {
+      background: transparent;
+      transition: all 0.3s ease;
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.03);
       }
 
-      .download-btn {
-        background: none;
+      > td {
         border: none;
-        cursor: pointer;
-        opacity: 0.7;
-        transition: opacity 0.2s;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        padding: 1.25rem 1.5rem;
+        color: $text-primary;
+      }
+    }
 
-        &:hover { opacity: 1; }
+    .p-paginator {
+      background: transparent;
+      border: none;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 1rem 2rem;
+      color: $text-secondary;
+
+      .p-paginator-pages .p-paginator-page {
+        background: transparent;
+        color: $text-secondary;
+        min-width: 2.5rem;
+        height: 2.5rem;
+        border-radius: 0.5rem;
+
+        &:hover {
+          background: rgba(255, 255, 255, 0.05);
+        }
+
+        &.p-highlight {
+          background: $primary-blue;
+          color: white;
+        }
+      }
+
+      .p-paginator-first,
+      .p-paginator-prev,
+      .p-paginator-next,
+      .p-paginator-last {
+        background: transparent;
+        color: $text-secondary;
+        min-width: 2.5rem;
+        height: 2.5rem;
+        border-radius: 0.5rem;
+
+        &:hover:not(:disabled) {
+          background: rgba(255, 255, 255, 0.05);
+        }
+      }
+    }
+  }
+
+  .transaction-id {
+    font-family: 'Courier New', monospace;
+    font-size: 0.875rem;
+    color: $text-secondary;
+    font-weight: 600;
+  }
+
+  .transaction-description {
+    font-size: 0.9375rem;
+    color: $text-primary;
+  }
+
+  .client-info {
+    .client-name {
+      font-weight: 600;
+      color: $text-primary;
+    }
+  }
+
+  .transaction-amount {
+    font-size: 1.125rem;
+    font-weight: 700;
+
+    &.positive {
+      color: #22c55e;
+    }
+
+    &.negative {
+      color: #ef4444;
+    }
+  }
+
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    color: $text-secondary;
+
+    p {
+      font-size: 1.125rem;
+      margin: 0;
+    }
+  }
+}
+
+// Bank Configuration Card
+::ng-deep .bank-config-card {
+  .p-card-body {
+    padding: 2rem;
+  }
+
+  .bank-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+
+    .bank-details {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      min-width: 300px;
+
+      .detail-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+
+        i {
+          font-size: 1.5rem;
+          color: $primary-blue;
+          width: 40px;
+          text-align: center;
+        }
+
+        .detail-content {
+          display: flex;
+          flex-direction: column;
+          gap: 0.25rem;
+
+          .detail-label {
+            font-size: 0.8125rem;
+            color: $text-secondary;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+          }
+
+          .detail-value {
+            font-size: 1rem;
+            color: $text-primary;
+            font-weight: 600;
+          }
+        }
+      }
+    }
+
+    .bank-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+  }
+}
+
+// Withdraw Dialog
+::ng-deep .p-dialog {
+  .p-dialog-header {
+    background: #1e293b;
+    color: white;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 1.5rem 2rem;
+
+    .p-dialog-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+  }
+
+  .p-dialog-content {
+    background: #0f172a;
+    color: $text-primary;
+    padding: 2rem;
+
+    .withdraw-dialog-content {
+      .withdraw-info {
+        margin-bottom: 2rem;
+        padding: 1.5rem;
+        background: linear-gradient(135deg, rgba(34, 197, 94, 0.15) 0%, rgba(34, 197, 94, 0.05) 100%);
+        border: 1px solid rgba(34, 197, 94, 0.3);
+        border-radius: 1rem;
+
+        .info-item {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+
+          i {
+            font-size: 2rem;
+            color: #22c55e;
+          }
+
+          .info-content {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+
+            .info-label {
+              font-size: 0.875rem;
+              color: $text-secondary;
+              text-transform: uppercase;
+              letter-spacing: 0.5px;
+            }
+
+            .info-value {
+              font-size: 1.75rem;
+              font-weight: 800;
+              color: $text-primary;
+            }
+          }
+        }
+      }
+
+      .field {
+        margin-bottom: 1.5rem;
+
+        label {
+          display: block;
+          margin-bottom: 0.5rem;
+          color: $text-secondary;
+          font-weight: 600;
+          font-size: 0.9375rem;
+        }
+
+        input {
+          width: 100%;
+          background: rgba(255, 255, 255, 0.05);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          color: $text-primary;
+          padding: 0.875rem 1rem;
+          border-radius: 0.75rem;
+          transition: all 0.3s ease;
+
+          &:focus {
+            outline: none;
+            border-color: $primary-blue;
+            box-shadow: 0 0 0 3px rgba(13, 134, 255, 0.2);
+          }
+
+          &::placeholder {
+            color: rgba(255, 255, 255, 0.3);
+          }
+
+          &:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+          }
+        }
+
+        .p-inputgroup {
+          .p-inputgroup-addon {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: $text-primary;
+            font-weight: 700;
+          }
+        }
+
+        .field-help {
+          display: block;
+          margin-top: 0.5rem;
+          color: $text-secondary;
+          font-size: 0.8125rem;
+        }
+      }
+
+      .withdrawal-notice {
+        display: flex;
+        gap: 1rem;
+        padding: 1rem;
+        background: rgba(13, 134, 255, 0.1);
+        border: 1px solid rgba(13, 134, 255, 0.3);
+        border-radius: 0.75rem;
+
+        i {
+          font-size: 1.25rem;
+          color: $primary-blue;
+          flex-shrink: 0;
+        }
+
+        .notice-content {
+          strong {
+            display: block;
+            margin-bottom: 0.25rem;
+            color: $text-primary;
+          }
+
+          p {
+            margin: 0;
+            font-size: 0.875rem;
+            color: $text-secondary;
+          }
+        }
+      }
+    }
+  }
+
+  .p-dialog-footer {
+    background: #1e293b;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 1rem 2rem;
+  }
+}
+
+// Responsive
+@media (max-width: 1024px) {
+  .container {
+    padding: 2rem 1.5rem;
+  }
+
+  .balance-cards-grid {
+    grid-template-columns: 1fr;
+  }
+
+  ::ng-deep .bank-config-card .bank-info {
+    flex-direction: column;
+    align-items: flex-start;
+
+    .bank-actions {
+      width: 100%;
+
+      .p-button {
+        width: 100%;
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 1.5rem 1rem;
+  }
+
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+
+    .header-left {
+      flex-direction: column;
+      align-items: flex-start;
+
+      .header-icon {
+        width: 60px;
+        height: 60px;
+
+        i {
+          font-size: 1.5rem;
+        }
+      }
+
+      .header-text h1 {
+        font-size: 2rem;
+      }
+    }
+
+    ::ng-deep .withdraw-button .p-button {
+      width: 100%;
+    }
+  }
+
+  ::ng-deep .chart-card .card-header,
+  ::ng-deep .transactions-card .card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+
+    .header-actions {
+      width: 100%;
+      flex-direction: column;
+
+      .p-button {
+        width: 100%;
       }
     }
   }

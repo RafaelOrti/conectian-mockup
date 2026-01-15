@@ -3,8 +3,9 @@
   <app-navbar 
     [userRole]="'CLIENT'"
     [userName]="'Carlos Martínez'"
-    [notificationCount]="3"
-    [messageCount]="2"
+    [notificationCount]="generalNotifications"
+    [messageCount]="messageNotifications"
+    [projectCount]="projectNotifications"
     [showSearch]="true"
   ></app-navbar>
   
@@ -331,35 +332,47 @@
       </div>
 
       <!-- Chatbot Mode -->
-      <div *ngIf="sidebarMode === 'chatbot'" class="chatbot-content">
-        <div class="chatbot-header">
-          <h3>💬 Asistente IA</h3>
-          <p class="chatbot-subtitle">Busca soluciones con lenguaje natural</p>
-        </div>
-        
-        <div class="chatbot-input-wrapper">
-          <textarea 
-            class="chatbot-input"
-            placeholder="Ej: Necesito reducir fraude en transacciones, Automatizar atención al cliente..."
-            [(ngModel)]="chatQuery"
-            (keyup.enter)="onChatSubmit()"
-            rows="4"
-          ></textarea>
-          <button class="chatbot-submit-btn" (click)="onChatSubmit()">
-            <span>🔍</span> Buscar
-          </button>
-        </div>
-        
-        <div class="quick-suggestions">
-          <span class="suggestion-label">Búsquedas populares:</span>
-          <button 
-            *ngFor="let suggestion of suggestions"
-            class="suggestion-chip"
-            (click)="onSuggestionClick(suggestion)"
-          >
-            {{ suggestion }}
-          </button>
-        </div>
+      <div *ngIf="sidebarMode === 'chatbot'" class="chatbot-content h-full flex flex-column">
+        <p-card styleClass="chatbot-card h-full surface-card border-none shadow-none flex flex-column">
+          <ng-template pTemplate="content">
+            <div class="flex flex-column h-full">
+              <div class="chatbot-header flex align-items-center gap-3 mb-4">
+                <p-avatar icon="pi pi-sparkles" styleClass="bg-primary-500 text-white" size="large" shape="circle"></p-avatar>
+                <div>
+                  <h3 class="m-0 text-xl font-bold text-white">Asistente IA</h3>
+                  <p class="m-0 text-sm text-gray-400">Busca soluciones con lenguaje natural</p>
+                </div>
+              </div>
+              
+              <div class="chatbot-input-wrapper flex flex-column gap-3 flex-grow-1">
+                <textarea 
+                  pInputTextarea 
+                  [(ngModel)]="chatQuery" 
+                  rows="6" 
+                  placeholder="Ej: Necesito reducir fraude en transacciones, Automatizar atención al cliente..." 
+                  class="w-full bg-gray-900 border-gray-700 text-white flex-grow-1"
+                  style="resize: none;"
+                  (keyup.enter)="onChatSubmit()"
+                ></textarea>
+                <p-button label="Buscar Soluciones" icon="pi pi-search" styleClass="w-full p-button-primary" (click)="onChatSubmit()"></p-button>
+              </div>
+              
+              <div class="quick-suggestions mt-5">
+                <span class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">Búsquedas populares:</span>
+                <div class="flex flex-wrap gap-2">
+                  <button 
+                    pButton 
+                    type="button" 
+                    *ngFor="let suggestion of suggestions" 
+                    [label]="suggestion" 
+                    class="p-button-outlined p-button-secondary p-button-sm p-button-rounded text-sm"
+                    (click)="onSuggestionClick(suggestion)"
+                  ></button>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        </p-card>
       </div>
     </aside>
     
@@ -414,6 +427,12 @@
               [class.featured]="case.featured"
               (click)="onCaseClick(case)"
             >
+              <!-- Case Image -->
+              <div class="case-image">
+                <img [src]="case.image" [alt]="case.title" />
+                <div class="image-overlay"></div>
+              </div>
+              
               <!-- Relevance Score -->
               <div class="case-header">
                 <span class="relevance-badge" [class.featured-badge]="case.featured">
@@ -427,7 +446,7 @@
               
               <!-- Provider Info -->
               <div class="case-provider">
-                <span class="provider-avatar-sm">{{ case.provider.logo }}</span>
+                <img [src]="case.provider.logo" [alt]="case.provider.name" class="provider-logo" />
                 <span class="provider-name">{{ case.provider.name }}</span>
                 <span *ngIf="case.provider.verified" class="verified-icon">
                   <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
@@ -530,26 +549,42 @@
             </button>
           </div>
           
-          <div class="requests-list">
-            <div *ngFor="let req of myRequests" class="request-card">
-              <div class="request-info">
-                <h3>{{ req.title }}</h3>
-                <div class="request-meta">
-                  <span>📅 {{ req.date }}</span>
-                  <span class="status-badge" [class.active]="req.status === 'Active'">{{ req.status }}</span>
-                  <span>💰 {{ req.budget }}</span>
+          <div class="cases-grid">
+            <article 
+              *ngFor="let req of myRequests" 
+              class="case-card"
+              (click)="viewResponses(req.id)"
+            >
+              <div class="case-header">
+                <span class="relevance-badge" [class.featured-badge]="req.status === 'Active'">
+                  <span class="premium-icon">{{ req.status === 'Active' ? '🟢' : '🔴' }}</span>
+                  {{ req.status === 'Active' ? 'Activo' : 'Cerrado' }}
+                </span>
+                <span class="date-badge" style="color: #a0aec0; font-size: 0.8rem;">{{ req.date }}</span>
+              </div>
+              
+              <h3 class="case-title">{{ req.title }}</h3>
+              
+              <div class="case-metrics">
+                <div class="metric-item">
+                  <span class="metric-label">Presupuesto</span>
+                  <span class="metric-value">{{ req.budget }}</span>
+                </div>
+                <div class="metric-item">
+                  <span class="metric-label">Respuestas</span>
+                  <span class="metric-value highlight">{{ req.responses }}</span>
                 </div>
               </div>
-              <div class="request-stats">
-                <div class="stat-box">
-                  <span class="stat-value">{{ req.responses }}</span>
-                  <span class="stat-label">Respuestas</span>
-                </div>
-                <button class="view-responses-btn">
+              
+              <div class="case-footer">
+                <button class="view-case-btn" (click)="viewResponses(req.id); $event.stopPropagation()">
                   Ver Respuestas
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                    <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
+                  </svg>
                 </button>
               </div>
-            </div>
+            </article>
           </div>
         </section>
       </div>

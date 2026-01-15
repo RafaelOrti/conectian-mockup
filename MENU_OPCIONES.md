@@ -180,3 +180,5 @@ Este documento explica qué hace cada opción del menú desplegable del perfil d
 
 4. **Permisos:** Algunas opciones pueden tener restricciones según el tipo de cuenta o plan de suscripción del usuario.
 
+
+

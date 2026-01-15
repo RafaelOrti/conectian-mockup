@@ -1,0 +1,1254 @@
+@import '../../../../styles/variables';
+
+:host {
+  display: block;
+}
+
+.deal-room-page {
+  min-height: 100vh;
+  background: $bg-dark;
+  color: $text-primary;
+  padding-top: 80px;
+}
+
+.container {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: $spacing-4 $spacing-6;
+}
+
+// Header
+.page-header {
+  margin-bottom: $spacing-6;
+  background: rgba(30, 39, 54, 0.4);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 1rem;
+  padding: $spacing-4 $spacing-6;
+
+  .header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .header-main {
+      h1 {
+        font-size: 2rem;
+        font-weight: 700;
+        margin: 0 0 $spacing-2 0;
+        background: linear-gradient(90deg, #fff, #a0aec0);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .deal-meta {
+        display: flex;
+        align-items: center;
+        gap: $spacing-4;
+        color: $text-secondary;
+        font-size: $font-size-sm;
+      }
+    }
+
+    .header-actions {
+      display: flex;
+      gap: $spacing-2;
+    }
+  }
+}
+
+// Layouts
+.chat-layout {
+  display: grid;
+  grid-template-columns: 1fr 350px;
+  gap: $spacing-6;
+  
+  @media (max-width: 1024px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+// PrimeNG Overrides & Glassmorphism
+::ng-deep {
+  .p-tabview-nav {
+    background: transparent !important;
+    border: none !important;
+    margin-bottom: $spacing-4;
+    
+    li {
+      margin-right: $spacing-2;
+      
+      .p-tabview-nav-link {
+        background: rgba(255, 255, 255, 0.05) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        color: $text-secondary !important;
+        border-radius: 0.5rem !important;
+        transition: all 0.2s;
+        padding: 0.75rem 1.25rem !important;
+        
+        &:hover {
+          background: rgba(255, 255, 255, 0.1) !important;
+          color: $text-primary !important;
+        }
+      }
+      
+      &.p-highlight .p-tabview-nav-link {
+        background: rgba(13, 134, 255, 0.2) !important;
+        border-color: rgba(13, 134, 255, 0.4) !important;
+        color: $primary-blue !important;
+      }
+    }
+  }
+  
+  .p-tabview-panels {
+    background: transparent !important;
+    padding: 0 !important;
+  }
+
+  .p-card {
+    background: rgba(30, 39, 54, 0.6) !important;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 1rem !important;
+    color: $text-primary !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2) !important;
+    
+    .p-card-header {
+      padding: 0 !important;
+    }
+    
+    .p-card-body {
+      padding: 1.5rem !important;
+    }
+    
+    .p-card-title {
+      color: $text-primary !important;
+      font-size: 1.25rem !important;
+      margin-bottom: 1rem !important;
+    }
+    
+    .p-card-subtitle {
+      color: $text-secondary !important;
+    }
+  }
+
+  // Chat Specifics
+  .chat-card {
+    height: 700px;
+    display: flex;
+    flex-direction: column;
+    
+    .p-card-body {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      padding: 0 !important;
+    }
+    
+    .p-card-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      padding: 0 !important;
+    }
+
+    .chat-header {
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(0, 0, 0, 0.2);
+    }
+  }
+
+  // ScrollPanel styling
+  .p-scrollpanel {
+    .p-scrollpanel-wrapper {
+      border-right: 9px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    .p-scrollpanel-bar {
+      background-color: rgba(255, 255, 255, 0.2);
+      border-radius: 4px;
+      
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.3);
+      }
+    }
+  }
+
+  // Dialogs
+  .p-dialog {
+    .p-dialog-header {
+      background: #1e293b;
+      color: white;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .p-dialog-content {
+      background: #0f172a;
+      color: #e2e8f0;
+      padding: 2rem;
+    }
+    .p-dialog-footer {
+      background: #1e293b;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 1rem 2rem;
+    }
+  }
+
+  // File Upload
+  .p-fileupload {
+    .p-fileupload-buttonbar {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-bottom: none;
+    }
+    .p-fileupload-content {
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: $text-secondary;
+    }
+  }
+
+  // Calendar
+  .p-datepicker {
+    background: #1e293b;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    
+    .p-datepicker-header {
+      background: #1e293b;
+      color: white;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    table td {
+      > span {
+        color: $text-secondary;
+        &.p-highlight {
+          background: $primary-blue;
+          color: white;
+        }
+      }
+    }
+  }
+}
+
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  
+  .message {
+    display: flex;
+    gap: 1rem;
+    max-width: 70%;
+    
+    &.message-own {
+      align-self: flex-end;
+      flex-direction: row-reverse;
+      
+      .message-bubble {
+        background: linear-gradient(135deg, $primary-blue 0%, darken($primary-blue, 10%) 100%);
+        color: white;
+        border-radius: 1rem 1rem 0 1rem;
+        
+        .timestamp { color: rgba(255, 255, 255, 0.7); }
+      }
+    }
+    
+    &.message-other {
+      align-self: flex-start;
+      
+      .message-bubble {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 1rem 1rem 1rem 0;
+      }
+    }
+    
+    .message-bubble {
+      padding: 1rem;
+      position: relative;
+      
+      .message-header {
+        font-size: 0.8rem;
+        margin-bottom: 0.5rem;
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        
+        .timestamp { color: $text-muted; }
+      }
+      
+      .attachment-chip {
+        margin-top: 0.5rem;
+        background: rgba(0, 0, 0, 0.2);
+        padding: 0.5rem;
+        border-radius: 0.5rem;
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        
+        .download-icon {
+          margin-left: auto;
+          background: none;
+          border: none;
+          color: white;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}
+
+.chat-input-area {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 0 0 1rem 1rem;
+
+  .chat-input {
+    flex: 1;
+  }
+}
+
+// ROI Calculator
+.roi-layout {
+  .roi-inputs-card {
+    .p-inputnumber, .p-inputtext {
+      width: 100%;
+    }
+  }
+  
+  .roi-results-card {
+    background: linear-gradient(145deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.9)) !important;
+    border: 1px solid rgba(13, 134, 255, 0.2) !important;
+    
+    .result-value {
+      &.positive { color: $success-green; }
+    }
+  }
+
+  .metric-card {
+    padding: 1.5rem;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 0.75rem;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.3);
+      border-color: rgba(13, 134, 255, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .metric-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1rem;
+      color: white;
+
+      &.roi {
+        background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+        box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+      }
+
+      &.savings {
+        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+      }
+
+      &.payback {
+        background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+      }
+    }
+
+    .metric-value {
+      line-height: 1.2;
+    }
+  }
+
+  .chart-container {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 0.75rem;
+    padding: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+}
+
+// Progress Overview Card
+.progress-overview-card {
+  background: linear-gradient(135deg, rgba(13, 134, 255, 0.15) 0%, rgba(30, 39, 54, 0.8) 100%);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(13, 134, 255, 0.3);
+  border-radius: 1rem;
+  padding: 2rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+
+  .progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+
+    .progress-info {
+      .progress-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: $text-primary;
+        margin: 0 0 0.5rem 0;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+
+        i {
+          color: $primary-blue;
+          font-size: 1.75rem;
+        }
+      }
+
+      .progress-subtitle {
+        font-size: 1rem;
+        color: $text-secondary;
+        margin: 0;
+        font-weight: 600;
+      }
+    }
+
+    .progress-stats {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+
+      .stat-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .stat-value {
+          font-size: 2rem;
+          font-weight: 700;
+          color: $primary-blue;
+          line-height: 1;
+        }
+
+        .stat-label {
+          font-size: 0.75rem;
+          color: $text-secondary;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          margin-top: 0.25rem;
+        }
+      }
+
+      .stat-divider {
+        width: 1px;
+        height: 40px;
+        background: rgba(255, 255, 255, 0.1);
+      }
+    }
+  }
+
+  .progress-bar-wrapper {
+    ::ng-deep .custom-progress {
+      height: 12px;
+      border-radius: 10px;
+      background: rgba(0, 0, 0, 0.3);
+      border: none;
+      box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.3);
+
+      .p-progressbar-value {
+        background: linear-gradient(90deg, #0d86ff 0%, #00d4ff 100%);
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(13, 134, 255, 0.5);
+        animation: pulse 2s ease-in-out infinite;
+      }
+    }
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+// Milestones Timeline
+.milestones-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  position: relative;
+
+  .milestone-item {
+    display: flex;
+    gap: 1.5rem;
+    position: relative;
+    padding-bottom: 2rem;
+
+    .milestone-connector {
+      position: absolute;
+      left: 1.875rem;
+      top: 4rem;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(180deg, rgba(13, 134, 255, 0.3) 0%, rgba(13, 134, 255, 0.1) 100%);
+    }
+
+    .milestone-marker {
+      flex-shrink: 0;
+      width: 60px;
+      display: flex;
+      justify-content: center;
+      padding-top: 0.25rem;
+
+      .marker-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.25rem;
+        border: 3px solid;
+        background: rgba(30, 39, 54, 0.9);
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+
+        &.completed {
+          border-color: #22c55e;
+          background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+          color: white;
+          box-shadow: 0 4px 16px rgba(34, 197, 94, 0.4);
+        }
+
+        &.in-progress {
+          border-color: #3b82f6;
+          background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+          color: white;
+          box-shadow: 0 4px 16px rgba(59, 130, 246, 0.4);
+          animation: pulse-marker 2s ease-in-out infinite;
+        }
+
+        &.awaiting {
+          border-color: #f59e0b;
+          background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+          color: white;
+          box-shadow: 0 4px 16px rgba(245, 158, 11, 0.4);
+        }
+
+        &.pending {
+          border-color: rgba(255, 255, 255, 0.2);
+          color: $text-secondary;
+        }
+      }
+    }
+
+    .milestone-content {
+      flex: 1;
+      background: rgba(30, 39, 54, 0.6);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+
+      &:hover {
+        border-color: rgba(13, 134, 255, 0.3);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        transform: translateY(-2px);
+      }
+
+      .milestone-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 1rem;
+        gap: 1rem;
+        flex-wrap: wrap;
+
+        .milestone-title-section {
+          flex: 1;
+          min-width: 200px;
+
+          .milestone-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: $text-primary;
+            margin: 0 0 0.5rem 0;
+          }
+
+          .milestone-date {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            color: $text-secondary;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 0.25rem 0.75rem;
+            border-radius: 0.5rem;
+
+            i {
+              font-size: 0.75rem;
+            }
+          }
+        }
+      }
+
+      .milestone-progress {
+        margin-top: 1rem;
+        padding: 1rem;
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 0.75rem;
+
+        .progress-label {
+          display: flex;
+          justify-content: space-between;
+          margin-bottom: 0.5rem;
+          font-size: 0.875rem;
+          color: $text-secondary;
+
+          .progress-percentage {
+            font-weight: 700;
+            color: $primary-blue;
+          }
+        }
+
+        .mini-progress-bar {
+          height: 8px;
+          background: rgba(0, 0, 0, 0.3);
+          border-radius: 10px;
+          overflow: hidden;
+
+          .mini-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #0d86ff 0%, #00d4ff 100%);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+            box-shadow: 0 0 8px rgba(13, 134, 255, 0.5);
+          }
+        }
+      }
+
+      .milestone-approvals {
+        margin-top: 1rem;
+        padding: 1rem;
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 0.75rem;
+
+        .approvals-header {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          margin-bottom: 0.75rem;
+          font-size: 0.875rem;
+          color: $text-secondary;
+          font-weight: 600;
+
+          i {
+            color: $primary-blue;
+          }
+        }
+
+        .approvals-list {
+          display: flex;
+          flex-direction: column;
+          gap: 0.75rem;
+
+          .approval-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 0.5rem;
+            transition: all 0.2s ease;
+
+            &:hover {
+              background: rgba(255, 255, 255, 0.05);
+            }
+
+            ::ng-deep .p-avatar {
+              flex-shrink: 0;
+
+              &.approval-approved {
+                background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%) !important;
+                border: 2px solid #22c55e;
+              }
+
+              &.approval-pending {
+                background: linear-gradient(135deg, #64748b 0%, #475569 100%) !important;
+                border: 2px solid #64748b;
+              }
+
+              &.approval-rejected {
+                background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
+                border: 2px solid #ef4444;
+              }
+            }
+
+            .approval-details {
+              flex: 1;
+
+              .approval-name {
+                font-weight: 600;
+                color: $text-primary;
+                font-size: 0.875rem;
+              }
+
+              .approval-role {
+                font-size: 0.75rem;
+                color: $text-secondary;
+              }
+            }
+
+            .approval-status-icon {
+              font-size: 1.25rem;
+              
+              &.approved {
+                color: #22c55e;
+              }
+
+              &.pending {
+                color: #f59e0b;
+              }
+
+              &.rejected {
+                color: #ef4444;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    &[data-status="completed"] .milestone-content {
+      border-left: 3px solid #22c55e;
+    }
+
+    &[data-status="in-progress"] .milestone-content {
+      border-left: 3px solid #3b82f6;
+    }
+
+    &[data-status="awaiting-approval"] .milestone-content {
+      border-left: 3px solid #f59e0b;
+    }
+  }
+}
+
+@keyframes pulse-marker {
+  0%, 100% {
+    box-shadow: 0 4px 16px rgba(59, 130, 246, 0.4);
+  }
+  50% {
+    box-shadow: 0 4px 24px rgba(59, 130, 246, 0.7);
+  }
+}
+
+// Sidebar Sticky
+.sidebar-sticky {
+  position: sticky;
+  top: 100px;
+}
+
+// Modern Card Styles
+.modern-card {
+  ::ng-deep .p-card-body {
+    padding: 0 !important;
+  }
+
+  .card-header-modern {
+    padding: 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+
+    .header-icon {
+      font-size: 1.5rem;
+      color: $primary-blue;
+    }
+
+    h3 {
+      margin: 0;
+      font-size: 1.125rem;
+      font-weight: 700;
+      color: $text-primary;
+    }
+  }
+}
+
+// Proposal Card
+.proposal-card {
+  .proposal-value-section {
+    padding: 1.5rem;
+    text-align: center;
+    background: linear-gradient(135deg, rgba(13, 134, 255, 0.1) 0%, rgba(13, 134, 255, 0.05) 100%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+
+    .value-label {
+      font-size: 0.75rem;
+      color: $text-secondary;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 0.5rem;
+    }
+
+    .value-amount {
+      font-size: 2.5rem;
+      font-weight: 800;
+      background: linear-gradient(90deg, #0d86ff 0%, #00d4ff 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.5rem;
+    }
+
+    .value-timeline {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.875rem;
+      color: $text-secondary;
+      background: rgba(0, 0, 0, 0.2);
+      padding: 0.375rem 0.75rem;
+      border-radius: 0.5rem;
+
+      i {
+        font-size: 0.75rem;
+      }
+    }
+  }
+
+  .proposal-quick-info {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+
+    .info-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.875rem;
+      color: $text-secondary;
+
+      i {
+        color: $primary-blue;
+        font-size: 1rem;
+      }
+    }
+  }
+
+  .proposal-actions {
+    padding: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+  }
+}
+
+// Stats Card
+.stats-card {
+  .stats-grid {
+    padding: 1.5rem;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+
+    .stat-box {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 1rem;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 0.75rem;
+      transition: all 0.3s ease;
+      border: 1px solid transparent;
+
+      &:hover {
+        background: rgba(0, 0, 0, 0.3);
+        border-color: rgba(13, 134, 255, 0.3);
+        transform: translateY(-2px);
+      }
+
+      .stat-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 0.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.25rem;
+
+        &.documents {
+          background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+          color: white;
+          box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        &.reviews {
+          background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+          color: white;
+          box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+        }
+
+        &.tickets {
+          background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+          color: white;
+          box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+        }
+
+        &.team {
+          background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+          color: white;
+          box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+        }
+      }
+
+      .stat-content {
+        flex: 1;
+
+        .stat-number {
+          font-size: 1.5rem;
+          font-weight: 700;
+          color: $text-primary;
+          line-height: 1;
+        }
+
+        .stat-text {
+          font-size: 0.75rem;
+          color: $text-secondary;
+          margin-top: 0.25rem;
+        }
+      }
+    }
+  }
+}
+
+// Timeline
+::ng-deep .customized-timeline {
+  .p-timeline-event-opposite {
+    flex: 0;
+    padding: 0 !important;
+  }
+  .p-timeline-event-content {
+    padding-bottom: 2rem;
+  }
+}
+
+.milestone-card {
+  margin-bottom: 0;
+  background: rgba(255, 255, 255, 0.03) !important;
+}
+
+// Legal & NDA Table - Larger Size
+::ng-deep {
+  .p-datatable-gridlines {
+    .p-datatable-thead > tr > th {
+      background: rgba(0, 0, 0, 0.3) !important;
+      color: $text-primary !important;
+      font-weight: 700 !important;
+      text-transform: uppercase !important;
+      font-size: 1rem !important;
+      letter-spacing: 0.5px !important;
+      padding: 1.5rem 1.25rem !important;
+      border-bottom: 2px solid rgba(13, 134, 255, 0.3) !important;
+    }
+
+    .p-datatable-tbody > tr > td {
+      padding: 1.5rem 1.25rem !important;
+      font-size: 1rem !important;
+      border-color: rgba(255, 255, 255, 0.05) !important;
+      vertical-align: top !important;
+      
+      .font-bold {
+        font-size: 1.125rem !important;
+        font-weight: 700 !important;
+        margin-bottom: 0.5rem !important;
+        color: $text-primary !important;
+      }
+      
+      .text-sm {
+        font-size: 0.9375rem !important;
+        line-height: 1.5 !important;
+        color: $text-secondary !important;
+      }
+      
+      // Version column
+      &:nth-child(2) {
+        font-size: 1.125rem !important;
+        font-weight: 600 !important;
+        color: $text-primary !important;
+      }
+      
+      // Actions column
+      &:last-child {
+        .p-button {
+          width: 2.5rem !important;
+          height: 2.5rem !important;
+          font-size: 1.125rem !important;
+          margin-right: 0.5rem !important;
+          
+          &:last-child {
+            margin-right: 0 !important;
+          }
+        }
+      }
+      
+      // Status column with tags
+      ::ng-deep .p-tag {
+        font-size: 0.9375rem !important;
+        padding: 0.5rem 1rem !important;
+        font-weight: 600 !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.5px !important;
+      }
+    }
+
+    .p-datatable-tbody > tr {
+      transition: all 0.2s ease !important;
+
+      &:hover {
+        background: rgba(13, 134, 255, 0.08) !important;
+      }
+    }
+  }
+}
+
+// Support Center
+.support-center {
+  .support-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 1rem;
+
+    h2 {
+      display: flex;
+      align-items: center;
+      font-size: 1.75rem;
+      font-weight: 700;
+      background: linear-gradient(90deg, #fff, #a0aec0);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  }
+
+  .stat-card {
+    transition: all 0.3s ease;
+    border-left: 4px solid transparent !important;
+
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+    }
+
+    &.stat-card-open {
+      border-left-color: #f59e0b !important;
+    }
+
+    &.stat-card-progress {
+      border-left-color: #3b82f6 !important;
+    }
+
+    &.stat-card-resolved {
+      border-left-color: #22c55e !important;
+    }
+
+    ::ng-deep .p-card-body {
+      padding: 1.5rem !important;
+    }
+
+    .stat-icon-wrapper {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      flex-shrink: 0;
+      transition: all 0.3s ease;
+
+      &.open {
+        background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
+      }
+
+      &.progress {
+        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+        box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+      }
+
+      &.resolved {
+        background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+        box-shadow: 0 6px 20px rgba(34, 197, 94, 0.4);
+      }
+    }
+  }
+
+  .tickets-table-card {
+    ::ng-deep .p-card-header {
+      background: rgba(0, 0, 0, 0.2);
+      border-bottom: 2px solid rgba(13, 134, 255, 0.2);
+    }
+  }
+
+  // Table enhancements
+  ::ng-deep .p-datatable {
+    .p-datatable-thead > tr > th {
+      background: rgba(0, 0, 0, 0.3);
+      color: $text-primary;
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.5px;
+      border-bottom: 2px solid rgba(13, 134, 255, 0.3);
+      padding: 1rem !important;
+    }
+
+    .p-datatable-tbody > tr {
+      transition: all 0.2s ease;
+
+      &:hover {
+        background: rgba(13, 134, 255, 0.08) !important;
+        transform: scale(1.01);
+      }
+
+      > td {
+        border-color: rgba(255, 255, 255, 0.05);
+        padding: 1rem !important;
+      }
+    }
+
+    .p-datatable-tbody > tr.p-highlight {
+      background: rgba(13, 134, 255, 0.15) !important;
+    }
+  }
+
+  // Dialog enhancements
+  ::ng-deep .support-dialog {
+    .p-dialog-header {
+      background: rgba(30, 39, 54, 0.8);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 1.5rem !important;
+    }
+
+    .p-dialog-content {
+      background: rgba(30, 39, 54, 0.6);
+      padding: 1.5rem !important;
+    }
+
+    .p-dialog-footer {
+      background: rgba(30, 39, 54, 0.8);
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 1rem 1.5rem !important;
+    }
+  }
+
+  ::ng-deep .p-paginator {
+    background: rgba(30, 39, 54, 0.6);
+    border-color: rgba(255, 255, 255, 0.08);
+    color: $text-secondary;
+
+    .p-paginator-pages .p-paginator-page.p-highlight {
+      background: $primary-blue;
+      border-color: $primary-blue;
+    }
+  }
+}
+
+// Slider styling
+::ng-deep .p-slider {
+  .p-slider-handle {
+    background: $primary-blue;
+    border: 2px solid white;
+    box-shadow: 0 2px 8px rgba(13, 134, 255, 0.4);
+
+    &:hover {
+      background: $primary-blue-hover;
+      box-shadow: 0 4px 12px rgba(13, 134, 255, 0.6);
+    }
+
+    &:focus {
+      box-shadow: 0 0 0 0.2rem rgba(13, 134, 255, 0.3);
+    }
+  }
+
+  .p-slider-range {
+    background: linear-gradient(90deg, $primary-blue 0%, #00d4ff 100%);
+  }
+}
+
+// Utilities
+.h-full { height: 100%; }
+.w-full { width: 100%; }
+.w-20rem { width: 20rem; }
+.cursor-pointer { cursor: pointer; }
+.text-center { text-align: center; }
+.flex { display: flex; }
+.flex-column { flex-direction: column; }
+.justify-content-between { justify-content: space-between; }
+.justify-content-center { justify-content: center; }
+.justify-content-end { justify-content: flex-end; }
+.justify-content-start { justify-content: flex-start; }
+.align-items-center { align-items: center; }
+.gap-1 { gap: 0.25rem; }
+.gap-2 { gap: 0.5rem; }
+.gap-3 { gap: 1rem; }
+.mb-2 { margin-bottom: 0.5rem; }
+.mb-3 { margin-bottom: 1rem; }
+.mb-4 { margin-bottom: 1.5rem; }
+.mr-1 { margin-right: 0.25rem; }
+.mr-2 { margin-right: 0.5rem; }
+.mr-3 { margin-right: 1rem; }
+.mt-1 { margin-top: 0.25rem; }
+.mt-2 { margin-top: 0.5rem; }
+.mt-4 { margin-top: 1.5rem; }
+.mx-2 { margin-left: 0.5rem; margin-right: 0.5rem; }
+.m-0 { margin: 0; }
+.p-3 { padding: 1rem; }
+.py-5 { padding-top: 3rem; padding-bottom: 3rem; }
+.text-2xl { font-size: 1.5rem; }
+.text-3xl { font-size: 1.75rem; }
+.text-4xl { font-size: 2.25rem; }
+.text-6xl { font-size: 3.75rem; }
+.font-bold { font-weight: 700; }
+.font-medium { font-weight: 500; }
+.font-mono { font-family: $font-mono; }
+.text-sm { font-size: 0.875rem; }
+.text-xs { font-size: 0.75rem; }
+.text-gray-400 { color: #94a3b8; }
+.text-blue-500 { color: #3b82f6; }
+.text-green-500 { color: #22c55e; }
+.text-yellow-400 { color: #facc15; }
+.text-red-400 { color: #f87171; }
+.text-primary { color: $primary-blue; }
+.text-success { color: #22c55e; }
+.text-info { color: #3b82f6; }
+.text-warning { color: #f59e0b; }
+.bg-primary-reverse { background: rgba(255, 255, 255, 0.05); }
+.surface-border { border-color: rgba(255, 255, 255, 0.1) !important; }
+.flex-1 { flex: 1; }
+.border-bottom-1 { border-bottom-width: 1px; border-bottom-style: solid; }
+.border-round { border-radius: 6px; }
+.border-round-top { border-radius: 6px 6px 0 0; }
+.h-15rem { height: 15rem; }

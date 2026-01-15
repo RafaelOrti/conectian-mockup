@@ -10,35 +10,32 @@
   <div class="hub-container">
     <div class="hub-header">
       <h1>Ecosistema Conectian</h1>
-      <div class="tabs-container">
-        <button 
-          class="tab-btn" 
-          [class.active]="activeTab === 'innovation'"
-          (click)="setActiveTab('innovation')"
-        >
-          <span class="icon">💡</span> Centro de Innovación
-        </button>
-        <button 
-          class="tab-btn" 
-          [class.active]="activeTab === 'growth'"
-          (click)="setActiveTab('growth')"
-        >
-          <span class="icon">📈</span> Centro de Crecimiento
-        </button>
-        <button 
-          class="tab-btn" 
-          [class.active]="activeTab === 'market'"
-          (click)="setActiveTab('market')"
-        >
-          <span class="icon">🔍</span> Análisis de Mercado
-        </button>
-      </div>
     </div>
 
-    <div class="hub-content">
-      <app-clientinnovationcenter *ngIf="activeTab === 'innovation'" [showNavbar]="false"></app-clientinnovationcenter>
-      <app-clientgrowthcenter *ngIf="activeTab === 'growth'" [showNavbar]="false"></app-clientgrowthcenter>
-      <app-clientmarketanalysis *ngIf="activeTab === 'market'" [showNavbar]="false"></app-clientmarketanalysis>
-    </div>
+    <p-tabView styleClass="glass-tabs">
+      <p-tabPanel header="Centro de Innovación">
+        <ng-template pTemplate="header">
+          <i class="pi pi-lightbulb mr-2"></i>
+          <span>Centro de Innovación</span>
+        </ng-template>
+        <app-clientinnovationcenter [showNavbar]="false"></app-clientinnovationcenter>
+      </p-tabPanel>
+
+      <p-tabPanel header="Centro de Crecimiento">
+        <ng-template pTemplate="header">
+          <i class="pi pi-chart-line mr-2"></i>
+          <span>Centro de Crecimiento</span>
+        </ng-template>
+        <app-clientgrowthcenter [showNavbar]="false"></app-clientgrowthcenter>
+      </p-tabPanel>
+
+      <p-tabPanel header="Análisis de Mercado">
+        <ng-template pTemplate="header">
+          <i class="pi pi-search mr-2"></i>
+          <span>Análisis de Mercado</span>
+        </ng-template>
+        <app-clientmarketanalysis [showNavbar]="false"></app-clientmarketanalysis>
+      </p-tabPanel>
+    </p-tabView>
   </div>
 </div>

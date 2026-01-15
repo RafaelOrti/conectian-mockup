@@ -1,52 +1,67 @@
-<div class="profile-hub-page">
+<div class="profile-hub">
   <app-navbar 
-    [userRole]="'CLIENT'" 
-    [userName]="'Carlos Martínez'"
+    userRole="CLIENT"
+    userName="Maria González"
     [notificationCount]="3"
     [messageCount]="2"
-    [projectCount]="4"
+    [projectCount]="1"
   ></app-navbar>
 
-  <div class="hub-container">
-    <div class="hub-header">
-      <h1>Mi Cuenta</h1>
-      <div class="tabs-container">
-        <button 
-          class="tab-btn" 
-          [class.active]="activeTab === 'profile'"
-          (click)="setActiveTab('profile')"
-        >
-          <span class="icon">👤</span> Mi Perfil
-        </button>
-        <button 
-          class="tab-btn" 
-          [class.active]="activeTab === 'company'"
-          (click)="setActiveTab('company')"
-        >
-          <span class="icon">🏢</span> Mi Empresa
-        </button>
-        <button 
-          class="tab-btn" 
-          [class.active]="activeTab === 'badges'"
-          (click)="setActiveTab('badges')"
-        >
-          <span class="icon">🏆</span> Badges y Recompensas
-        </button>
-        <button 
-          class="tab-btn" 
-          [class.active]="activeTab === 'payments'"
-          (click)="setActiveTab('payments')"
-        >
-          <span class="icon">💳</span> Pagos
-        </button>
-      </div>
+  <div class="container">
+    <!-- Page Header -->
+    <div class="page-header">
+      <h1 class="page-title">Mi Cuenta</h1>
     </div>
 
-    <div class="hub-content">
-      <app-clientprofile *ngIf="activeTab === 'profile'" [showNavbar]="false"></app-clientprofile>
-      <app-clientcompany *ngIf="activeTab === 'company'" [showNavbar]="false"></app-clientcompany>
-      <app-clientbadges *ngIf="activeTab === 'badges'" [showNavbar]="false"></app-clientbadges>
-      <app-clientpayments *ngIf="activeTab === 'payments'" [showNavbar]="false"></app-clientpayments>
+    <!-- Custom Tabs -->
+    <div class="custom-tabs">
+      <!-- Tab Navigation -->
+      <div class="tabs-nav">
+        <button 
+          *ngFor="let tab of tabs; let i = index"
+          class="tab-button"
+          [class.active]="activeTab === i"
+          (click)="activeTab = i"
+        >
+          <span class="tab-icon">{{ tab.icon }}</span>
+          <span class="tab-label">{{ tab.label }}</span>
+        </button>
+      </div>
+
+      <!-- Tab Content -->
+      <div class="tabs-content">
+        <div class="tab-panel" *ngIf="activeTab === 0">
+          <div class="panel-header">
+            <span class="panel-icon">👤</span>
+            <h2 class="panel-title">Mi Perfil</h2>
+          </div>
+          <p class="construction-message">Vista en construcción</p>
+        </div>
+
+        <div class="tab-panel" *ngIf="activeTab === 1">
+          <div class="panel-header">
+            <span class="panel-icon">🏢</span>
+            <h2 class="panel-title">Mi Empresa</h2>
+          </div>
+          <p class="construction-message">Vista en construcción</p>
+        </div>
+
+        <div class="tab-panel" *ngIf="activeTab === 2">
+          <div class="panel-header">
+            <span class="panel-icon">🏆</span>
+            <h2 class="panel-title">Badges y Recompensas</h2>
+          </div>
+          <p class="construction-message">Vista en construcción</p>
+        </div>
+
+        <div class="tab-panel" *ngIf="activeTab === 3">
+          <div class="panel-header">
+            <span class="panel-icon">💳</span>
+            <h2 class="panel-title">Pagos</h2>
+          </div>
+          <p class="construction-message">Vista en construcción</p>
+        </div>
+      </div>
     </div>
   </div>
 </div>

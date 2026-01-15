@@ -4,7 +4,8 @@
   min-height: 100vh;
   background: $bg-dark;
   color: $text-primary;
-  padding-top: 80px; // Fix for navbar overlap
+  padding-top: 80px;
+  padding-bottom: 4rem;
 
   &.no-navbar {
     padding-top: 0;
@@ -13,222 +14,670 @@
 }
 
 .container {
-  max-width: 1200px;
+  max-width: 1600px;
   margin: 0 auto;
-  padding: $spacing-8;
+  padding: 2rem 3rem 3rem;
 }
 
+// Page Header
 .page-header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: $spacing-8;
+  align-items: center;
+  margin-bottom: 2.5rem;
+  gap: 2rem;
+  flex-wrap: wrap;
 
-  h1 {
-    font-size: $font-size-3xl;
-    font-weight: $font-weight-bold;
-    margin-bottom: $spacing-2;
-  }
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
 
-  .subtitle {
-    color: $text-secondary;
-    font-size: $font-size-lg;
+    .header-icon {
+      width: 72px;
+      height: 72px;
+      border-radius: 1rem;
+      background: linear-gradient(135deg, rgba(13, 134, 255, 0.2) 0%, rgba(13, 134, 255, 0.05) 100%);
+      border: 1px solid rgba(13, 134, 255, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      i {
+        font-size: 2rem;
+        color: $primary-blue;
+      }
+    }
+
+    .header-text {
+      h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin: 0 0 0.5rem 0;
+        background: linear-gradient(135deg, #fff 0%, #0d86ff 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .subtitle {
+        font-size: 1.125rem;
+        color: $text-secondary;
+        margin: 0;
+      }
+    }
   }
 }
 
+// Profile Layout
 .profile-layout {
-  display: flex;
-  gap: $spacing-8;
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 2.5rem;
+}
 
-  .profile-sidebar {
-    width: 300px;
-    flex-shrink: 0;
+// Sidebar
+.profile-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+::ng-deep .user-profile-card {
+  .p-card {
+    background: linear-gradient(135deg, rgba(30, 39, 54, 0.8) 0%, rgba(30, 39, 54, 0.6) 100%);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(13, 134, 255, 0.2);
+    border-radius: 1.5rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    position: relative;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #0d86ff 0%, #00d4ff 100%);
+    }
+  }
+
+  .p-card-body {
+    padding: 2.5rem 2rem;
+  }
+
+  .user-header {
     display: flex;
     flex-direction: column;
-    gap: $spacing-6;
+    align-items: center;
+    gap: 1.5rem;
 
-    .user-card {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      padding: $spacing-6;
+    .avatar-container {
+      position: relative;
 
-      .avatar-section {
-        position: relative;
-        margin-bottom: $spacing-4;
-
-        .avatar-large {
-          width: 100px;
-          height: 100px;
-          border-radius: 50%;
-          background: linear-gradient(135deg, #0d86ff 0%, #6b5cf0 100%);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: $font-size-3xl;
-          font-weight: bold;
-          color: white;
+      .user-avatar {
+        .p-avatar {
+          width: 120px !important;
+          height: 120px !important;
+          font-size: 3rem !important;
+          font-weight: 800 !important;
+          background: linear-gradient(135deg, #0d86ff 0%, #00d4ff 100%) !important;
+          border: 4px solid rgba(13, 134, 255, 0.3);
+          box-shadow: 0 8px 32px rgba(13, 134, 255, 0.4);
         }
+      }
 
-        .change-avatar-btn {
-          position: absolute;
-          bottom: 0;
-          right: 0;
-          width: 32px;
-          height: 32px;
-          border-radius: 50%;
-          background: $bg-dark-lighter;
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          color: $text-primary;
-          cursor: pointer;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: $font-size-sm;
+      ::ng-deep .avatar-upload-btn {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+
+        .p-button {
+          width: 40px !important;
+          height: 40px !important;
+          padding: 0 !important;
+          border-radius: 50% !important;
+          background: $primary-blue !important;
+          border: 3px solid rgba(30, 39, 54, 0.9) !important;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
 
           &:hover {
-            background: rgba(255, 255, 255, 0.1);
-          }
-        }
-      }
-
-      h2 {
-        font-size: $font-size-xl;
-        margin-bottom: $spacing-1;
-      }
-
-      .role {
-        color: $primary-blue;
-        font-weight: $font-weight-medium;
-        margin-bottom: $spacing-1;
-      }
-
-      .company {
-        color: $text-secondary;
-        font-size: $font-size-sm;
-        margin-bottom: $spacing-6;
-      }
-
-      .stats-row {
-        display: flex;
-        gap: $spacing-6;
-        width: 100%;
-        justify-content: center;
-        padding-top: $spacing-4;
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
-
-        .stat {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-
-          .val {
-            font-weight: bold;
-            font-size: $font-size-lg;
+            background: #0066cc !important;
           }
 
-          .lbl {
-            font-size: $font-size-xs;
-            color: $text-secondary;
+          .p-button-icon {
+            font-size: 1rem !important;
           }
         }
       }
     }
 
-    .profile-nav {
-      display: flex;
-      flex-direction: column;
-      gap: $spacing-2;
+    .user-info {
+      text-align: center;
 
-      .nav-item {
-        padding: $spacing-3 $spacing-4;
-        text-align: left;
-        background: rgba(255, 255, 255, 0.02);
-        border: 1px solid rgba(255, 255, 255, 0.05);
-        border-radius: $border-radius-base;
+      .user-name {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: $text-primary;
+        margin: 0 0 0.5rem 0;
+      }
+
+      .user-role {
+        font-size: 1rem;
+        color: $primary-blue;
+        font-weight: 600;
+        margin: 0 0 0.25rem 0;
+      }
+
+      .user-company {
+        font-size: 0.9375rem;
         color: $text-secondary;
-        cursor: pointer;
-        transition: all 0.2s;
+        margin: 0;
+      }
+    }
+
+    .user-stats {
+      display: flex;
+      gap: 2rem;
+      padding: 1.5rem 2rem;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 1rem;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      width: 100%;
+      justify-content: center;
+
+      .stat-item {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+
+        i {
+          font-size: 1.5rem;
+          color: $primary-blue;
+        }
+
+        .stat-content {
+          display: flex;
+          flex-direction: column;
+
+          .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: $text-primary;
+            line-height: 1;
+          }
+
+          .stat-label {
+            font-size: 0.75rem;
+            color: $text-secondary;
+            margin-top: 0.25rem;
+          }
+        }
+      }
+
+      .stat-divider {
+        width: 1px;
+        background: rgba(255, 255, 255, 0.1);
+      }
+    }
+  }
+}
+
+::ng-deep .quick-actions-card {
+  .p-card {
+    background: rgba(30, 39, 54, 0.6);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 1.5rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  }
+
+  .p-card-body {
+    padding: 2rem;
+  }
+
+  .card-title {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+
+    i {
+      font-size: 1.25rem;
+      color: $primary-blue;
+    }
+
+    h3 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: $text-primary;
+      margin: 0;
+    }
+  }
+
+  .actions-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+
+    .action-btn .p-button {
+      justify-content: flex-start;
+      padding: 0.875rem 1.25rem;
+      
+      &:hover {
+        background: rgba(13, 134, 255, 0.1) !important;
+        border-color: rgba(13, 134, 255, 0.3) !important;
+        color: $primary-blue !important;
+      }
+    }
+  }
+}
+
+// Main Content
+::ng-deep .content-main-card {
+  .p-card {
+    background: rgba(30, 39, 54, 0.6);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 1.5rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  }
+
+  .p-card-body {
+    padding: 0;
+  }
+}
+
+// Tabs
+::ng-deep .profile-tabs {
+  .p-tabview-nav-container {
+    background: transparent;
+    border: none;
+    margin: 0;
+  }
+
+  .p-tabview-nav {
+    background: transparent;
+    border: none;
+    padding: 1rem 2rem 0;
+    display: flex;
+    gap: 0.5rem;
+
+    li {
+      margin: 0;
+
+      .p-tabview-nav-link {
+        background: transparent;
+        border: none;
+        border-bottom: 3px solid transparent;
+        border-radius: 0;
+        color: $text-secondary;
+        padding: 1rem 1.5rem;
+        transition: all 0.3s ease;
 
         &:hover {
-          background: rgba(255, 255, 255, 0.05);
+          background: rgba(255, 255, 255, 0.03);
           color: $text-primary;
         }
 
-        &.active {
-          background: rgba(13, 134, 255, 0.1);
-          border-color: rgba(13, 134, 255, 0.3);
-          color: $primary-blue;
-          font-weight: $font-weight-medium;
+        &:focus {
+          box-shadow: none;
         }
 
-        &.danger {
-          color: $danger-red;
-          border-color: rgba(244, 68, 74, 0.2);
+        .tab-header {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+          font-size: 1rem;
+          font-weight: 600;
 
-          &:hover {
-            background: rgba(244, 68, 74, 0.1);
+          i {
+            font-size: 1.125rem;
+          }
+        }
+      }
+
+      &.p-highlight {
+        .p-tabview-nav-link {
+          color: $primary-blue;
+          border-bottom-color: $primary-blue;
+        }
+      }
+    }
+  }
+
+  .p-tabview-panels {
+    background: transparent;
+    border: none;
+    padding: 0;
+
+    .p-tabview-panel {
+      background: transparent;
+    }
+  }
+}
+
+// Tab Content
+.tab-content {
+  padding: 2.5rem 2rem;
+}
+
+.section-header {
+  margin-bottom: 2rem;
+
+  h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: $text-primary;
+    margin: 0 0 0.5rem 0;
+  }
+
+  p {
+    font-size: 0.9375rem;
+    color: $text-secondary;
+    margin: 0;
+  }
+}
+
+// Forms
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+
+  .form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    &.full-width {
+      grid-column: span 2;
+    }
+
+    label {
+      font-size: 0.9375rem;
+      font-weight: 600;
+      color: $text-secondary;
+    }
+
+    input,
+    textarea {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: $text-primary;
+      padding: 0.875rem 1rem;
+      border-radius: 0.75rem;
+      transition: all 0.3s ease;
+
+      &:focus {
+        outline: none;
+        border-color: $primary-blue;
+        box-shadow: 0 0 0 3px rgba(13, 134, 255, 0.2);
+        background: rgba(255, 255, 255, 0.08);
+      }
+
+      &::placeholder {
+        color: rgba(255, 255, 255, 0.3);
+      }
+    }
+
+    textarea {
+      resize: vertical;
+      font-family: inherit;
+      line-height: 1.6;
+    }
+
+    .p-inputgroup {
+      .p-inputgroup-addon {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: $primary-blue;
+      }
+    }
+  }
+}
+
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+// Security
+.security-card {
+  max-width: 600px;
+
+  .form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+
+    label {
+      font-size: 0.9375rem;
+      font-weight: 600;
+      color: $text-secondary;
+    }
+
+    ::ng-deep .p-password {
+      width: 100%;
+
+      input {
+        width: 100%;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: $text-primary;
+        padding: 0.875rem 1rem;
+        border-radius: 0.75rem;
+
+        &:focus {
+          border-color: $primary-blue;
+          box-shadow: 0 0 0 3px rgba(13, 134, 255, 0.2);
+        }
+      }
+    }
+  }
+
+  .security-tip {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    background: rgba(13, 134, 255, 0.1);
+    border: 1px solid rgba(13, 134, 255, 0.3);
+    border-radius: 0.75rem;
+    margin-bottom: 2rem;
+
+    i {
+      font-size: 1.25rem;
+      color: $primary-blue;
+      flex-shrink: 0;
+      margin-top: 0.125rem;
+    }
+
+    .tip-content {
+      strong {
+        display: block;
+        margin-bottom: 0.25rem;
+        color: $text-primary;
+        font-size: 0.9375rem;
+      }
+
+      p {
+        margin: 0;
+        font-size: 0.875rem;
+        color: $text-secondary;
+        line-height: 1.5;
+      }
+    }
+  }
+}
+
+// Notifications
+.notifications-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+
+  .notification-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 1rem;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.12);
+    }
+
+    .notification-info {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      flex: 1;
+
+      i {
+        font-size: 1.75rem;
+        color: $primary-blue;
+        flex-shrink: 0;
+      }
+
+      .notification-details {
+        h4 {
+          font-size: 1rem;
+          font-weight: 600;
+          color: $text-primary;
+          margin: 0 0 0.25rem 0;
+        }
+
+        p {
+          font-size: 0.875rem;
+          color: $text-secondary;
+          margin: 0;
+        }
+      }
+    }
+
+    ::ng-deep .p-inputswitch {
+      .p-inputswitch-slider {
+        background: rgba(255, 255, 255, 0.1);
+
+        &:before {
+          background: white;
+        }
+      }
+
+      &.p-inputswitch-checked {
+        .p-inputswitch-slider {
+          background: $primary-blue;
+        }
+      }
+    }
+  }
+}
+
+// Responsive
+@media (max-width: 1280px) {
+  .profile-layout {
+    grid-template-columns: 320px 1fr;
+  }
+}
+
+@media (max-width: 1024px) {
+  .container {
+    padding: 2rem 1.5rem;
+  }
+
+  .profile-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-sidebar {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 1.5rem 1rem;
+  }
+
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+
+    .header-left {
+      flex-direction: column;
+      align-items: flex-start;
+
+      .header-icon {
+        width: 60px;
+        height: 60px;
+
+        i {
+          font-size: 1.5rem;
+        }
+      }
+
+      .header-text h1 {
+        font-size: 2rem;
+      }
+    }
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+
+    .form-field {
+      &.full-width {
+        grid-column: span 1;
+      }
+    }
+  }
+
+  .form-actions {
+    flex-direction: column-reverse;
+
+    .p-button {
+      width: 100%;
+    }
+  }
+
+  ::ng-deep .profile-tabs {
+    .p-tabview-nav {
+      padding: 0.75rem 1rem 0;
+
+      li .p-tabview-nav-link {
+        padding: 0.75rem 1rem;
+
+        .tab-header {
+          font-size: 0.9375rem;
+
+          span {
+            display: none;
+          }
+
+          i {
+            font-size: 1.25rem;
           }
         }
       }
     }
   }
 
-  .profile-content {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: $spacing-6;
-
-    .content-card {
-      h3 {
-        font-size: $font-size-xl;
-        margin-bottom: $spacing-6;
-        padding-bottom: $spacing-4;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      }
-
-      .form-grid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: $spacing-6;
-
-        .form-group {
-          display: flex;
-          flex-direction: column;
-          gap: $spacing-2;
-
-          &.full-width {
-            grid-column: span 2;
-          }
-
-          label {
-            font-size: $font-size-sm;
-            color: $text-secondary;
-            font-weight: $font-weight-medium;
-          }
-
-          .form-input, .form-textarea {
-            padding: $spacing-3;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: $border-radius-base;
-            color: $text-primary;
-            font-size: $font-size-base;
-
-            &:focus {
-              outline: none;
-              border-color: $primary-blue;
-            }
-
-            &:disabled {
-              opacity: 0.5;
-              cursor: not-allowed;
-            }
-          }
-        }
-      }
-    }
+  .tab-content {
+    padding: 2rem 1rem;
   }
 }

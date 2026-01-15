@@ -5,18 +5,36 @@ import { ProviderProfileComponent } from '../profile/providerprofile.component';
 import { ProviderCompanyComponent } from '../company/providercompany.component';
 import { ProviderBadgesComponent } from '../badges/providerbadges.component';
 import { ProviderPaymentsComponent } from '../payments/providerpayments.component';
+import { TabViewModule } from 'primeng/tabview';
+import { CardModule } from 'primeng/card';
+import { AvatarModule } from 'primeng/avatar';
+import { BadgeModule } from 'primeng/badge';
 
 @Component({
   selector: 'app-provider-profile-hub',
   standalone: true,
-  imports: [CommonModule, NavbarComponent, ProviderProfileComponent, ProviderCompanyComponent, ProviderBadgesComponent, ProviderPaymentsComponent],
+  imports: [
+    CommonModule, 
+    NavbarComponent, 
+    ProviderProfileComponent, 
+    ProviderCompanyComponent, 
+    ProviderBadgesComponent, 
+    ProviderPaymentsComponent,
+    TabViewModule,
+    CardModule,
+    AvatarModule,
+    BadgeModule
+  ],
   templateUrl: './providerprofilehub.component.html',
   styleUrls: ['./providerprofilehub.component.scss']
 })
 export class ProviderProfileHubComponent {
-  activeTab: 'profile' | 'company' | 'badges' | 'payments' = 'profile';
+  activeIndex: number = 0;
 
-  setActiveTab(tab: 'profile' | 'company' | 'badges' | 'payments') {
-    this.activeTab = tab;
-  }
+  userStats = {
+    completionRate: 85,
+    badges: 12,
+    rating: 4.8,
+    projects: 24
+  };
 }

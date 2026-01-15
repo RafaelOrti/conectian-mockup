@@ -1,30 +1,118 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { NavbarComponent } from '../../../shared/components/navbar/navbar.component';
-import { CardComponent } from '../../../shared/components/card/card.component';
+import { CardModule } from 'primeng/card';
+import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
+import { InputTextareaModule } from 'primeng/inputtextarea';
+import { AvatarModule } from 'primeng/avatar';
+import { TabViewModule } from 'primeng/tabview';
+import { TooltipModule } from 'primeng/tooltip';
+import { FileUploadModule } from 'primeng/fileupload';
+import { PasswordModule } from 'primeng/password';
+import { InputSwitchModule } from 'primeng/inputswitch';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
   selector: 'app-provider-profile',
   standalone: true,
-  imports: [CommonModule, NavbarComponent, CardComponent],
-  template: `
-    <div [class.no-navbar]="!showNavbar" style="padding-top: 80px; min-height: 100vh;">
-      <app-navbar *ngIf="showNavbar" [userRole]="'PROVIDER'" [userName]="'María González'" [notificationCount]="5"></app-navbar>
-      <div class="container" style="padding: 2rem; max-width: 1200px; margin: 0 auto;">
-        <app-card>
-          <h1>👤 Mi Perfil</h1>
-          <p class="text-secondary">Vista en construcción</p>
-        </app-card>
-      </div>
-    </div>
-  `,
-  styles: [`
-    .no-navbar {
-      padding-top: 0 !important;
-      min-height: auto !important;
-    }
-  `]
+  imports: [
+    CommonModule,
+    FormsModule,
+    NavbarComponent,
+    CardModule,
+    ButtonModule,
+    InputTextModule,
+    InputTextareaModule,
+    AvatarModule,
+    TabViewModule,
+    TooltipModule,
+    FileUploadModule,
+    PasswordModule,
+    InputSwitchModule,
+    ToastModule
+  ],
+  providers: [MessageService],
+  templateUrl: './providerprofile.component.html',
+  styleUrls: ['./providerprofile.component.scss']
 })
 export class ProviderProfileComponent {
   @Input() showNavbar: boolean = true;
+
+  activeTabIndex: number = 0;
+
+  profile = {
+    firstName: 'María',
+    lastName: 'González',
+    fullName: 'María González',
+    role: 'CEO & Founder',
+    email: 'maria.gonzalez@techsolutions.ai',
+    phone: '+34 666 777 888',
+    bio: 'Experta en IA y consultoría tecnológica. Ayudando a empresas a transformarse digitalmente.',
+    company: 'TechSolutions AI',
+    sector: 'Inteligencia Artificial',
+    website: 'https://techsolutions-ai.com',
+    location: 'Barcelona, España',
+    avatar: 'MG',
+    projectsCount: 24,
+    reviewsCount: 18
+  };
+
+  currentPassword: string = '';
+  newPassword: string = '';
+  confirmPassword: string = '';
+
+  emailNotifications: boolean = true;
+  pushNotifications: boolean = true;
+  weeklyReport: boolean = true;
+  marketingEmails: boolean = false;
+
+  constructor(private messageService: MessageService) {}
+
+  saveProfile(): void {
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Perfil Actualizado',
+      detail: 'Los cambios se han guardado correctamente.'
+    });
+  }
+
+  changePassword(): void {
+    if (this.newPassword !== this.confirmPassword) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Las contraseñas no coinciden.'
+      });
+      return;
+    }
+
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Contraseña Actualizada',
+      detail: 'Tu contraseña ha sido cambiada exitosamente.'
+    });
+
+    this.currentPassword = '';
+    this.newPassword = '';
+    this.confirmPassword = '';
+  }
+
+  saveNotificationSettings(): void {
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Preferencias Guardadas',
+      detail: 'Tus preferencias de notificaciones se han actualizado.'
+    });
+  }
+
+  onAvatarUpload(event: any): void {
+    this.messageService.add({
+      severity: 'info',
+      summary: 'Imagen Subida',
+      detail: 'Tu avatar ha sido actualizado.'
+    });
+  }
 }

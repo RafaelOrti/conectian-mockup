@@ -1,22 +1,29 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NavbarComponent } from '../../../shared/components/navbar/navbar.component';
-import { ClientProfileComponent } from '../profile/clientprofile.component';
-import { ClientCompanyComponent } from '../company/clientcompany.component';
-import { ClientBadgesComponent } from '../badges/clientbadges.component';
-import { ClientPaymentsComponent } from '../payments/clientpayments.component';
+
+interface Tab {
+  icon: string;
+  label: string;
+}
 
 @Component({
   selector: 'app-client-profile-hub',
   standalone: true,
-  imports: [CommonModule, NavbarComponent, ClientProfileComponent, ClientCompanyComponent, ClientBadgesComponent, ClientPaymentsComponent],
+  imports: [
+    CommonModule,
+    NavbarComponent
+  ],
   templateUrl: './clientprofilehub.component.html',
   styleUrls: ['./clientprofilehub.component.scss']
 })
 export class ClientProfileHubComponent {
-  activeTab: 'profile' | 'company' | 'badges' | 'payments' = 'profile';
+  activeTab: number = 0;
 
-  setActiveTab(tab: 'profile' | 'company' | 'badges' | 'payments') {
-    this.activeTab = tab;
-  }
+  tabs: Tab[] = [
+    { icon: '👤', label: 'Mi Perfil' },
+    { icon: '🏢', label: 'Mi Empresa' },
+    { icon: '🏆', label: 'Badges y Recompensas' },
+    { icon: '💳', label: 'Pagos' }
+  ];
 }
