@@ -1,125 +1,221 @@
 <div class="admin-content-page">
   <app-navbar 
-    [userRole]="'ADMIN'" 
-    [userName]="'Admin User'"
+    userRole="ADMIN"
+    userName="Admin User"
     [notificationCount]="5"
   ></app-navbar>
   
   <div class="container">
-    <div class="page-header">
+    <!-- Page Header -->
+    <div class="page-header mb-4">
       <div>
-        <h1>📄 Gestión de Contenido</h1>
-        <p class="subtitle">Administra los recursos, artículos y guías de la plataforma</p>
+        <h1 class="page-title">
+          <i class="pi pi-file-edit mr-2"></i>
+          Gestión de Contenido
+        </h1>
+        <p class="page-subtitle">Administra los recursos, artículos y guías de la plataforma</p>
       </div>
-      <app-button variant="primary" icon="➕">Nuevo Contenido</app-button>
+      <p-button 
+        label="Nuevo Contenido" 
+        icon="pi pi-plus" 
+        styleClass="p-button-primary"
+      ></p-button>
     </div>
 
     <!-- Stats Row -->
-    <div class="stats-row">
-      <app-card class="stat-card">
-        <div class="stat-icon articles">📝</div>
-        <div class="stat-info">
-          <span class="stat-value">124</span>
-          <span class="stat-label">Artículos Publicados</span>
+    <div class="stats-grid mb-4">
+      <p-card styleClass="stat-card">
+        <div class="stat-content">
+          <div class="stat-icon articles">
+            <i class="pi pi-file text-3xl"></i>
+          </div>
+          <div class="stat-info">
+            <div class="stat-value">124</div>
+            <div class="stat-label">Artículos Publicados</div>
+          </div>
         </div>
-      </app-card>
-      <app-card class="stat-card">
-        <div class="stat-icon pending">⏳</div>
-        <div class="stat-info">
-          <span class="stat-value">8</span>
-          <span class="stat-label">Pendientes de Revisión</span>
+      </p-card>
+
+      <p-card styleClass="stat-card">
+        <div class="stat-content">
+          <div class="stat-icon pending">
+            <i class="pi pi-clock text-3xl"></i>
+          </div>
+          <div class="stat-info">
+            <div class="stat-value">8</div>
+            <div class="stat-label">Pendientes de Revisión</div>
+          </div>
         </div>
-      </app-card>
-      <app-card class="stat-card">
-        <div class="stat-icon views">👁️</div>
-        <div class="stat-info">
-          <span class="stat-value">45.2k</span>
-          <span class="stat-label">Vistas Totales</span>
+      </p-card>
+
+      <p-card styleClass="stat-card">
+        <div class="stat-content">
+          <div class="stat-icon views">
+            <i class="pi pi-eye text-3xl"></i>
+          </div>
+          <div class="stat-info">
+            <div class="stat-value">45.2k</div>
+            <div class="stat-label">Vistas Totales</div>
+          </div>
         </div>
-      </app-card>
+      </p-card>
     </div>
 
-    <!-- Content Table -->
-    <app-card class="content-table-card">
-      <div class="table-header">
+    <!-- Content Table Card -->
+    <p-card styleClass="content-table-card">
+      <!-- Filters Header -->
+      <div class="table-header mb-4">
         <div class="search-filters">
-          <div class="search-box">
-            <span class="search-icon">🔍</span>
-            <input type="text" placeholder="Buscar contenido..." class="search-input">
-          </div>
-          <select class="filter-select">
-            <option value="all">Todos los tipos</option>
-            <option value="article">Artículos</option>
-            <option value="guide">Guías</option>
-            <option value="video">Videos</option>
-          </select>
-          <select class="filter-select">
-            <option value="all">Todos los estados</option>
-            <option value="published">Publicado</option>
-            <option value="draft">Borrador</option>
-            <option value="review">En Revisión</option>
-          </select>
+          <span class="p-input-icon-left flex-1" style="max-width: 400px;">
+            <i class="pi pi-search"></i>
+            <input 
+              type="text" 
+              pInputText 
+              placeholder="Buscar contenido..." 
+              (input)="onGlobalFilter($event)"
+              class="w-full"
+            />
+          </span>
+          
+          <p-dropdown 
+            [options]="typeOptions" 
+            [(ngModel)]="selectedType"
+            optionLabel="label" 
+            optionValue="value"
+            placeholder="Todos los tipos"
+            styleClass="filter-dropdown"
+          ></p-dropdown>
+
+          <p-dropdown 
+            [options]="statusOptions" 
+            [(ngModel)]="selectedStatus"
+            optionLabel="label" 
+            optionValue="value"
+            placeholder="Todos los estados"
+            styleClass="filter-dropdown"
+          ></p-dropdown>
         </div>
       </div>
 
-      <table class="admin-table">
-        <thead>
+      <!-- Table -->
+      <p-table 
+        [value]="contentItems" 
+        [paginator]="true" 
+        [rows]="10"
+        [rowsPerPageOptions]="[5, 10, 20]"
+        [globalFilterFields]="['title', 'author.name', 'type', 'status']"
+        styleClass="p-datatable-gridlines"
+        responsiveLayout="scroll"
+      >
+        <ng-template pTemplate="header">
           <tr>
-            <th>Título</th>
-            <th>Tipo</th>
-            <th>Autor</th>
-            <th>Fecha</th>
-            <th>Estado</th>
-            <th>Vistas</th>
-            <th>Acciones</th>
+            <th pSortableColumn="title">
+              TÍTULO
+              <p-sortIcon field="title"></p-sortIcon>
+            </th>
+            <th pSortableColumn="type">
+              TIPO
+              <p-sortIcon field="type"></p-sortIcon>
+            </th>
+            <th pSortableColumn="author.name">
+              AUTOR
+              <p-sortIcon field="author.name"></p-sortIcon>
+            </th>
+            <th pSortableColumn="date">
+              FECHA
+              <p-sortIcon field="date"></p-sortIcon>
+            </th>
+            <th pSortableColumn="status">
+              ESTADO
+              <p-sortIcon field="status"></p-sortIcon>
+            </th>
+            <th pSortableColumn="views" class="text-center">
+              VISTAS
+              <p-sortIcon field="views"></p-sortIcon>
+            </th>
+            <th class="text-center">ACCIONES</th>
           </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let item of contentItems">
+        </ng-template>
+
+        <ng-template pTemplate="body" let-item>
+          <tr>
             <td>
               <div class="content-title-cell">
-                <span class="content-title">{{item.title}}</span>
-                <span class="content-slug">{{item.slug}}</span>
+                <div class="content-title">{{ item.title }}</div>
+                <div class="content-slug">{{ item.slug }}</div>
               </div>
             </td>
             <td>
-              <span class="type-badge" [class]="item.type">
-                {{item.type === 'article' ? '📝 Artículo' : item.type === 'guide' ? '📚 Guía' : '🎥 Video'}}
-              </span>
+              <p-tag 
+                [value]="getTypeLabel(item.type)" 
+                [severity]="getTypeSeverity(item.type)"
+                [icon]="getTypeIcon(item.type)"
+                styleClass="type-tag"
+              ></p-tag>
             </td>
             <td>
               <div class="author-info">
-                <div class="author-avatar">{{item.author.avatar}}</div>
-                <span>{{item.author.name}}</span>
+                <p-avatar 
+                  [label]="item.author.avatar" 
+                  size="normal"
+                  shape="circle"
+                  styleClass="author-avatar"
+                ></p-avatar>
+                <span>{{ item.author.name }}</span>
               </div>
             </td>
-            <td>{{item.date}}</td>
             <td>
-              <span class="status-badge" [class]="item.status">
-                {{item.status === 'published' ? 'Publicado' : item.status === 'draft' ? 'Borrador' : 'Revisión'}}
+              <span class="date-text">
+                <i class="pi pi-calendar mr-1"></i>
+                {{ item.date }}
               </span>
             </td>
-            <td>{{item.views | number}}</td>
             <td>
-              <div class="actions">
-                <button class="icon-btn edit" title="Editar">✏️</button>
-                <button class="icon-btn delete" title="Eliminar">🗑️</button>
+              <p-tag 
+                [value]="getStatusLabel(item.status)" 
+                [severity]="getStatusSeverity(item.status)"
+                styleClass="status-tag"
+              ></p-tag>
+            </td>
+            <td class="text-center">
+              <span class="views-count">{{ item.views | number }}</span>
+            </td>
+            <td>
+              <div class="action-buttons">
+                <p-button 
+                  icon="pi pi-eye" 
+                  styleClass="p-button-rounded p-button-text p-button-info"
+                  pTooltip="Ver"
+                  tooltipPosition="top"
+                ></p-button>
+                <p-button 
+                  icon="pi pi-pencil" 
+                  styleClass="p-button-rounded p-button-text p-button-secondary"
+                  pTooltip="Editar"
+                  tooltipPosition="top"
+                ></p-button>
+                <p-button 
+                  icon="pi pi-trash" 
+                  styleClass="p-button-rounded p-button-text p-button-danger"
+                  pTooltip="Eliminar"
+                  tooltipPosition="top"
+                ></p-button>
               </div>
             </td>
           </tr>
-        </tbody>
-      </table>
-      
-      <div class="pagination">
-        <span class="page-info">Mostrando 1-10 de 124 resultados</span>
-        <div class="page-controls">
-          <button class="page-btn" disabled>Anterior</button>
-          <button class="page-btn active">1</button>
-          <button class="page-btn">2</button>
-          <button class="page-btn">3</button>
-          <button class="page-btn">Siguiente</button>
-        </div>
-      </div>
-    </app-card>
+        </ng-template>
+
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="7" class="text-center py-6">
+              <div class="empty-state">
+                <i class="pi pi-inbox text-4xl mb-3"></i>
+                <p>No se encontraron resultados</p>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </p-card>
   </div>
 </div>

@@ -92,8 +92,16 @@
   .filters-content {
     flex: 1;
     overflow-y: auto;
+    overflow-x: hidden;
     padding: $spacing-6;
+    padding-bottom: 2rem; // Extra padding at bottom to prevent cutoff
     @include scrollbar-custom;
+    
+    // Ensure last filter section is fully visible
+    .filter-section:last-child {
+      padding-bottom: 1rem;
+      margin-bottom: 1rem;
+    }
   }
 
   .chatbot-content {
@@ -162,16 +170,37 @@
       padding-bottom: 2rem;
       border-bottom: 1px solid rgba(59, 130, 246, 0.2);
       position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 1rem;
       
       &::after {
         content: '';
         position: absolute;
         bottom: -1px;
-        left: 0;
+        left: 50%;
+        transform: translateX(-50%);
         width: 60px;
         height: 2px;
         background: linear-gradient(90deg, #3b82f6, transparent);
         border-radius: 2px;
+      }
+      
+      > div {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+        
+        h3 {
+          margin: 0 !important;
+        }
+        
+        p {
+          margin: 0 !important;
+        }
       }
       
       .p-avatar {
@@ -452,7 +481,8 @@
     
     &:last-child {
       border-bottom: none;
-      margin-bottom: 0;
+      margin-bottom: 1.5rem; // Keep margin to prevent cutoff
+      padding-bottom: 1.5rem; // Keep padding to prevent cutoff
     }
     
     h4 {

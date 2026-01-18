@@ -1,67 +1,103 @@
-<div class="profile-hub">
+<div class="profile-hub-page">
   <app-navbar 
-    userRole="CLIENT"
-    userName="Maria González"
+    [userRole]="'CLIENT'" 
+    [userName]="'Carlos Martínez'"
     [notificationCount]="3"
     [messageCount]="2"
     [projectCount]="1"
   ></app-navbar>
 
-  <div class="container">
+  <div class="hub-container">
     <!-- Page Header -->
     <div class="page-header">
-      <h1 class="page-title">Mi Cuenta</h1>
+      <div class="header-content">
+        <div class="user-avatar-section">
+          <p-avatar 
+            label="C" 
+            size="xlarge"
+            shape="circle"
+            styleClass="user-avatar"
+          ></p-avatar>
+          <div class="user-info">
+            <h1>Mi Cuenta</h1>
+            <p class="user-subtitle">Gestiona tu perfil y configuración</p>
+          </div>
+        </div>
+        
+        <div class="header-stats">
+          <div class="stat-badge">
+            <i class="pi pi-chart-line"></i>
+            <div class="stat-content">
+              <span class="stat-value">{{ userStats.completionRate }}%</span>
+              <span class="stat-label">Completado</span>
+            </div>
+          </div>
+          <div class="stat-badge">
+            <i class="pi pi-star-fill"></i>
+            <div class="stat-content">
+              <span class="stat-value">{{ userStats.rating }}</span>
+              <span class="stat-label">Rating</span>
+            </div>
+          </div>
+          <div class="stat-badge">
+            <i class="pi pi-trophy"></i>
+            <div class="stat-content">
+              <span class="stat-value">{{ userStats.badges }}</span>
+              <span class="stat-label">Badges</span>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <!-- Custom Tabs -->
-    <div class="custom-tabs">
-      <!-- Tab Navigation -->
-      <div class="tabs-nav">
-        <button 
-          *ngFor="let tab of tabs; let i = index"
-          class="tab-button"
-          [class.active]="activeTab === i"
-          (click)="activeTab = i"
-        >
-          <span class="tab-icon">{{ tab.icon }}</span>
-          <span class="tab-label">{{ tab.label }}</span>
-        </button>
-      </div>
+    <!-- Modern TabView -->
+    <div class="tabs-wrapper">
+      <p-tabView [(activeIndex)]="activeIndex" styleClass="professional-tabs">
+        <!-- Tab 1: Mi Perfil -->
+        <p-tabPanel>
+          <ng-template pTemplate="header">
+            <div class="tab-header">
+              <i class="pi pi-user"></i>
+              <span>Mi Perfil</span>
+            </div>
+          </ng-template>
+          <app-clientprofile [showNavbar]="false"></app-clientprofile>
+        </p-tabPanel>
 
-      <!-- Tab Content -->
-      <div class="tabs-content">
-        <div class="tab-panel" *ngIf="activeTab === 0">
-          <div class="panel-header">
-            <span class="panel-icon">👤</span>
-            <h2 class="panel-title">Mi Perfil</h2>
-          </div>
-          <p class="construction-message">Vista en construcción</p>
-        </div>
+        <!-- Tab 2: Mi Empresa -->
+        <p-tabPanel>
+          <ng-template pTemplate="header">
+            <div class="tab-header">
+              <i class="pi pi-building"></i>
+              <span>Mi Empresa</span>
+            </div>
+          </ng-template>
+          <app-clientcompany [showNavbar]="false"></app-clientcompany>
+        </p-tabPanel>
 
-        <div class="tab-panel" *ngIf="activeTab === 1">
-          <div class="panel-header">
-            <span class="panel-icon">🏢</span>
-            <h2 class="panel-title">Mi Empresa</h2>
-          </div>
-          <p class="construction-message">Vista en construcción</p>
-        </div>
+        <!-- Tab 3: Badges y Recompensas -->
+        <p-tabPanel>
+          <ng-template pTemplate="header">
+            <div class="tab-header">
+              <i class="pi pi-trophy"></i>
+              <span>Badges y Recompensas</span>
+              <p-badge [value]="userStats.badges.toString()" severity="success"></p-badge>
+            </div>
+          </ng-template>
+          <app-clientbadges [showNavbar]="false"></app-clientbadges>
+        </p-tabPanel>
 
-        <div class="tab-panel" *ngIf="activeTab === 2">
-          <div class="panel-header">
-            <span class="panel-icon">🏆</span>
-            <h2 class="panel-title">Badges y Recompensas</h2>
-          </div>
-          <p class="construction-message">Vista en construcción</p>
-        </div>
-
-        <div class="tab-panel" *ngIf="activeTab === 3">
-          <div class="panel-header">
-            <span class="panel-icon">💳</span>
-            <h2 class="panel-title">Pagos</h2>
-          </div>
-          <p class="construction-message">Vista en construcción</p>
-        </div>
-      </div>
+        <!-- Tab 4: Pagos -->
+        <p-tabPanel>
+          <ng-template pTemplate="header">
+            <div class="tab-header">
+              <i class="pi pi-wallet"></i>
+              <span>Pagos</span>
+            </div>
+          </ng-template>
+          <app-clientpayments [showNavbar]="false"></app-clientpayments>
+        </p-tabPanel>
+      </p-tabView>
     </div>
   </div>
 </div>

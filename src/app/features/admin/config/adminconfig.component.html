@@ -11,30 +11,34 @@
         <h1>⚙️ Configuración</h1>
         <p class="subtitle">Ajustes generales de la plataforma y sistema</p>
       </div>
-      <app-button variant="primary" icon="💾">Guardar Cambios</app-button>
+      <div class="header-actions">
+        <app-button 
+          *ngIf="hasChanges" 
+          variant="secondary" 
+          icon="↩️" 
+          (click)="resetChanges()">
+          Descartar
+        </app-button>
+        <app-button 
+          variant="primary" 
+          icon="💾" 
+          [disabled]="!hasChanges"
+          (click)="saveChanges()">
+          Guardar Cambios
+        </app-button>
+      </div>
     </div>
 
     <div class="config-layout">
       <!-- Sidebar Navigation -->
       <app-card class="config-sidebar">
         <nav class="config-nav">
-          <button class="nav-item active">
-            <span class="icon">🏢</span> General
-          </button>
-          <button class="nav-item">
-            <span class="icon">🔔</span> Notificaciones
-          </button>
-          <button class="nav-item">
-            <span class="icon">🔐</span> Seguridad
-          </button>
-          <button class="nav-item">
-            <span class="icon">💳</span> Pagos
-          </button>
-          <button class="nav-item">
-            <span class="icon">🔌</span> Integraciones
-          </button>
-          <button class="nav-item">
-            <span class="icon">📧</span> Email Templates
+          <button 
+            *ngFor="let section of sections" 
+            class="nav-item" 
+            [class.active]="activeSection === section.id"
+            (click)="setActiveSection(section.id)">
+            <span class="icon">{{ section.icon }}</span> {{ section.label }}
           </button>
         </nav>
       </app-card>
@@ -42,26 +46,41 @@
       <!-- Main Content -->
       <div class="config-content">
         <!-- General Settings -->
-        <app-card class="config-section">
+        <app-card class="config-section" *ngIf="activeSection === 'general'">
           <h3>Información de la Plataforma</h3>
           <div class="form-grid">
             <div class="form-group">
               <label>Nombre de la Plataforma</label>
-              <input type="text" value="Conectian AI Marketplace" class="form-input">
+              <input 
+                type="text" 
+                [(ngModel)]="config.platformName" 
+                (ngModelChange)="onConfigChange()"
+                class="form-input"
+                placeholder="Nombre de la plataforma">
             </div>
             <div class="form-group">
               <label>Email de Soporte</label>
-              <input type="email" value="support@conectian.com" class="form-input">
+              <input 
+                type="email" 
+                [(ngModel)]="config.supportEmail" 
+                (ngModelChange)="onConfigChange()"
+                class="form-input"
+                placeholder="email@ejemplo.com">
             </div>
             <div class="form-group full-width">
               <label>Descripción SEO</label>
-              <textarea class="form-textarea" rows="3">La plataforma líder para conectar empresas con soluciones de Inteligencia Artificial.</textarea>
+              <textarea 
+                [(ngModel)]="config.seoDescription" 
+                (ngModelChange)="onConfigChange()"
+                class="form-textarea" 
+                rows="3"
+                placeholder="Descripción para motores de búsqueda..."></textarea>
             </div>
           </div>
         </app-card>
 
         <!-- Feature Flags -->
-        <app-card class="config-section">
+        <app-card class="config-section" *ngIf="activeSection === 'general'">
           <h3>Funcionalidades (Feature Flags)</h3>
           <div class="toggles-list">
             <div class="toggle-item">
@@ -70,7 +89,10 @@
                 <span class="toggle-desc">Permitir que nuevos usuarios se registren en la plataforma</span>
               </div>
               <label class="switch">
-                <input type="checkbox" checked>
+                <input 
+                  type="checkbox" 
+                  [(ngModel)]="config.allowNewRegistrations"
+                  (change)="onToggleChange('allowNewRegistrations', $event)">
                 <span class="slider"></span>
               </label>
             </div>
@@ -81,7 +103,10 @@
                 <span class="toggle-desc">Activar pantalla de mantenimiento para todos los usuarios excepto admin</span>
               </div>
               <label class="switch">
-                <input type="checkbox">
+                <input 
+                  type="checkbox"
+                  [(ngModel)]="config.maintenanceMode"
+                  (change)="onToggleChange('maintenanceMode', $event)">
                 <span class="slider"></span>
               </label>
             </div>
@@ -92,7 +117,10 @@
                 <span class="toggle-desc">Habilitar características beta para usuarios seleccionados</span>
               </div>
               <label class="switch">
-                <input type="checkbox" checked>
+                <input 
+                  type="checkbox"
+                  [(ngModel)]="config.betaFeatures"
+                  (change)="onToggleChange('betaFeatures', $event)">
                 <span class="slider"></span>
               </label>
             </div>
@@ -100,30 +128,232 @@
         </app-card>
 
         <!-- Localization -->
-        <app-card class="config-section">
+        <app-card class="config-section" *ngIf="activeSection === 'general'">
           <h3>Localización y Región</h3>
           <div class="form-grid">
             <div class="form-group">
               <label>Idioma por Defecto</label>
-              <select class="form-select">
+              <select 
+                [(ngModel)]="config.defaultLanguage" 
+                (ngModelChange)="onConfigChange()"
+                class="form-select">
                 <option value="es">Español</option>
                 <option value="en">Inglés</option>
+                <option value="fr">Francés</option>
+                <option value="de">Alemán</option>
               </select>
             </div>
             <div class="form-group">
               <label>Zona Horaria</label>
-              <select class="form-select">
+              <select 
+                [(ngModel)]="config.timezone" 
+                (ngModelChange)="onConfigChange()"
+                class="form-select">
                 <option value="madrid">Europe/Madrid (GMT+1)</option>
                 <option value="london">Europe/London (GMT+0)</option>
                 <option value="ny">America/New_York (GMT-5)</option>
+                <option value="la">America/Los_Angeles (GMT-8)</option>
+                <option value="tokyo">Asia/Tokyo (GMT+9)</option>
               </select>
             </div>
             <div class="form-group">
               <label>Moneda Principal</label>
-              <select class="form-select">
+              <select 
+                [(ngModel)]="config.currency" 
+                (ngModelChange)="onConfigChange()"
+                class="form-select">
                 <option value="eur">EUR (€)</option>
                 <option value="usd">USD ($)</option>
+                <option value="gbp">GBP (£)</option>
+                <option value="jpy">JPY (¥)</option>
               </select>
+            </div>
+          </div>
+        </app-card>
+
+        <!-- Notifications Section -->
+        <app-card class="config-section" *ngIf="activeSection === 'notifications'">
+          <h3>🔔 Configuración de Notificaciones</h3>
+          <p class="section-desc">Gestiona cómo y cuándo se envían notificaciones a los usuarios</p>
+          <div class="toggles-list">
+            <div class="toggle-item">
+              <div class="toggle-info">
+                <span class="toggle-label">Notificaciones por Email</span>
+                <span class="toggle-desc">Enviar notificaciones importantes por correo electrónico</span>
+              </div>
+              <label class="switch">
+                <input type="checkbox" checked>
+                <span class="slider"></span>
+              </label>
+            </div>
+            <div class="toggle-item">
+              <div class="toggle-info">
+                <span class="toggle-label">Notificaciones Push</span>
+                <span class="toggle-desc">Activar notificaciones push en navegador</span>
+              </div>
+              <label class="switch">
+                <input type="checkbox" checked>
+                <span class="slider"></span>
+              </label>
+            </div>
+            <div class="toggle-item">
+              <div class="toggle-info">
+                <span class="toggle-label">Resumen Diario</span>
+                <span class="toggle-desc">Enviar resumen diario de actividad a usuarios</span>
+              </div>
+              <label class="switch">
+                <input type="checkbox">
+                <span class="slider"></span>
+              </label>
+            </div>
+          </div>
+        </app-card>
+
+        <!-- Security Section -->
+        <app-card class="config-section" *ngIf="activeSection === 'security'">
+          <h3>🔐 Configuración de Seguridad</h3>
+          <p class="section-desc">Opciones de seguridad y autenticación</p>
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Duración de Sesión (minutos)</label>
+              <input type="number" value="60" class="form-input">
+            </div>
+            <div class="form-group">
+              <label>Intentos de Login</label>
+              <input type="number" value="5" class="form-input">
+            </div>
+            <div class="form-group full-width">
+              <label>Política de Contraseñas</label>
+              <select class="form-select">
+                <option value="low">Baja - Mínimo 6 caracteres</option>
+                <option value="medium" selected>Media - 8 caracteres, mayúsculas y números</option>
+                <option value="high">Alta - 10+ caracteres, símbolos especiales</option>
+              </select>
+            </div>
+          </div>
+          <div class="toggles-list mt-4">
+            <div class="toggle-item">
+              <div class="toggle-info">
+                <span class="toggle-label">Autenticación de Dos Factores (2FA)</span>
+                <span class="toggle-desc">Requerir 2FA para usuarios admin</span>
+              </div>
+              <label class="switch">
+                <input type="checkbox" checked>
+                <span class="slider"></span>
+              </label>
+            </div>
+          </div>
+        </app-card>
+
+        <!-- Payments Section -->
+        <app-card class="config-section" *ngIf="activeSection === 'payments'">
+          <h3>💳 Configuración de Pagos</h3>
+          <p class="section-desc">Gestiona los métodos de pago y facturación</p>
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Procesador de Pagos</label>
+              <select class="form-select">
+                <option value="stripe" selected>Stripe</option>
+                <option value="paypal">PayPal</option>
+                <option value="square">Square</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Comisión de Plataforma (%)</label>
+              <input type="number" value="10" class="form-input" step="0.1">
+            </div>
+            <div class="form-group full-width">
+              <label>Stripe API Key</label>
+              <input type="password" value="sk_test_••••••••••••••••" class="form-input">
+            </div>
+          </div>
+          <div class="toggles-list mt-4">
+            <div class="toggle-item">
+              <div class="toggle-info">
+                <span class="toggle-label">Facturación Automática</span>
+                <span class="toggle-desc">Generar facturas automáticamente al completar pagos</span>
+              </div>
+              <label class="switch">
+                <input type="checkbox" checked>
+                <span class="slider"></span>
+              </label>
+            </div>
+          </div>
+        </app-card>
+
+        <!-- Integrations Section -->
+        <app-card class="config-section" *ngIf="activeSection === 'integrations'">
+          <h3>🔌 Integraciones</h3>
+          <p class="section-desc">Conecta con servicios externos</p>
+          <div class="integrations-grid">
+            <div class="integration-card">
+              <div class="integration-header">
+                <img src="https://cdn.worldvectorlogo.com/logos/slack-new-logo.svg" alt="Slack" class="integration-logo">
+                <div>
+                  <h4>Slack</h4>
+                  <span class="badge badge-success">Conectado</span>
+                </div>
+              </div>
+              <p>Notificaciones de actividad en Slack</p>
+              <button class="btn-secondary">Desconectar</button>
+            </div>
+            <div class="integration-card">
+              <div class="integration-header">
+                <img src="https://cdn.worldvectorlogo.com/logos/google-analytics-4.svg" alt="Analytics" class="integration-logo">
+                <div>
+                  <h4>Google Analytics</h4>
+                  <span class="badge badge-warning">No conectado</span>
+                </div>
+              </div>
+              <p>Seguimiento de analytics</p>
+              <button class="btn-primary">Conectar</button>
+            </div>
+            <div class="integration-card">
+              <div class="integration-header">
+                <img src="https://cdn.worldvectorlogo.com/logos/zapier.svg" alt="Zapier" class="integration-logo">
+                <div>
+                  <h4>Zapier</h4>
+                  <span class="badge badge-warning">No conectado</span>
+                </div>
+              </div>
+              <p>Automatizaciones con Zapier</p>
+              <button class="btn-primary">Conectar</button>
+            </div>
+          </div>
+        </app-card>
+
+        <!-- Email Templates Section -->
+        <app-card class="config-section" *ngIf="activeSection === 'email'">
+          <h3>📧 Plantillas de Email</h3>
+          <p class="section-desc">Personaliza los emails que se envían a los usuarios</p>
+          <div class="email-templates-list">
+            <div class="template-item">
+              <div class="template-info">
+                <h4>Email de Bienvenida</h4>
+                <p>Se envía cuando un nuevo usuario se registra</p>
+              </div>
+              <button class="btn-secondary">Editar</button>
+            </div>
+            <div class="template-item">
+              <div class="template-info">
+                <h4>Recuperación de Contraseña</h4>
+                <p>Email para restablecer contraseña olvidada</p>
+              </div>
+              <button class="btn-secondary">Editar</button>
+            </div>
+            <div class="template-item">
+              <div class="template-info">
+                <h4>Notificación de Nuevo Deal</h4>
+                <p>Alerta cuando se crea un nuevo proyecto</p>
+              </div>
+              <button class="btn-secondary">Editar</button>
+            </div>
+            <div class="template-item">
+              <div class="template-info">
+                <h4>Resumen Mensual</h4>
+                <p>Resumen de actividad mensual</p>
+              </div>
+              <button class="btn-secondary">Editar</button>
             </div>
           </div>
         </app-card>

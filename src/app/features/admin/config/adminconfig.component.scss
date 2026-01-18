@@ -29,6 +29,11 @@
     color: $text-secondary;
     font-size: $font-size-lg;
   }
+
+  .header-actions {
+    display: flex;
+    gap: $spacing-3;
+  }
 }
 
 .config-layout {
@@ -210,6 +215,165 @@
                 transition: .4s;
                 border-radius: 50%;
               }
+            }
+          }
+        }
+      }
+
+      .section-desc {
+        color: $text-secondary;
+        font-size: $font-size-base;
+        margin-bottom: $spacing-6;
+        padding-bottom: $spacing-4;
+      }
+
+      .mt-4 {
+        margin-top: $spacing-6;
+      }
+
+      // Integrations Grid
+      .integrations-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: $spacing-4;
+
+        .integration-card {
+          padding: $spacing-5;
+          background: rgba(255, 255, 255, 0.03);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: $border-radius-base;
+          transition: all 0.3s ease;
+
+          &:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(13, 134, 255, 0.3);
+            transform: translateY(-2px);
+          }
+
+          .integration-header {
+            display: flex;
+            align-items: center;
+            gap: $spacing-3;
+            margin-bottom: $spacing-3;
+
+            .integration-logo {
+              width: 40px;
+              height: 40px;
+              object-fit: contain;
+              background: white;
+              padding: 4px;
+              border-radius: 8px;
+            }
+
+            h4 {
+              font-size: $font-size-base;
+              font-weight: $font-weight-semibold;
+              margin: 0;
+            }
+
+            .badge {
+              padding: 2px 8px;
+              border-radius: 12px;
+              font-size: $font-size-xs;
+              font-weight: $font-weight-medium;
+
+              &.badge-success {
+                background: rgba(24, 185, 129, 0.2);
+                color: $success-green;
+              }
+
+              &.badge-warning {
+                background: rgba(249, 105, 8, 0.2);
+                color: $warning-orange;
+              }
+            }
+          }
+
+          p {
+            color: $text-secondary;
+            font-size: $font-size-sm;
+            margin-bottom: $spacing-4;
+          }
+
+          button {
+            width: 100%;
+            padding: $spacing-2 $spacing-4;
+            border: none;
+            border-radius: $border-radius-base;
+            cursor: pointer;
+            font-weight: $font-weight-medium;
+            transition: all 0.2s;
+
+            &.btn-primary {
+              background: $primary-blue;
+              color: white;
+
+              &:hover {
+                background: darken($primary-blue, 10%);
+              }
+            }
+
+            &.btn-secondary {
+              background: rgba(255, 255, 255, 0.1);
+              color: $text-primary;
+
+              &:hover {
+                background: rgba(255, 255, 255, 0.15);
+              }
+            }
+          }
+        }
+      }
+
+      // Email Templates List
+      .email-templates-list {
+        display: flex;
+        flex-direction: column;
+        gap: $spacing-4;
+
+        .template-item {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: $spacing-4;
+          background: rgba(255, 255, 255, 0.03);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: $border-radius-base;
+          transition: all 0.2s;
+
+          &:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(13, 134, 255, 0.3);
+          }
+
+          .template-info {
+            h4 {
+              font-size: $font-size-base;
+              font-weight: $font-weight-semibold;
+              margin: 0 0 $spacing-1 0;
+              color: $text-primary;
+            }
+
+            p {
+              font-size: $font-size-sm;
+              color: $text-secondary;
+              margin: 0;
+            }
+          }
+
+          button {
+            padding: $spacing-2 $spacing-4;
+            background: rgba(255, 255, 255, 0.1);
+            color: $text-primary;
+            border: none;
+            border-radius: $border-radius-base;
+            cursor: pointer;
+            font-weight: $font-weight-medium;
+            transition: all 0.2s;
+
+            &:hover {
+              background: rgba(13, 134, 255, 0.2);
+              color: $primary-blue;
             }
           }
         }

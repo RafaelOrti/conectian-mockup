@@ -1,183 +1,110 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
-import { FormsModule } from '@angular/forms';
 import { NavbarComponent } from '../../../shared/components/navbar/navbar.component';
+
+// PrimeNG
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { ProgressBarModule } from 'primeng/progressbar';
-import { ChipModule } from 'primeng/chip';
 import { TagModule } from 'primeng/tag';
+import { ChipModule } from 'primeng/chip';
 import { TooltipModule } from 'primeng/tooltip';
-import { KnobModule } from 'primeng/knob';
 
 interface Badge {
   id: string;
-  name: string;
-  description: string;
   icon: string;
-  level: 'BRONCE' | 'PLATA' | 'ORO' | 'DIAMANTE';
-  status: 'earned' | 'in-progress' | 'locked';
-  progress?: number;
-  maxProgress?: number;
-  earnedDate?: string;
-  rewards?: string[];
-}
-
-interface Achievement {
-  id: string;
   title: string;
   description: string;
-  icon: string;
-  points: number;
-  category: 'cases' | 'leads' | 'referrals' | 'quality';
-  status: 'completed' | 'in-progress' | 'locked';
+  unlocked: boolean;
+  unlockedDate?: string;
+  progress?: number;
+  requirement?: string;
 }
 
 @Component({
   selector: 'app-providerbadges',
   standalone: true,
   imports: [
-    CommonModule, 
-    RouterModule,
-    FormsModule, 
+    CommonModule,
     NavbarComponent,
     CardModule,
     ButtonModule,
     ProgressBarModule,
-    ChipModule,
     TagModule,
-    TooltipModule,
-    KnobModule
+    ChipModule,
+    TooltipModule
   ],
   templateUrl: './providerbadges.component.html',
   styleUrls: ['./providerbadges.component.scss']
 })
 export class ProviderBadgesComponent {
   @Input() showNavbar: boolean = true;
-  reputationScore: number = 3200;
-  reputationLevel: string = 'Maestro';
-  reputationProgress: number = 85;
+
+  currentLevel = 'Experto Platinum';
+  nextLevel = 'Experto Diamond';
+  currentXP = 4250;
+  nextLevelXP = 5000;
+  progressPercentage = 85;
 
   badges: Badge[] = [
     {
       id: '1',
-      name: 'Proveedor Verificado',
-      description: 'Completa la verificación de tu empresa y equipo',
-      icon: '✅',
-      level: 'BRONCE',
-      status: 'earned',
-      earnedDate: '2024-01-10',
-      rewards: ['Sello de Verificación', 'Mayor visibilidad']
-    },
-    {
-      id: '2',
-      name: 'Creador de Contenido',
-      description: 'Publica 10 casos de uso destacados',
-      icon: '📝',
-      level: 'PLATA',
-      status: 'in-progress',
-      progress: 7,
-      maxProgress: 10,
-      rewards: ['Sello Plata', 'Prioridad en búsquedas']
-    },
-    {
-      id: '3',
-      name: 'Líder en Conversión',
-      description: 'Convierte 20 leads en proyectos cerrados',
-      icon: '🎯',
-      level: 'ORO',
-      status: 'in-progress',
-      progress: 12,
-      maxProgress: 20,
-      rewards: ['Sello Oro', 'Badge destacado', 'Comisiones mejoradas']
-    },
-    {
-      id: '4',
-      name: 'Embajador Premium',
-      description: 'Refiere 15 proveedores que se unan',
-      icon: '👑',
-      level: 'DIAMANTE',
-      status: 'locked',
-      progress: 3,
-      maxProgress: 15,
-      rewards: ['Sello Diamante', 'Comisión por referidos', 'Acceso VIP']
-    }
-  ];
-
-  achievements: Achievement[] = [
-    {
-      id: '1',
-      title: 'Primer Caso Publicado',
-      description: 'Publica tu primer caso de uso',
-      icon: '🎉',
-      points: 150,
-      category: 'cases',
-      status: 'completed'
-    },
-    {
-      id: '2',
-      title: 'Lead Master',
-      description: 'Responde a 50 leads en menos de 2 horas',
-      icon: '⚡',
-      points: 300,
-      category: 'leads',
-      status: 'in-progress'
-    },
-    {
-      id: '3',
-      title: 'Calidad 5 Estrellas',
-      description: 'Mantén un rating de 5 estrellas en 10 proyectos',
       icon: '⭐',
-      points: 500,
-      category: 'quality',
-      status: 'locked'
+      title: 'Primera Venta',
+      description: 'Cerraste tu primer proyecto en Conectian',
+      unlocked: true,
+      unlockedDate: '15 Dic 2025'
+    },
+    {
+      id: '2',
+      icon: '🎯',
+      title: 'Top Performer',
+      description: 'Alcanzaste 10 proyectos completados',
+      unlocked: true,
+      unlockedDate: '10 Ene 2026'
+    },
+    {
+      id: '3',
+      icon: '💎',
+      title: 'Cliente Satisfecho',
+      description: 'Obtuviste 5 reseñas de 5 estrellas',
+      unlocked: true,
+      unlockedDate: '25 Ene 2026'
     },
     {
       id: '4',
-      title: 'Network Builder',
-      description: 'Refiere 5 proveedores exitosos',
-      icon: '🌐',
-      points: 750,
-      category: 'referrals',
-      status: 'locked'
+      icon: '🚀',
+      title: 'Innovador',
+      description: 'Publica 10 casos de uso únicos',
+      unlocked: false,
+      progress: 70,
+      requirement: '7 de 10 casos'
+    },
+    {
+      id: '5',
+      icon: '🌟',
+      title: 'Experto Certificado',
+      description: 'Completa todas las certificaciones de IA',
+      unlocked: false,
+      progress: 40,
+      requirement: '2 de 5 certificaciones'
+    },
+    {
+      id: '6',
+      icon: '👑',
+      title: 'Elite Partner',
+      description: 'Alcanza €100k en proyectos facturados',
+      unlocked: false,
+      progress: 55,
+      requirement: '€55k de €100k'
     }
   ];
 
-  getLevelColor(level: string): string {
-    const colors: { [key: string]: string } = {
-      'BRONCE': '#cd7f32',
-      'PLATA': '#c0c0c0',
-      'ORO': '#ffd700',
-      'DIAMANTE': '#b9f2ff'
-    };
-    return colors[level] || '#718096';
-  }
-
-  getProgressPercentage(badge: Badge): number {
-    if (!badge.progress || !badge.maxProgress) return 0;
-    return (badge.progress / badge.maxProgress) * 100;
-  }
-
-  getCategoryIcon(category: string): string {
-    const icons: { [key: string]: string } = {
-      'cases': '📝',
-      'leads': '📊',
-      'referrals': '🌟',
-      'quality': '⭐'
-    };
-    return icons[category] || '🏆';
-  }
-
-  getEarnedBadges(): Badge[] {
-    return this.badges.filter(b => b.status === 'earned');
-  }
-
-  getInProgressBadges(): Badge[] {
-    return this.badges.filter(b => b.status === 'in-progress');
+  getUnlockedBadges(): Badge[] {
+    return this.badges.filter(b => b.unlocked);
   }
 
   getLockedBadges(): Badge[] {
-    return this.badges.filter(b => b.status === 'locked');
+    return this.badges.filter(b => !b.unlocked);
   }
 }

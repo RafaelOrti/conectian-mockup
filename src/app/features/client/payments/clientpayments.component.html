@@ -1,5 +1,6 @@
 <div class="client-payments-page">
   <app-navbar 
+    *ngIf="showNavbar"
     [userRole]="'CLIENT'" 
     [userName]="'Carlos Martínez'"
     [notificationCount]="3"

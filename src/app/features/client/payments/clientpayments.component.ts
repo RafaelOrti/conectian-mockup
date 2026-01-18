@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NavbarComponent } from '../../../shared/components/navbar/navbar.component';
 import { CardComponent } from '../../../shared/components/card/card.component';
@@ -12,6 +12,8 @@ import { ButtonComponent } from '../../../shared/components/button/button.compon
   styleUrls: ['./clientpayments.component.scss']
 })
 export class ClientPaymentsComponent {
+  @Input() showNavbar: boolean = true;
+
   invoices = [
     {
       id: 'INV-2025-001',
@@ -43,5 +45,6 @@ export class ClientPaymentsComponent {
     }
   ];
 }
+
 
 

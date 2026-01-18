@@ -2,51 +2,1182 @@
 
 .admin-finance-page {
   min-height: 100vh;
-  background: $bg-dark;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+  background-attachment: fixed;
   color: $text-primary;
   padding-top: 80px;
+  position: relative;
+  overflow-x: hidden;
+
+  // Animated background gradient overlay
+  &::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+      radial-gradient(circle at 20% 50%, rgba(255, 215, 0, 0.08) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(16, 185, 129, 0.06) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+    animation: gradientShift 20s ease infinite;
+  }
+
+  @keyframes gradientShift {
+    0%, 100% {
+      opacity: 1;
+      transform: scale(1) rotate(0deg);
+    }
+    50% {
+      opacity: 0.7;
+      transform: scale(1.1) rotate(2deg);
+    }
+  }
 }
 
 .container {
-  max-width: 1400px;
+  max-width: 1600px;
   margin: 0 auto;
-  padding: $spacing-8;
+  padding: 2.5rem 3rem 3.5rem;
+  position: relative;
+  z-index: 1;
 }
 
+// Page Header
 .page-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: $spacing-8;
+  margin-bottom: 3rem;
+  gap: 2rem;
+  flex-wrap: wrap;
+  animation: fadeInDown 0.6s ease-out;
+
+  @keyframes fadeInDown {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 
   h1 {
-    font-size: $font-size-3xl;
-    font-weight: $font-weight-bold;
-    margin-bottom: $spacing-2;
+    font-size: 3rem;
+    font-weight: 900;
+    margin-bottom: 0.75rem;
+    background: linear-gradient(135deg, #ffd700 0%, #ffed4e 30%, #ffd700 60%, #f59e0b 100%);
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -1px;
+    filter: drop-shadow(0 4px 12px rgba(255, 215, 0, 0.5));
+    animation: shimmerGold 3s ease-in-out infinite;
+    position: relative;
+    
+    &::after {
+      content: '💰';
+      margin-left: 0.5rem;
+      filter: drop-shadow(0 4px 8px rgba(255, 215, 0, 0.6));
+      animation: bounce 2s ease-in-out infinite;
+    }
+  }
+  
+  @keyframes shimmerGold {
+    0%, 100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+  
+  @keyframes bounce {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-5px);
+    }
   }
 
   .subtitle {
     color: $text-secondary;
-    font-size: $font-size-lg;
+    font-size: 1.125rem;
+    font-weight: 500;
+    line-height: 1.6;
   }
 
   .header-actions {
     display: flex;
-    gap: $spacing-4;
+    gap: 1rem;
+    align-items: center;
+
+    .period-select {
+      padding: 0.875rem 1.5rem;
+      background: rgba(30, 39, 54, 0.7);
+      backdrop-filter: blur(20px);
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      border-radius: 0.875rem;
+      color: $text-primary;
+      font-size: 0.9375rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+
+      &:hover {
+        border-color: rgba(255, 215, 0, 0.3);
+        background: rgba(30, 39, 54, 0.9);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+      }
+
+      &:focus {
+        outline: none;
+        border-color: rgba(255, 215, 0, 0.5);
+        box-shadow: 
+          0 0 0 3px rgba(255, 215, 0, 0.15),
+          0 6px 16px rgba(0, 0, 0, 0.3);
+      }
+
+      option {
+        background: #1e293b;
+        color: $text-primary;
+        padding: 0.5rem;
+      }
+    }
   }
 }
 
-// Estilos básicos para las tarjetas de finanzas
-.stats-grid {
+// KPIs Row
+.kpis-row {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: $spacing-6;
-  margin-bottom: $spacing-8;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+  animation: fadeInUp 0.6s ease-out 0.2s both;
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 }
 
-.finance-card {
-  padding: $spacing-6;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: $border-radius-lg;
+::ng-deep .kpi-card {
+  .card-content {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.25rem;
+    padding: 2rem;
+    background: rgba(30, 39, 54, 0.7);
+    backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 1.5rem;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, 
+        transparent,
+        rgba(255, 215, 0, 0.8),
+        transparent
+      );
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      animation: slideRight 2s ease-in-out infinite;
+    }
+    
+    &::after {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      border-radius: 1.5rem;
+      background: linear-gradient(45deg, transparent, rgba(255, 215, 0, 0.1), transparent);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      z-index: -1;
+    }
+
+    &:hover {
+      transform: translateY(-12px) scale(1.03);
+      border-color: rgba(255, 215, 0, 0.4);
+      box-shadow: 
+        0 20px 60px rgba(0, 0, 0, 0.5),
+        0 10px 30px rgba(255, 215, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+
+      &::before {
+        opacity: 1;
+      }
+      
+      &::after {
+        opacity: 1;
+        animation: rotate 3s linear infinite;
+      }
+
+      .kpi-icon {
+        transform: scale(1.15) rotate(8deg);
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+      }
+      
+      .kpi-value {
+        transform: scale(1.05);
+      }
+    }
+    
+    @keyframes slideRight {
+      0% {
+        transform: translateX(-100%);
+      }
+      100% {
+        transform: translateX(200%);
+      }
+    }
+    
+    @keyframes rotate {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(360deg);
+      }
+    }
+  }
+
+  .kpi-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.75rem;
+    flex-shrink: 0;
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    position: relative;
+    overflow: hidden;
+    
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 1.5rem;
+      padding: 2px;
+      background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+    
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at center, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    &.revenue {
+      background: linear-gradient(135deg, rgba(34, 197, 94, 0.3) 0%, rgba(34, 197, 94, 0.15) 50%, rgba(16, 185, 129, 0.25) 100%);
+      border: 2px solid rgba(34, 197, 94, 0.5);
+      box-shadow: 
+        0 8px 24px rgba(34, 197, 94, 0.4),
+        inset 0 2px 4px rgba(255, 255, 255, 0.1),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.2);
+      animation: pulseGreen 3s ease-in-out infinite;
+    }
+
+    &.arr {
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.3) 0%, rgba(59, 130, 246, 0.15) 50%, rgba(37, 99, 235, 0.25) 100%);
+      border: 2px solid rgba(59, 130, 246, 0.5);
+      box-shadow: 
+        0 8px 24px rgba(59, 130, 246, 0.4),
+        inset 0 2px 4px rgba(255, 255, 255, 0.1),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.2);
+      animation: pulseBlue 3s ease-in-out infinite 0.5s;
+    }
+
+    &.customers {
+      background: linear-gradient(135deg, rgba(168, 85, 247, 0.3) 0%, rgba(168, 85, 247, 0.15) 50%, rgba(147, 51, 234, 0.25) 100%);
+      border: 2px solid rgba(168, 85, 247, 0.5);
+      box-shadow: 
+        0 8px 24px rgba(168, 85, 247, 0.4),
+        inset 0 2px 4px rgba(255, 255, 255, 0.1),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.2);
+      animation: pulsePurple 3s ease-in-out infinite 1s;
+    }
+
+    &.ltv {
+      background: linear-gradient(135deg, rgba(255, 215, 0, 0.3) 0%, rgba(255, 215, 0, 0.15) 50%, rgba(245, 158, 11, 0.25) 100%);
+      border: 2px solid rgba(255, 215, 0, 0.5);
+      box-shadow: 
+        0 8px 24px rgba(255, 215, 0, 0.4),
+        inset 0 2px 4px rgba(255, 255, 255, 0.1),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.2);
+      animation: pulseGold 3s ease-in-out infinite 1.5s;
+    }
+  }
+  
+  @keyframes pulseGreen {
+    0%, 100% {
+      box-shadow: 
+        0 8px 24px rgba(34, 197, 94, 0.4),
+        inset 0 2px 4px rgba(255, 255, 255, 0.1),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.2);
+    }
+    50% {
+      box-shadow: 
+        0 12px 32px rgba(34, 197, 94, 0.6),
+        0 0 20px rgba(34, 197, 94, 0.3),
+        inset 0 2px 4px rgba(255, 255, 255, 0.15),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.2);
+    }
+  }
+  
+  @keyframes pulseBlue {
+    0%, 100% {
+      box-shadow: 
+        0 8px 24px rgba(59, 130, 246, 0.4),
+        inset 0 2px 4px rgba(255, 255, 255, 0.1),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.2);
+    }
+    50% {
+      box-shadow: 
+        0 12px 32px rgba(59, 130, 246, 0.6),
+        0 0 20px rgba(59, 130, 246, 0.3),
+        inset 0 2px 4px rgba(255, 255, 255, 0.15),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.2);
+    }
+  }
+  
+  @keyframes pulsePurple {
+    0%, 100% {
+      box-shadow: 
+        0 8px 24px rgba(168, 85, 247, 0.4),
+        inset 0 2px 4px rgba(255, 255, 255, 0.1),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.2);
+    }
+    50% {
+      box-shadow: 
+        0 12px 32px rgba(168, 85, 247, 0.6),
+        0 0 20px rgba(168, 85, 247, 0.3),
+        inset 0 2px 4px rgba(255, 255, 255, 0.15),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.2);
+    }
+  }
+  
+  @keyframes pulseGold {
+    0%, 100% {
+      box-shadow: 
+        0 8px 24px rgba(255, 215, 0, 0.4),
+        inset 0 2px 4px rgba(255, 255, 255, 0.1),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.2);
+    }
+    50% {
+      box-shadow: 
+        0 12px 32px rgba(255, 215, 0, 0.6),
+        0 0 20px rgba(255, 215, 0, 0.3),
+        inset 0 2px 4px rgba(255, 255, 255, 0.15),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.2);
+    }
+  }
+
+  .kpi-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex: 1;
+
+    .kpi-label {
+      font-size: 0.875rem;
+      color: $text-secondary;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .kpi-value {
+      font-size: 2.25rem;
+      font-weight: 900;
+      color: $text-primary;
+      line-height: 1;
+      letter-spacing: -1px;
+      background: linear-gradient(135deg, #fff 0%, #e0e0e0 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 2px 4px rgba(255, 255, 255, 0.1));
+      transition: transform 0.3s ease;
+    }
+
+    .kpi-trend {
+      font-size: 0.875rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.375rem;
+      padding: 0.375rem 0.75rem;
+      border-radius: 0.5rem;
+      width: fit-content;
+
+      &.positive {
+        color: #22c55e;
+        background: rgba(34, 197, 94, 0.15);
+        border: 1px solid rgba(34, 197, 94, 0.3);
+
+        &::before {
+          content: '↗';
+          font-size: 1rem;
+        }
+      }
+
+      &.negative {
+        color: #ef4444;
+        background: rgba(239, 68, 68, 0.15);
+        border: 1px solid rgba(239, 68, 68, 0.3);
+
+        &::before {
+          content: '↘';
+          font-size: 1rem;
+        }
+      }
+    }
+  }
+}
+
+// Grid Layout
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+  animation: fadeInUp 0.6s ease-out 0.4s both;
+}
+
+// Revenue Breakdown Card
+::ng-deep .revenue-breakdown {
+  .card-content {
+    padding: 2.5rem;
+    background: rgba(30, 39, 54, 0.7);
+    backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 1.5rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    transition: all 0.4s ease;
+
+    &:hover {
+      border-color: rgba(255, 215, 0, 0.2);
+      box-shadow: 0 12px 48px rgba(0, 0, 0, 0.4);
+    }
+
+    h3 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: $text-primary;
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+
+      &::before {
+        content: '📊';
+        font-size: 1.75rem;
+      }
+    }
+  }
+
+  .breakdown-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+  }
+
+  .breakdown-item {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 1rem;
+    align-items: center;
+
+    .breakdown-info {
+      display: flex;
+      flex-direction: column;
+      gap: 0.375rem;
+
+      .breakdown-label {
+        font-size: 0.9375rem;
+        font-weight: 600;
+        color: $text-primary;
+      }
+
+      .breakdown-value {
+        font-size: 1.25rem;
+        font-weight: 800;
+        color: $primary-blue;
+        letter-spacing: -0.3px;
+      }
+    }
+
+    .breakdown-bar {
+      grid-column: 1 / -1;
+      height: 14px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 999px;
+      overflow: visible;
+      position: relative;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+
+      .bar-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #22c55e 0%, #16a34a 50%, #22c55e 100%);
+        background-size: 200% 100%;
+        border-radius: 999px;
+        transition: width 1.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        box-shadow: 
+          0 0 20px rgba(34, 197, 94, 0.6),
+          0 4px 12px rgba(34, 197, 94, 0.4),
+          inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        position: relative;
+        overflow: hidden;
+        animation: shimmerBar 3s ease-in-out infinite;
+        
+        &::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(90deg, 
+            transparent,
+            rgba(255, 255, 255, 0.4),
+            transparent
+          );
+          animation: slideBar 2s ease-in-out infinite;
+        }
+
+        &.provider {
+          background: linear-gradient(90deg, #3b82f6 0%, #2563eb 50%, #3b82f6 100%);
+          background-size: 200% 100%;
+          box-shadow: 
+            0 0 20px rgba(59, 130, 246, 0.6),
+            0 4px 12px rgba(59, 130, 246, 0.4),
+            inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+
+        &.base {
+          background: linear-gradient(90deg, #a855f7 0%, #9333ea 50%, #a855f7 100%);
+          background-size: 200% 100%;
+          box-shadow: 
+            0 0 20px rgba(168, 85, 247, 0.6),
+            0 4px 12px rgba(168, 85, 247, 0.4),
+            inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+
+        &.commission {
+          background: linear-gradient(90deg, #ffd700 0%, #f59e0b 50%, #ffd700 100%);
+          background-size: 200% 100%;
+          box-shadow: 
+            0 0 20px rgba(255, 215, 0, 0.6),
+            0 4px 12px rgba(255, 215, 0, 0.4),
+            inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+      }
+    }
+    
+    @keyframes shimmerBar {
+      0%, 100% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+    }
+    
+    @keyframes slideBar {
+      0% {
+        left: -100%;
+      }
+      100% {
+        left: 200%;
+      }
+    }
+
+    .breakdown-percent {
+      font-size: 1rem;
+      font-weight: 700;
+      color: $text-secondary;
+      grid-column: 2;
+      text-align: right;
+    }
+  }
+}
+
+// Churn Card
+::ng-deep .churn-card {
+  .card-content {
+    padding: 2.5rem;
+    background: rgba(30, 39, 54, 0.7);
+    backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 1.5rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    transition: all 0.4s ease;
+
+    &:hover {
+      border-color: rgba(255, 215, 0, 0.2);
+      box-shadow: 0 12px 48px rgba(0, 0, 0, 0.4);
+    }
+
+    h3 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: $text-primary;
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+
+      &::before {
+        content: '📉';
+        font-size: 1.75rem;
+      }
+    }
+
+    h4 {
+      font-size: 1.125rem;
+      font-weight: 700;
+      color: $text-primary;
+      margin-bottom: 1.25rem;
+
+      &::before {
+        content: '⚠️ ';
+      }
+    }
+  }
+
+  .churn-metrics {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+
+    .churn-stat {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      padding: 1.5rem;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 1.25rem;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.5), transparent);
+        opacity: 0;
+        transition: opacity 0.4s ease;
+      }
+      
+      &::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle at top right, rgba(255, 215, 0, 0.05), transparent 50%);
+        opacity: 0;
+        transition: opacity 0.4s ease;
+      }
+
+      &:hover {
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.04) 100%);
+        border-color: rgba(255, 215, 0, 0.3);
+        transform: translateY(-6px) scale(1.02);
+        box-shadow: 
+          0 8px 24px rgba(0, 0, 0, 0.3),
+          0 4px 12px rgba(255, 215, 0, 0.2);
+          
+        &::before {
+          opacity: 1;
+        }
+        
+        &::after {
+          opacity: 1;
+        }
+        
+        .stat-value {
+          transform: scale(1.1);
+        }
+      }
+
+      .stat-value {
+        font-size: 2rem;
+        font-weight: 900;
+        color: $text-primary;
+        letter-spacing: -1px;
+        transition: transform 0.3s ease;
+        position: relative;
+        z-index: 1;
+
+        &.positive {
+          background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+          -webkit-background-clip: text;
+          background-clip: text;
+          -webkit-text-fill-color: transparent;
+          filter: drop-shadow(0 2px 8px rgba(34, 197, 94, 0.3));
+        }
+
+        &.negative {
+          background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+          -webkit-background-clip: text;
+          background-clip: text;
+          -webkit-text-fill-color: transparent;
+          filter: drop-shadow(0 2px 8px rgba(239, 68, 68, 0.3));
+        }
+      }
+
+      .stat-label {
+        font-size: 0.8125rem;
+        color: $text-secondary;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        position: relative;
+        z-index: 1;
+      }
+    }
+  }
+
+  .at-risk-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.875rem;
+
+    .at-risk-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1rem;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 0.875rem;
+      transition: all 0.3s ease;
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.06);
+        border-color: rgba(255, 215, 0, 0.2);
+        transform: translateX(4px);
+      }
+
+      .user-info {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+        flex: 1;
+
+        .user-email {
+          font-size: 0.9375rem;
+          font-weight: 600;
+          color: $text-primary;
+        }
+
+        .user-plan {
+          font-size: 0.8125rem;
+          color: $text-secondary;
+        }
+      }
+
+      .risk-indicator {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.875rem;
+        font-weight: 600;
+        padding: 0.5rem 1rem;
+        border-radius: 0.75rem;
+        white-space: nowrap;
+
+        &.risk-high {
+          color: #ef4444;
+          background: rgba(239, 68, 68, 0.15);
+          border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        &.risk-medium {
+          color: #f59e0b;
+          background: rgba(245, 158, 11, 0.15);
+          border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        &.risk-low {
+          color: #22c55e;
+          background: rgba(34, 197, 94, 0.15);
+          border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+      }
+    }
+  }
+}
+
+// Transactions Card
+::ng-deep .transactions-card {
+  animation: fadeInUp 0.6s ease-out 0.6s both;
+
+  .card-content {
+    padding: 2.5rem;
+    background: rgba(30, 39, 54, 0.7);
+    backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 1.5rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+
+      h3 {
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: $text-primary;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+
+        &::before {
+          content: '💳';
+          font-size: 1.75rem;
+        }
+      }
+    }
+  }
+
+  .transactions-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+
+    thead {
+      tr {
+        th {
+          padding: 1rem;
+          text-align: left;
+          font-size: 0.8125rem;
+          font-weight: 700;
+          color: $text-secondary;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+          background: rgba(255, 255, 255, 0.03);
+
+          &:first-child {
+            border-top-left-radius: 0.75rem;
+          }
+
+          &:last-child {
+            border-top-right-radius: 0.75rem;
+          }
+        }
+      }
+    }
+
+    tbody {
+      tr {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        
+        &::before {
+          content: '';
+          position: absolute;
+          left: 0;
+          top: 0;
+          bottom: 0;
+          width: 3px;
+          background: linear-gradient(180deg, #ffd700, #f59e0b);
+          opacity: 0;
+          transition: opacity 0.3s ease;
+          border-radius: 0 4px 4px 0;
+        }
+
+        &:hover {
+          background: linear-gradient(90deg, rgba(255, 215, 0, 0.08), rgba(255, 255, 255, 0.05));
+          transform: translateX(8px) scale(1.01);
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+          
+          &::before {
+            opacity: 1;
+          }
+
+          td {
+            border-color: rgba(255, 215, 0, 0.3);
+          }
+          
+          .tx-amount {
+            transform: scale(1.1);
+          }
+        }
+
+        td {
+          padding: 1.5rem 1rem;
+          font-size: 0.9375rem;
+          color: $text-primary;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+          transition: all 0.3s ease;
+          font-weight: 500;
+
+          &:first-child {
+            font-weight: 600;
+            color: $text-secondary;
+            padding-left: 1.5rem;
+          }
+
+          .tx-type {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.375rem 0.875rem;
+            border-radius: 0.625rem;
+            font-size: 0.8125rem;
+            font-weight: 600;
+            white-space: nowrap;
+
+            &.type-subscription {
+              background: rgba(59, 130, 246, 0.15);
+              color: #3b82f6;
+              border: 1px solid rgba(59, 130, 246, 0.3);
+            }
+
+            &.type-commission {
+              background: rgba(34, 197, 94, 0.15);
+              color: #22c55e;
+              border: 1px solid rgba(34, 197, 94, 0.3);
+            }
+
+            &.type-refund {
+              background: rgba(239, 68, 68, 0.15);
+              color: #ef4444;
+              border: 1px solid rgba(239, 68, 68, 0.3);
+            }
+          }
+
+          &.tx-amount {
+            font-weight: 900;
+            font-size: 1.25rem;
+            letter-spacing: -0.5px;
+            transition: transform 0.3s ease;
+            padding: 0.5rem 1rem;
+
+            &.positive {
+              background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+              -webkit-background-clip: text;
+              background-clip: text;
+              -webkit-text-fill-color: transparent;
+              filter: drop-shadow(0 2px 4px rgba(34, 197, 94, 0.3));
+            }
+
+            &.negative {
+              background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+              -webkit-background-clip: text;
+              background-clip: text;
+              -webkit-text-fill-color: transparent;
+              filter: drop-shadow(0 2px 4px rgba(239, 68, 68, 0.3));
+            }
+          }
+
+          .tx-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.375rem 0.875rem;
+            border-radius: 0.625rem;
+            font-size: 0.8125rem;
+            font-weight: 600;
+            white-space: nowrap;
+
+            &.status-completed {
+              background: rgba(34, 197, 94, 0.15);
+              color: #22c55e;
+              border: 1px solid rgba(34, 197, 94, 0.3);
+            }
+
+            &.status-pending {
+              background: rgba(245, 158, 11, 0.15);
+              color: #f59e0b;
+              border: 1px solid rgba(245, 158, 11, 0.3);
+            }
+
+            &.status-failed {
+              background: rgba(239, 68, 68, 0.15);
+              color: #ef4444;
+              border: 1px solid rgba(239, 68, 68, 0.3);
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Helper Classes
+.mt-6 {
+  margin-top: 2.5rem !important;
+}
+
+// Responsive Design
+@media (max-width: 1024px) {
+  .container {
+    padding: 2rem 1.5rem;
+  }
+
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+
+    h1 {
+      font-size: 2.5rem;
+    }
+
+    .header-actions {
+      width: 100%;
+      flex-direction: column;
+    }
+  }
+
+  .kpis-row {
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.25rem;
+  }
+
+  .grid-2 {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  ::ng-deep .churn-card .churn-metrics {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 1.5rem 1rem;
+  }
+
+  .page-header {
+    h1 {
+      font-size: 2rem;
+    }
+
+    .subtitle {
+      font-size: 1rem;
+    }
+  }
+
+  .kpis-row {
+    grid-template-columns: 1fr;
+  }
+
+  ::ng-deep .kpi-card .card-content {
+    padding: 1.5rem;
+
+    .kpi-icon {
+      width: 64px;
+      height: 64px;
+      font-size: 2rem;
+    }
+
+    .kpi-content .kpi-value {
+      font-size: 1.75rem;
+    }
+  }
+
+  ::ng-deep .revenue-breakdown .card-content,
+  ::ng-deep .churn-card .card-content,
+  ::ng-deep .transactions-card .card-content {
+    padding: 1.5rem;
+
+    h3 {
+      font-size: 1.25rem;
+    }
+  }
+
+  ::ng-deep .transactions-card .transactions-table {
+    display: block;
+    overflow-x: auto;
+    
+    thead, tbody, th, td, tr {
+      display: block;
+    }
+
+    thead tr {
+      display: none;
+    }
+
+    tbody tr {
+      margin-bottom: 1rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 0.875rem;
+      padding: 1rem;
+
+      td {
+        padding: 0.5rem 0;
+        border: none;
+        text-align: right;
+        position: relative;
+        padding-left: 50%;
+
+        &::before {
+          content: attr(data-label);
+          position: absolute;
+          left: 0;
+          font-weight: 700;
+          color: $text-secondary;
+          text-transform: uppercase;
+          font-size: 0.75rem;
+          letter-spacing: 0.5px;
+        }
+
+        &:first-child {
+          padding-top: 0;
+        }
+
+        &:last-child {
+          padding-bottom: 0;
+        }
+      }
+    }
+  }
 }

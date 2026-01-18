@@ -1,93 +1,109 @@
-<div class="client-badges-page" [class.no-navbar]="!showNavbar">
+<div class="badges-page">
   <app-navbar 
     *ngIf="showNavbar"
-    [userRole]="'CLIENT'" 
-    [userName]="'Carlos Martínez'"
+    userRole="CLIENT"
+    userName="Carlos Martínez"
     [notificationCount]="3"
     [messageCount]="2"
     [projectCount]="4"
   ></app-navbar>
   
   <div class="container">
-    <div class="page-header d-flex justify-between align-start mb-8">
+    <!-- Page Header -->
+    <div class="page-header mb-4">
       <div>
-        <h1 class="mb-2">🏆 Badges y Recompensas</h1>
-        <p class="text-secondary">Tus logros y nivel de innovación en la plataforma</p>
+        <h1 class="page-title">
+          <i class="pi pi-trophy mr-2"></i>
+          Badges y Recompensas
+        </h1>
+        <p class="page-subtitle">Tus logros y nivel de innovación en la plataforma</p>
       </div>
-      <div class="level-info d-flex align-center gap-3 p-3 px-6 rounded-full border-surface-border" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
-        <span class="text-secondary text-sm">Nivel Actual:</span>
-        <span class="font-bold uppercase tracking-wider" style="color: #ffd700;">Innovador Gold</span>
+      <div class="level-badge">
+        <span class="level-label">Nivel Actual:</span>
+        <p-chip 
+          [label]="currentLevel" 
+          icon="pi pi-star-fill"
+          [style]="{'background': 'linear-gradient(135deg, #ffd700 0%, #ffed4e 100%)', 'color': '#1a1a1a', 'font-weight': '700'}"
+        ></p-chip>
       </div>
     </div>
 
-    <!-- Progress Section -->
-    <div class="card progress-card mb-10" style="background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);">
-      <div class="progress-header d-flex justify-between align-end mb-6">
-        <div class="next-level">
-          <h3 class="text-xl mb-1">Siguiente Nivel: Innovador Platinum</h3>
-          <p class="text-secondary text-sm">Completa 2 proyectos más para subir de nivel</p>
+    <!-- Progress Card -->
+    <p-card styleClass="progress-card mb-4">
+      <div class="progress-content">
+        <div class="progress-info">
+          <h3 class="next-level-title">
+            <i class="pi pi-arrow-up mr-2"></i>
+            Siguiente Nivel: {{ nextLevel }}
+          </h3>
+          <p class="progress-description">Completa 2 proyectos más para subir de nivel</p>
         </div>
-        <div class="points text-right">
-          <span class="d-block text-2xl font-bold text-blue">2,450</span>
-          <span class="text-xs text-secondary">Puntos XP</span>
+        <div class="xp-display">
+          <div class="xp-value">{{ currentXP }}</div>
+          <div class="xp-label">Puntos XP</div>
         </div>
       </div>
-      <div class="progress-bar-container">
-        <div class="p-progressbar mb-2">
-          <div class="p-progressbar-value" style="width: 75%"></div>
+      <div class="progress-bar-wrapper mt-3">
+        <p-progressBar 
+          [value]="progressPercentage" 
+          [showValue]="false"
+          [style]="{'height': '12px'}"
+        ></p-progressBar>
+        <div class="progress-text">
+          <span>{{ progressPercentage }}% Completado</span>
+          <span>{{ currentXP }} / {{ nextLevelXP }} XP</span>
         </div>
-        <span class="text-xs text-secondary float-right">75% Completado</span>
       </div>
-    </div>
+    </p-card>
 
     <!-- Badges Grid -->
-    <div class="badges-grid d-grid gap-6" style="grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));">
-      <div class="card badge-card unlocked d-flex flex-column align-center text-center p-8 relative hover:translate-y-1 transition-transform" style="border-color: rgba(13, 134, 255, 0.3); background: linear-gradient(135deg, rgba(13, 134, 255, 0.05) 0%, rgba(13, 134, 255, 0.01) 100%);">
-        <div class="badge-icon text-5xl mb-4 drop-shadow-lg">🚀</div>
-        <h3 class="text-lg mb-2">Pionero Digital</h3>
-        <p class="text-secondary text-sm mb-4 flex-1">Primer proyecto de IA lanzado con éxito</p>
-        <span class="text-xs text-muted">Conseguido: 12 Ene 2025</span>
-      </div>
+    <div class="badges-section">
+      <h2 class="section-title mb-3">
+        <i class="pi pi-star mr-2"></i>
+        Tus Logros
+      </h2>
+      <div class="badges-grid">
+        <p-card 
+          *ngFor="let badge of badges" 
+          [styleClass]="badge.unlocked ? 'badge-card unlocked' : 'badge-card locked'"
+        >
+          <div class="badge-content">
+            <div class="badge-icon" [class.locked-icon]="!badge.unlocked">
+              {{ badge.icon }}
+            </div>
+            <h3 class="badge-title" [class.locked-text]="!badge.unlocked">
+              {{ badge.title }}
+            </h3>
+            <p class="badge-description" [class.locked-text]="!badge.unlocked">
+              {{ badge.description }}
+            </p>
+            
+            <!-- Unlocked Badge -->
+            <div *ngIf="badge.unlocked" class="badge-footer">
+              <p-tag 
+                value="CONSEGUIDO" 
+                severity="success" 
+                icon="pi pi-check"
+              ></p-tag>
+              <span class="unlock-date">{{ badge.unlockedDate }}</span>
+            </div>
 
-      <div class="card badge-card unlocked d-flex flex-column align-center text-center p-8 relative hover:translate-y-1 transition-transform" style="border-color: rgba(13, 134, 255, 0.3); background: linear-gradient(135deg, rgba(13, 134, 255, 0.05) 0%, rgba(13, 134, 255, 0.01) 100%);">
-        <div class="badge-icon text-5xl mb-4 drop-shadow-lg">🤝</div>
-        <h3 class="text-lg mb-2">Networker Pro</h3>
-        <p class="text-secondary text-sm mb-4 flex-1">Conectaste con 5 proveedores verificados</p>
-        <span class="text-xs text-muted">Conseguido: 05 Feb 2025</span>
-      </div>
-
-      <div class="card badge-card unlocked d-flex flex-column align-center text-center p-8 relative hover:translate-y-1 transition-transform" style="border-color: rgba(13, 134, 255, 0.3); background: linear-gradient(135deg, rgba(13, 134, 255, 0.05) 0%, rgba(13, 134, 255, 0.01) 100%);">
-        <div class="badge-icon text-5xl mb-4 drop-shadow-lg">💡</div>
-        <h3 class="text-lg mb-2">Visionario</h3>
-        <p class="text-secondary text-sm mb-4 flex-1">Publicaste 3 casos de uso innovadores</p>
-        <span class="text-xs text-muted">Conseguido: 20 Feb 2025</span>
-      </div>
-
-      <div class="card badge-card locked opacity-70 d-flex flex-column align-center text-center p-8 relative hover:translate-y-1 transition-transform">
-        <div class="badge-icon text-5xl mb-4 blur-sm opacity-50">🌍</div>
-        <h3 class="text-lg mb-2 blur-sm opacity-50">Expansión Global</h3>
-        <p class="text-secondary text-sm mb-4 flex-1 blur-sm opacity-50">Implementa soluciones en 3 países diferentes</p>
-        <div class="lock-overlay absolute inset-0 d-flex align-center justify-center" style="top:0; left:0; right:0; bottom:0;">
-          <span class="lock-icon text-3xl p-3 rounded-full border-surface-border" style="background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.2);">🔒</span>
-        </div>
-      </div>
-
-      <div class="card badge-card locked opacity-70 d-flex flex-column align-center text-center p-8 relative hover:translate-y-1 transition-transform">
-        <div class="badge-icon text-5xl mb-4 blur-sm opacity-50">🦄</div>
-        <h3 class="text-lg mb-2 blur-sm opacity-50">Unicorn Hunter</h3>
-        <p class="text-secondary text-sm mb-4 flex-1 blur-sm opacity-50">Colabora con una startup unicornio</p>
-        <div class="lock-overlay absolute inset-0 d-flex align-center justify-center" style="top:0; left:0; right:0; bottom:0;">
-          <span class="lock-icon text-3xl p-3 rounded-full border-surface-border" style="background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.2);">🔒</span>
-        </div>
-      </div>
-
-      <div class="card badge-card locked opacity-70 d-flex flex-column align-center text-center p-8 relative hover:translate-y-1 transition-transform">
-        <div class="badge-icon text-5xl mb-4 blur-sm opacity-50">🎓</div>
-        <h3 class="text-lg mb-2 blur-sm opacity-50">AI Master</h3>
-        <p class="text-secondary text-sm mb-4 flex-1 blur-sm opacity-50">Completa todos los cursos de formación básica</p>
-        <div class="lock-overlay absolute inset-0 d-flex align-center justify-center" style="top:0; left:0; right:0; bottom:0;">
-          <span class="lock-icon text-3xl p-3 rounded-full border-surface-border" style="background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.2);">🔒</span>
-        </div>
+            <!-- Locked Badge -->
+            <div *ngIf="!badge.unlocked" class="badge-footer locked-footer">
+              <div class="lock-icon-wrapper">
+                <i class="pi pi-lock text-2xl"></i>
+              </div>
+              <div class="progress-info-small" *ngIf="badge.progress !== undefined">
+                <p-progressBar 
+                  [value]="badge.progress" 
+                  [showValue]="false"
+                  [style]="{'height': '6px', 'margin-bottom': '0.5rem'}"
+                ></p-progressBar>
+                <span class="requirement-text">{{ badge.requirement }}</span>
+              </div>
+            </div>
+          </div>
+        </p-card>
       </div>
     </div>
   </div>

@@ -1,144 +1,194 @@
-<div class="client-company-page" [class.no-navbar]="!showNavbar">
+<div class="company-page">
+  <p-toast></p-toast>
+
   <app-navbar 
     *ngIf="showNavbar"
-    [userRole]="'CLIENT'" 
-    [userName]="'Carlos Martínez'"
+    userRole="CLIENT"
+    userName="Carlos Martínez"
     [notificationCount]="3"
     [messageCount]="2"
     [projectCount]="4"
   ></app-navbar>
   
   <div class="container">
-    <div class="page-header d-flex justify-between align-start mb-8">
+    <!-- Page Header -->
+    <div class="page-header mb-4">
       <div>
-        <h1 class="mb-2">🏢 Mi Empresa</h1>
-        <p class="text-secondary">Gestiona los perfiles y departamentos de tu organización</p>
+        <h1 class="page-title">
+          <i class="pi pi-building mr-2"></i>
+          Mi Empresa
+        </h1>
+        <p class="page-subtitle">Gestiona los perfiles y departamentos de tu organización</p>
       </div>
-      <button class="btn btn-primary">
-        <span class="icon">➕</span> Invitar Miembro
-      </button>
+      <p-button 
+        label="Invitar Miembro" 
+        icon="pi pi-user-plus" 
+        (click)="inviteMember()"
+      ></p-button>
     </div>
 
-    <!-- Company Overview -->
-    <div class="card company-info-card mb-8">
-      <div class="company-header d-flex align-center gap-6">
-        <div class="logo-placeholder rounded-lg d-flex align-center justify-center font-bold text-white text-2xl" style="width: 80px; height: 80px; background: linear-gradient(135deg, #0d86ff, #6b5cf0);">TS</div>
+    <!-- Company Overview Card -->
+    <p-card styleClass="company-overview-card mb-4">
+      <div class="company-header">
+        <div class="company-logo-wrapper">
+          <p-avatar 
+            [label]="companyInfo.initials" 
+            size="xlarge" 
+            shape="circle"
+            [style]="{'background-color': '#0d86ff', 'color': '#ffffff', 'font-size': '2rem', 'width': '100px', 'height': '100px'}"
+          ></p-avatar>
+        </div>
         <div class="company-details flex-1">
-          <h2 class="text-2xl mb-1">TechSolutions SL</h2>
-          <p class="text-blue font-medium mb-2">Tecnología y Software</p>
-          <div class="meta-info d-flex gap-6 text-secondary text-sm">
-            <span>📍 Madrid, España</span>
-            <span>👥 45 Empleados</span>
-            <span>🌐 techsolutions.com</span>
+          <h2 class="company-name">{{ companyInfo.name }}</h2>
+          <p class="company-industry">
+            <i class="pi pi-tag mr-2"></i>
+            {{ companyInfo.industry }}
+          </p>
+          <div class="company-meta">
+            <p-chip>
+              <i class="pi pi-map-marker mr-2"></i>
+              {{ companyInfo.location }}
+            </p-chip>
+            <p-chip>
+              <i class="pi pi-users mr-2"></i>
+              {{ companyInfo.employees }} Empleados
+            </p-chip>
+            <p-chip>
+              <i class="pi pi-globe mr-2"></i>
+              {{ companyInfo.website }}
+            </p-chip>
           </div>
         </div>
-        <button class="btn btn-secondary">Editar Perfil</button>
+        <div>
+          <p-button 
+            label="Editar Perfil" 
+            icon="pi pi-pencil" 
+            styleClass="p-button-outlined"
+            (click)="editProfile()"
+          ></p-button>
+        </div>
       </div>
-    </div>
+    </p-card>
 
-    <!-- Departments Grid -->
-    <div class="departments-layout d-flex flex-column gap-8">
-      <!-- Dirección -->
-      <section class="department-section">
-        <div class="dept-header d-flex align-baseline gap-4 mb-6 pb-2 border-bottom border-surface-border" style="border-bottom: 1px solid rgba(255,255,255,0.1);">
-          <h3 class="text-xl">Dirección</h3>
-          <span class="text-secondary text-sm">3 miembros</span>
+    <!-- Departments -->
+    <div class="departments-container">
+      <div *ngFor="let dept of departments" class="department-section mb-4">
+        <div class="dept-header mb-3">
+          <h3 class="dept-title">
+            <i class="pi pi-sitemap mr-2"></i>
+            {{ dept.name }}
+          </h3>
+          <p-badge 
+            [value]="dept.memberCount + ' miembros'" 
+            severity="info"
+          ></p-badge>
         </div>
-        <div class="members-grid d-grid gap-6" style="grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));">
-          <div class="card member-card d-flex align-center gap-4 p-4 hover:translate-y-1 transition-transform">
-            <div class="member-avatar rounded-full bg-surface-hover d-flex align-center justify-center font-bold" style="width: 48px; height: 48px;">CM</div>
-            <div class="member-info flex-1 overflow-hidden">
-              <h4 class="text-base mb-1 truncate">Carlos Martínez</h4>
-              <span class="text-blue text-xs mb-1 d-block">CEO & Founder</span>
-              <span class="text-secondary text-xs truncate d-block">carlos&#64;techsolutions.com</span>
-            </div>
-            <span class="badge badge-success">Activo</span>
-          </div>
-          
-          <div class="card member-card d-flex align-center gap-4 p-4 hover:translate-y-1 transition-transform">
-            <div class="member-avatar rounded-full bg-surface-hover d-flex align-center justify-center font-bold" style="width: 48px; height: 48px;">AL</div>
-            <div class="member-info flex-1 overflow-hidden">
-              <h4 class="text-base mb-1 truncate">Ana López</h4>
-              <span class="text-blue text-xs mb-1 d-block">CTO</span>
-              <span class="text-secondary text-xs truncate d-block">ana&#64;techsolutions.com</span>
-            </div>
-            <span class="badge badge-success">Activo</span>
-          </div>
-        </div>
-      </section>
 
-      <!-- Tecnología -->
-      <section class="department-section">
-        <div class="dept-header d-flex align-baseline gap-4 mb-6 pb-2 border-bottom border-surface-border" style="border-bottom: 1px solid rgba(255,255,255,0.1);">
-          <h3 class="text-xl">Tecnología e Innovación</h3>
-          <span class="text-secondary text-sm">12 miembros</span>
-        </div>
-        <div class="members-grid d-grid gap-6" style="grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));">
-          <div class="card member-card d-flex align-center gap-4 p-4 hover:translate-y-1 transition-transform">
-            <div class="member-avatar rounded-full bg-surface-hover d-flex align-center justify-center font-bold" style="width: 48px; height: 48px;">JR</div>
-            <div class="member-info flex-1 overflow-hidden">
-              <h4 class="text-base mb-1 truncate">Javier Ruiz</h4>
-              <span class="text-blue text-xs mb-1 d-block">Lead Developer</span>
-              <span class="text-secondary text-xs truncate d-block">javier&#64;techsolutions.com</span>
+        <div class="members-grid">
+          <p-card 
+            *ngFor="let member of dept.members" 
+            styleClass="member-card"
+          >
+            <div class="member-content">
+              <p-avatar 
+                [label]="member.initials" 
+                size="large" 
+                shape="circle"
+                [style]="{'background-color': '#1e2736', 'color': '#0d86ff'}"
+              ></p-avatar>
+              <div class="member-info flex-1">
+                <h4 class="member-name">{{ member.name }}</h4>
+                <p class="member-role">{{ member.role }}</p>
+                <p class="member-email">
+                  <i class="pi pi-envelope mr-1"></i>
+                  {{ member.email }}
+                </p>
+              </div>
+              <p-tag 
+                [value]="getStatusLabel(member.status)" 
+                [severity]="getStatusSeverity(member.status)"
+              ></p-tag>
             </div>
-            <span class="badge badge-success">Activo</span>
-          </div>
+          </p-card>
 
-          <div class="card member-card d-flex align-center gap-4 p-4 hover:translate-y-1 transition-transform">
-            <div class="member-avatar rounded-full bg-surface-hover d-flex align-center justify-center font-bold" style="width: 48px; height: 48px;">MS</div>
-            <div class="member-info flex-1 overflow-hidden">
-              <h4 class="text-base mb-1 truncate">María Sánchez</h4>
-              <span class="text-blue text-xs mb-1 d-block">AI Engineer</span>
-              <span class="text-secondary text-xs truncate d-block">maria&#64;techsolutions.com</span>
-            </div>
-            <span class="badge badge-success">Activo</span>
-          </div>
-
-          <div class="card member-card d-flex align-center gap-4 p-4 hover:translate-y-1 transition-transform">
-            <div class="member-avatar rounded-full bg-surface-hover d-flex align-center justify-center font-bold" style="width: 48px; height: 48px;">DP</div>
-            <div class="member-info flex-1 overflow-hidden">
-              <h4 class="text-base mb-1 truncate">David Pérez</h4>
-              <span class="text-blue text-xs mb-1 d-block">Frontend Dev</span>
-              <span class="text-secondary text-xs truncate d-block">david&#64;techsolutions.com</span>
-            </div>
-            <span class="badge badge-warning">Ausente</span>
-          </div>
-          
-          <div class="add-member-card d-flex flex-column align-center justify-center gap-2 p-4 rounded-lg cursor-pointer transition-all hover:bg-surface-hover hover:text-blue hover:border-blue" style="background: rgba(255,255,255,0.02); border: 1px dashed rgba(255,255,255,0.1); min-height: 80px; color: #94a3b8;">
-            <span class="plus-icon text-2xl">+</span>
+          <!-- Add Member Card -->
+          <div class="add-member-card" (click)="addTeamMember()">
+            <i class="pi pi-plus text-4xl mb-2"></i>
             <span>Añadir al equipo</span>
           </div>
         </div>
-      </section>
 
-      <!-- Ventas -->
-      <section class="department-section">
-        <div class="dept-header d-flex align-baseline gap-4 mb-6 pb-2 border-bottom border-surface-border" style="border-bottom: 1px solid rgba(255,255,255,0.1);">
-          <h3 class="text-xl">Ventas y Marketing</h3>
-          <span class="text-secondary text-sm">8 miembros</span>
-        </div>
-        <div class="members-grid d-grid gap-6" style="grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));">
-          <div class="card member-card d-flex align-center gap-4 p-4 hover:translate-y-1 transition-transform">
-            <div class="member-avatar rounded-full bg-surface-hover d-flex align-center justify-center font-bold" style="width: 48px; height: 48px;">LG</div>
-            <div class="member-info flex-1 overflow-hidden">
-              <h4 class="text-base mb-1 truncate">Lucía García</h4>
-              <span class="text-blue text-xs mb-1 d-block">Head of Sales</span>
-              <span class="text-secondary text-xs truncate d-block">lucia&#64;techsolutions.com</span>
-            </div>
-            <span class="badge badge-success">Activo</span>
-          </div>
-
-          <div class="card member-card d-flex align-center gap-4 p-4 hover:translate-y-1 transition-transform">
-            <div class="member-avatar rounded-full bg-surface-hover d-flex align-center justify-center font-bold" style="width: 48px; height: 48px;">RT</div>
-            <div class="member-info flex-1 overflow-hidden">
-              <h4 class="text-base mb-1 truncate">Roberto Torres</h4>
-              <span class="text-blue text-xs mb-1 d-block">Account Manager</span>
-              <span class="text-secondary text-xs truncate d-block">roberto&#64;techsolutions.com</span>
-            </div>
-            <span class="badge badge-info">Pendiente</span>
-          </div>
-        </div>
-      </section>
+        <p-divider *ngIf="dept !== departments[departments.length - 1]"></p-divider>
+      </div>
     </div>
   </div>
+
+  <!-- Invite Dialog -->
+  <p-dialog 
+    [(visible)]="showInviteDialog" 
+    header="Invitar Miembro al Equipo" 
+    [modal]="true" 
+    [style]="{width: '500px'}" 
+    [draggable]="false" 
+    [resizable]="false"
+  >
+    <div class="p-fluid">
+      <div class="field mb-4">
+        <label for="email" class="font-bold mb-2">
+          <i class="pi pi-envelope mr-1"></i>
+          Email del Miembro
+        </label>
+        <input 
+          id="email"
+          type="email" 
+          pInputText 
+          placeholder="ejemplo@empresa.com"
+          class="w-full"
+        />
+      </div>
+      
+      <div class="field mb-4">
+        <label for="role" class="font-bold mb-2">
+          <i class="pi pi-briefcase mr-1"></i>
+          Rol
+        </label>
+        <input 
+          id="role"
+          type="text" 
+          pInputText 
+          placeholder="Ej: Developer, Manager..."
+          class="w-full"
+        />
+      </div>
+
+      <div class="field mb-4">
+        <label for="department" class="font-bold mb-2">
+          <i class="pi pi-sitemap mr-1"></i>
+          Departamento
+        </label>
+        <p-dropdown 
+          id="department"
+          [options]="departmentOptions" 
+          optionLabel="label"
+          optionValue="value"
+          placeholder="Selecciona un departamento"
+          styleClass="w-full"
+        ></p-dropdown>
+      </div>
+    </div>
+    
+    <ng-template pTemplate="footer">
+      <p-button 
+        label="Cancelar" 
+        icon="pi pi-times" 
+        (click)="showInviteDialog = false" 
+        styleClass="p-button-text"
+      ></p-button>
+      <p-button 
+        label="Enviar Invitación" 
+        icon="pi pi-send" 
+        (click)="showInviteDialog = false"
+      ></p-button>
+    </ng-template>
+  </p-dialog>
 </div>

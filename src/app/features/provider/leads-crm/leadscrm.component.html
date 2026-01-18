@@ -48,9 +48,12 @@
           <div *ngFor="let lead of column.leads" class="lead-item">
             <p-card styleClass="lead-card">
               <ng-template pTemplate="header">
+                <div class="card-image-header">
+                  <img [src]="lead.logo" [alt]="lead.companyName" class="company-logo-image" />
+                  <div class="image-overlay"></div>
+                </div>
                 <div class="card-header-content">
                   <div class="company-info">
-                    <p-avatar [image]="lead.logo" shape="circle" size="normal" styleClass="company-avatar"></p-avatar>
                     <div class="info-text">
                       <h4>{{ lead.companyName }}</h4>
                       <p-tag *ngIf="lead.isProject" value="Proyecto Activo" severity="success" icon="pi pi-rocket"></p-tag>

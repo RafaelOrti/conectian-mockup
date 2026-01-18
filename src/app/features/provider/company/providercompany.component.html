@@ -1,266 +1,179 @@
-<div class="provider-company-page" [class.no-navbar]="!showNavbar">
+<div class="company-page">
+  <p-toast></p-toast>
+
   <app-navbar 
     *ngIf="showNavbar"
-    [userRole]="'PROVIDER'" 
-    [userName]="'TechSolutions AI'"
+    userRole="PROVIDER"
+    userName="Jorge Martín"
     [notificationCount]="5"
+    [messageCount]="3"
+    [projectCount]="7"
   ></app-navbar>
   
   <div class="container">
     <!-- Page Header -->
-    <div class="page-header">
-      <div class="header-left">
-        <div class="header-icon">
-          <i class="pi pi-building"></i>
-        </div>
-        <div class="header-text">
-          <h1>Mi Empresa</h1>
-          <p class="subtitle">Gestiona el equipo y la estructura de tu organización proveedora</p>
-        </div>
+    <div class="page-header mb-4">
+      <div>
+        <h1 class="page-title">
+          <i class="pi pi-building mr-2"></i>
+          Mi Empresa
+        </h1>
+        <p class="page-subtitle">Gestiona los perfiles y departamentos de tu organización</p>
       </div>
       <p-button 
         label="Invitar Miembro" 
         icon="pi pi-user-plus" 
-        (click)="openInviteDialog()"
-        styleClass="invite-button"
+        (click)="inviteMember()"
       ></p-button>
     </div>
 
     <!-- Company Overview Card -->
-    <p-card styleClass="company-overview-card">
-      <div class="company-content">
-        <div class="company-avatar-section">
-          <div class="company-logo">
-            <span>TS</span>
-          </div>
+    <p-card styleClass="company-overview-card mb-4">
+      <div class="company-header">
+        <div class="company-logo-wrapper">
+          <p-avatar 
+            [label]="companyInfo.initials" 
+            size="xlarge" 
+            shape="circle"
+            [style]="{'background-color': '#0d86ff', 'color': '#ffffff', 'font-size': '2rem', 'width': '100px', 'height': '100px'}"
+          ></p-avatar>
         </div>
-
-        <div class="company-info-section">
+        <div class="company-details flex-1">
           <h2 class="company-name">{{ companyInfo.name }}</h2>
-          <p class="company-industry">{{ companyInfo.industry }}</p>
-
+          <p class="company-industry">
+            <i class="pi pi-tag mr-2"></i>
+            {{ companyInfo.industry }}
+          </p>
           <div class="company-meta">
-            <div class="meta-item">
-              <i class="pi pi-map-marker"></i>
-              <span>{{ companyInfo.location }}</span>
-            </div>
-            <div class="meta-item">
-              <i class="pi pi-users"></i>
-              <span>{{ companyInfo.totalMembers }} Expertos</span>
-            </div>
-            <div class="meta-item">
-              <i class="pi pi-globe"></i>
-              <span>{{ companyInfo.website }}</span>
-            </div>
+            <p-chip>
+              <i class="pi pi-map-marker mr-2"></i>
+              {{ companyInfo.location }}
+            </p-chip>
+            <p-chip>
+              <i class="pi pi-users mr-2"></i>
+              {{ companyInfo.employees }} Empleados
+            </p-chip>
+            <p-chip>
+              <i class="pi pi-globe mr-2"></i>
+              {{ companyInfo.website }}
+            </p-chip>
           </div>
         </div>
-
-        <div class="company-actions">
+        <div>
           <p-button 
             label="Editar Perfil" 
             icon="pi pi-pencil" 
             styleClass="p-button-outlined"
-          ></p-button>
-          <p-button 
-            icon="pi pi-ellipsis-v" 
-            styleClass="p-button-text p-button-rounded"
-            pTooltip="Más opciones"
-            tooltipPosition="bottom"
+            (click)="editProfile()"
           ></p-button>
         </div>
       </div>
     </p-card>
 
-    <!-- Team Sections -->
-    <div class="teams-layout">
-      <!-- Technical Team -->
-      <section class="team-section">
-        <div class="section-header">
-          <div class="header-content">
-            <h3>
-              <i class="pi pi-code"></i>
-              Equipo Técnico
-            </h3>
-            <p-chip 
-              [label]="getTechnicalTeam().length + ' miembros'" 
-              styleClass="team-count-chip"
-            ></p-chip>
-          </div>
+    <!-- Departments -->
+    <div class="departments-container">
+      <div *ngFor="let dept of departments" class="department-section mb-4">
+        <div class="dept-header mb-3">
+          <h3 class="dept-title">
+            <i class="pi pi-sitemap mr-2"></i>
+            {{ dept.name }}
+          </h3>
+          <p-badge 
+            [value]="dept.memberCount + ' miembros'" 
+            severity="info"
+          ></p-badge>
         </div>
 
-        <div class="team-grid">
+        <div class="members-grid">
           <p-card 
-            *ngFor="let member of getTechnicalTeam()" 
+            *ngFor="let member of dept.members" 
             styleClass="member-card"
           >
             <div class="member-content">
-              <div class="member-header">
-                <p-avatar 
-                  [label]="member.avatar" 
-                  shape="circle" 
-                  size="large"
-                  styleClass="member-avatar"
-                ></p-avatar>
-                <p-tag 
-                  [value]="member.status === 'active' ? 'Activo' : member.status === 'away' ? 'Ausente' : 'Pendiente'" 
-                  [severity]="getStatusSeverity(member.status)"
-                  [icon]="member.status === 'active' ? 'pi pi-check-circle' : 'pi pi-clock'"
-                  styleClass="status-tag"
-                ></p-tag>
-              </div>
-
-              <div class="member-info">
+              <p-avatar 
+                [label]="member.initials" 
+                size="large" 
+                shape="circle"
+                [style]="{'background-color': '#1e2736', 'color': '#0d86ff'}"
+              ></p-avatar>
+              <div class="member-info flex-1">
                 <h4 class="member-name">{{ member.name }}</h4>
                 <p class="member-role">{{ member.role }}</p>
-                <a [href]="'mailto:' + member.email" class="member-email">
-                  <i class="pi pi-envelope"></i>
+                <p class="member-email">
+                  <i class="pi pi-envelope mr-1"></i>
                   {{ member.email }}
-                </a>
+                </p>
               </div>
-
-              <div class="member-skills" *ngIf="member.skills">
-                <p-chip 
-                  *ngFor="let skill of member.skills" 
-                  [label]="skill"
-                  styleClass="skill-chip"
-                ></p-chip>
-              </div>
-
-              <div class="member-actions">
-                <p-button 
-                  icon="pi pi-comment" 
-                  styleClass="p-button-text p-button-sm"
-                  pTooltip="Enviar mensaje"
-                ></p-button>
-                <p-button 
-                  icon="pi pi-ellipsis-v" 
-                  styleClass="p-button-text p-button-sm"
-                  pTooltip="Más opciones"
-                ></p-button>
-              </div>
+              <p-tag 
+                [value]="getStatusLabel(member.status)" 
+                [severity]="getStatusSeverity(member.status)"
+              ></p-tag>
             </div>
           </p-card>
 
           <!-- Add Member Card -->
-          <div class="add-member-card" (click)="openInviteDialog()">
-            <div class="add-icon">
-              <i class="pi pi-plus"></i>
-            </div>
-            <span class="add-text">Añadir al equipo</span>
-          </div>
-        </div>
-      </section>
-
-      <!-- Business Team -->
-      <section class="team-section">
-        <div class="section-header">
-          <div class="header-content">
-            <h3>
-              <i class="pi pi-briefcase"></i>
-              Gestión y Ventas
-            </h3>
-            <p-chip 
-              [label]="getBusinessTeam().length + ' miembros'" 
-              styleClass="team-count-chip"
-            ></p-chip>
+          <div class="add-member-card" (click)="addTeamMember()">
+            <i class="pi pi-plus text-4xl mb-2"></i>
+            <span>Añadir al equipo</span>
           </div>
         </div>
 
-        <div class="team-grid">
-          <p-card 
-            *ngFor="let member of getBusinessTeam()" 
-            styleClass="member-card"
-          >
-            <div class="member-content">
-              <div class="member-header">
-                <p-avatar 
-                  [label]="member.avatar" 
-                  shape="circle" 
-                  size="large"
-                  styleClass="member-avatar"
-                ></p-avatar>
-                <p-tag 
-                  [value]="member.status === 'active' ? 'Activo' : member.status === 'away' ? 'Ausente' : 'Pendiente'" 
-                  [severity]="getStatusSeverity(member.status)"
-                  [icon]="member.status === 'active' ? 'pi pi-check-circle' : 'pi pi-clock'"
-                  styleClass="status-tag"
-                ></p-tag>
-              </div>
-
-              <div class="member-info">
-                <h4 class="member-name">{{ member.name }}</h4>
-                <p class="member-role">{{ member.role }}</p>
-                <a [href]="'mailto:' + member.email" class="member-email">
-                  <i class="pi pi-envelope"></i>
-                  {{ member.email }}
-                </a>
-              </div>
-
-              <div class="member-skills" *ngIf="member.skills">
-                <p-chip 
-                  *ngFor="let skill of member.skills" 
-                  [label]="skill"
-                  styleClass="skill-chip"
-                ></p-chip>
-              </div>
-
-              <div class="member-actions">
-                <p-button 
-                  icon="pi pi-comment" 
-                  styleClass="p-button-text p-button-sm"
-                  pTooltip="Enviar mensaje"
-                ></p-button>
-                <p-button 
-                  icon="pi pi-ellipsis-v" 
-                  styleClass="p-button-text p-button-sm"
-                  pTooltip="Más opciones"
-                ></p-button>
-              </div>
-            </div>
-          </p-card>
-
-          <!-- Add Member Card -->
-          <div class="add-member-card" (click)="openInviteDialog()">
-            <div class="add-icon">
-              <i class="pi pi-plus"></i>
-            </div>
-            <span class="add-text">Añadir al equipo</span>
-          </div>
-        </div>
-      </section>
+        <p-divider *ngIf="dept !== departments[departments.length - 1]"></p-divider>
+      </div>
     </div>
   </div>
 
-  <!-- Invite Member Dialog -->
+  <!-- Invite Dialog -->
   <p-dialog 
     [(visible)]="showInviteDialog" 
     header="Invitar Miembro al Equipo" 
-    [modal]="true"
-    [style]="{width: '500px'}"
-    [draggable]="false"
+    [modal]="true" 
+    [style]="{width: '500px'}" 
+    [draggable]="false" 
     [resizable]="false"
   >
-    <div class="invite-dialog-content">
-      <div class="p-fluid">
-        <div class="field">
-          <label for="email">Email</label>
-          <input 
-            id="email" 
-            type="email" 
-            pInputText 
-            placeholder="nombre@empresa.com"
-          />
-        </div>
-        
-        <div class="field">
-          <label for="role">Rol</label>
-          <input 
-            id="role" 
-            type="text" 
-            pInputText 
-            placeholder="ej: Senior Developer"
-          />
-        </div>
+    <div class="p-fluid">
+      <div class="field mb-4">
+        <label for="email" class="font-bold mb-2">
+          <i class="pi pi-envelope mr-1"></i>
+          Email del Miembro
+        </label>
+        <input 
+          id="email"
+          type="email" 
+          pInputText 
+          placeholder="ejemplo@empresa.com"
+          class="w-full"
+        />
+      </div>
+      
+      <div class="field mb-4">
+        <label for="role" class="font-bold mb-2">
+          <i class="pi pi-briefcase mr-1"></i>
+          Rol
+        </label>
+        <input 
+          id="role"
+          type="text" 
+          pInputText 
+          placeholder="Ej: Developer, Manager..."
+          class="w-full"
+        />
+      </div>
+
+      <div class="field mb-4">
+        <label for="department" class="font-bold mb-2">
+          <i class="pi pi-sitemap mr-1"></i>
+          Departamento
+        </label>
+        <p-dropdown 
+          id="department"
+          [options]="departmentOptions" 
+          optionLabel="label"
+          optionValue="value"
+          placeholder="Selecciona un departamento"
+          styleClass="w-full"
+        ></p-dropdown>
       </div>
     </div>
     

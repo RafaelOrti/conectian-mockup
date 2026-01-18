@@ -5,6 +5,7 @@ import { Subject } from 'rxjs';
 import { takeUntil, filter } from 'rxjs/operators';
 import { NotificationDropdownComponent, Notification } from '../notification-dropdown/notification-dropdown.component';
 import { UserMenuDropdownComponent, UserMenuItem } from '../user-menu-dropdown/user-menu-dropdown.component';
+import { NotificationService } from '../../services/notification.service';
 
 interface NavLink {
   label: string;
@@ -275,7 +276,10 @@ export class NavbarComponent implements OnInit, OnChanges, OnDestroy {
   private destroy$ = new Subject<void>();
   private boundHandleClickOutside: (event: Event) => void;
 
-  constructor(private router: Router) {
+  constructor(
+    private router: Router,
+    private notificationService: NotificationService
+  ) {
     // Bind del método una vez para poder removerlo correctamente
     this.boundHandleClickOutside = this.handleClickOutside.bind(this);
   }
@@ -283,10 +287,29 @@ export class NavbarComponent implements OnInit, OnChanges, OnDestroy {
   ngOnInit(): void {
     this.updateNavLinks();
     
-    // Inicializar contadores internos con los valores iniciales
-    this.internalNotificationCount = this.notificationCount;
-    this.internalMessageCount = this.messageCount;
-    this.internalProjectCount = this.projectCount;
+    // Suscribirse al servicio de notificaciones para mantener contadores consistentes
+    this.notificationService.counts$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(counts => {
+        // Actualizar contadores internos desde el servicio
+        this.internalNotificationCount = counts.notifications;
+        this.internalMessageCount = counts.messages;
+        this.internalProjectCount = counts.projects;
+      });
+    
+    // Si se pasan valores iniciales desde los inputs, actualizarlos en el servicio
+    // Esto solo ocurre la primera vez
+    if (this.notificationCount > 0 || this.messageCount > 0 || this.projectCount > 0) {
+      const currentCounts = this.notificationService.getCurrentCounts();
+      // Solo actualizar si los valores del servicio son 0 (primera inicialización)
+      if (currentCounts.notifications === 0 && currentCounts.messages === 0 && currentCounts.projects === 0) {
+        this.notificationService.updateCounts({
+          notifications: this.notificationCount,
+          messages: this.messageCount,
+          projects: this.projectCount
+        });
+      }
+    }
     
     // Cerrar dropdowns al navegar
     this.router.events
@@ -297,7 +320,7 @@ export class NavbarComponent implements OnInit, OnChanges, OnDestroy {
       .subscribe(() => {
         this.closeAllDropdowns();
         this.updateNavLinks();
-        // NO actualizar contadores al navegar, mantener los valores actuales
+        // Los contadores se mantienen gracias al servicio
       });
     
     // Cerrar dropdowns al hacer clic fuera
@@ -319,57 +342,33 @@ export class NavbarComponent implements OnInit, OnChanges, OnDestroy {
     if (changes['notifications']) {
       if (this.notifications && this.notifications.length > 0) {
         const unreadCount = this.notifications.filter(n => !n.read).length;
-        this.internalNotificationCount = unreadCount;
+        // Actualizar tanto el contador interno como el servicio
+        this.notificationService.updateNotificationCount(unreadCount);
         // Limpiar notificaciones generadas si hay notificaciones reales
         this.generatedNotifications = [];
-      } else if (changes['notifications'].previousValue && this.notifications.length === 0) {
-        // Si el array pasa a estar vacío, mantener el contador actual
-        // No resetear a 0 automáticamente
       }
     }
     
-    // Solo actualizar contadores si es la primera vez o si el valor aumenta (nuevas notificaciones)
-    // Esto evita que los contadores cambien al navegar entre páginas con valores diferentes
-    if (changes['notificationCount']) {
-      const newCount = changes['notificationCount'].currentValue;
-      if (changes['notificationCount'].firstChange) {
-        // Primera inicialización
-        this.internalNotificationCount = newCount;
-        // Generar notificaciones si es necesario
-        if (newCount > 0 && (!this.notifications || this.notifications.length === 0)) {
-          this.generatedNotifications = this.generateSampleNotifications();
-        }
-      } else {
-        // Solo actualizar si el nuevo valor es mayor (nuevas notificaciones llegaron)
-        if (newCount > this.internalNotificationCount) {
-          this.internalNotificationCount = newCount;
-          // Regenerar notificaciones si no hay array real
-          if (!this.notifications || this.notifications.length === 0) {
-            this.generatedNotifications = this.generateSampleNotifications();
-          }
-        }
+    // Si vienen contadores desde los inputs en el primer cambio, actualizarlos en el servicio
+    // Los cambios subsecuentes se ignoran porque el servicio es la fuente de verdad
+    if (changes['notificationCount'] && changes['notificationCount'].firstChange && changes['notificationCount'].currentValue > 0) {
+      const currentServiceCount = this.notificationService.getCurrentCounts().notifications;
+      if (currentServiceCount === 0) {
+        this.notificationService.updateNotificationCount(changes['notificationCount'].currentValue);
       }
     }
     
-    if (changes['messageCount']) {
-      const newCount = changes['messageCount'].currentValue;
-      if (changes['messageCount'].firstChange) {
-        this.internalMessageCount = newCount;
-      } else {
-        if (newCount > this.internalMessageCount) {
-          this.internalMessageCount = newCount;
-        }
+    if (changes['messageCount'] && changes['messageCount'].firstChange && changes['messageCount'].currentValue > 0) {
+      const currentServiceCount = this.notificationService.getCurrentCounts().messages;
+      if (currentServiceCount === 0) {
+        this.notificationService.updateMessageCount(changes['messageCount'].currentValue);
       }
     }
     
-    if (changes['projectCount']) {
-      const newCount = changes['projectCount'].currentValue;
-      if (changes['projectCount'].firstChange) {
-        this.internalProjectCount = newCount;
-      } else {
-        if (newCount > this.internalProjectCount) {
-          this.internalProjectCount = newCount;
-        }
+    if (changes['projectCount'] && changes['projectCount'].firstChange && changes['projectCount'].currentValue > 0) {
+      const currentServiceCount = this.notificationService.getCurrentCounts().projects;
+      if (currentServiceCount === 0) {
+        this.notificationService.updateProjectCount(changes['projectCount'].currentValue);
       }
     }
   }

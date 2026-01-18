@@ -2,9 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { NavbarComponent } from '../../../shared/components/navbar/navbar.component';
-import { CardComponent } from '../../../shared/components/card/card.component';
-import { BadgeComponent } from '../../../shared/components/badge/badge.component';
-import { ButtonComponent } from '../../../shared/components/button/button.component';
+import { CardModule } from 'primeng/card';
+import { TagModule } from 'primeng/tag';
+import { ButtonModule } from 'primeng/button';
+import { AvatarModule } from 'primeng/avatar';
 
 interface Project {
   id: string;
@@ -13,13 +14,15 @@ interface Project {
   provider: {
     name: string;
     logo: string;
-    verified: boolean;
+    image?: string;
   };
   status: 'active' | 'completed' | 'on-hold';
   acceptedDate: string;
   lastActivity: string;
   value?: number;
   timeline?: string;
+  progress?: number;
+  category?: string;
 }
 
 @Component({
@@ -28,9 +31,10 @@ interface Project {
   imports: [
     CommonModule,
     NavbarComponent,
-    CardComponent,
-    BadgeComponent,
-    ButtonComponent
+    CardModule,
+    TagModule,
+    ButtonModule,
+    AvatarModule
   ],
   templateUrl: './clientprojectmanagement.component.html',
   styleUrls: ['./clientprojectmanagement.component.scss']
@@ -55,13 +59,15 @@ export class ClientProjectManagementComponent implements OnInit {
         provider: {
           name: 'Nexus Solutions',
           logo: '⚡',
-          verified: true
+          image: 'assets/images/providers/nexus.png'
         },
         status: 'active',
         acceptedDate: '2025-11-15',
         lastActivity: 'Hace 2 horas',
         value: 25000,
-        timeline: '8 semanas'
+        timeline: '8 semanas',
+        progress: 65,
+        category: 'AI & Chatbots'
       },
       {
         id: '2',
@@ -70,13 +76,15 @@ export class ClientProjectManagementComponent implements OnInit {
         provider: {
           name: 'DataLogic AI',
           logo: '🤖',
-          verified: true
+          image: 'assets/images/providers/datalogic.png'
         },
         status: 'active',
         acceptedDate: '2025-11-10',
         lastActivity: 'Hace 1 día',
         value: 45000,
-        timeline: '12 semanas'
+        timeline: '12 semanas',
+        progress: 45,
+        category: 'Security & Fraud'
       },
       {
         id: '3',
@@ -85,13 +93,15 @@ export class ClientProjectManagementComponent implements OnInit {
         provider: {
           name: 'Optimizer AI',
           logo: '📊',
-          verified: true
+          image: 'assets/images/providers/optimizer.png'
         },
         status: 'on-hold',
         acceptedDate: '2025-10-20',
         lastActivity: 'Hace 1 semana',
         value: 35000,
-        timeline: '10 semanas'
+        timeline: '10 semanas',
+        progress: 30,
+        category: 'Logistics & Optimization'
       }
     ];
   }
@@ -100,32 +110,33 @@ export class ClientProjectManagementComponent implements OnInit {
     this.router.navigate(['/client/deal-room', dealRoomId]);
   }
 
-  getStatusClass(status: string): string {
+  getSeverity(status: string): 'success' | 'info' | 'warning' | 'danger' | undefined {
     switch (status) {
       case 'active':
-        return 'status-active';
+        return 'success';
       case 'completed':
-        return 'status-completed';
+        return 'info';
       case 'on-hold':
-        return 'status-on-hold';
+        return 'warning';
       default:
-        return '';
+        return undefined;
     }
   }
 
   getStatusLabel(status: string): string {
     switch (status) {
       case 'active':
-        return 'Activo';
+        return 'ACTIVO';
       case 'completed':
-        return 'Completado';
+        return 'COMPLETADO';
       case 'on-hold':
-        return 'En Pausa';
+        return 'EN PAUSA';
       default:
-        return status;
+        return status.toUpperCase();
     }
   }
 }
+
 
 
 
